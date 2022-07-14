@@ -1,0 +1,199 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{theorem}
+\usepackage{proof}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{color} 
+\usepackage{xy}
+\usepackage{tikz-cd}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{alltt}
+
+\usepackage{macros}
+
+
+\begin{document}
+
+\title{Transducers on compressed strings}
+\maketitle
+In this note, we investigate transducers that operate on compressed strings. The compression for strings is straight line programs: a \emph{compression} of a string $w \in \Sigma^*$ is a context-free grammar which generates the string $w$ and no other strings. We assume that the grammars are in Chomsky normal form and deterministic in the sense that every non-terminal has only one rule that applies to it.
+We investigate several transducer models, and study which ones allow efficient evaluation on compressed strings, as explained in the following definition. 
+
+\begin{definition}\label{sec:}
+    For a string-to-string function $f: \Sigma^* \to \Gamma^*$, its \emph{compressed evaluation problem} is the following: given a compressed representation of an input string $w \in \Sigma^*$, compute a compressed representation of the output string $f(w) \in \Gamma^*$.
+\end{definition}
+
+As a positive result, we will show that the problem can be solved in linear time for functions taken from some standard transducer classes, such as streaming string transducers~\cite{alurExpressivenessStreamingString2010}, or certain subclasses of the polyregular functions~\cite{douneautabot_et_al:LIPIcs:2020:12697,NguyenNP21}. As a negative result, we will show that the problem cannot be solved in polynomial time (because the compressed strings are too large) for general polyregular functions~\cite{bojanczykPolyregularFunctions2018}.  This will, in particular, give a simple proof that the subclasses considered are indeed proper subclasses of the polyregular functions. 
+
+
+\section{Streaming string transducers}
+In this section, we discuss streaming string transducers. This is a  transducer model that was introduced by Alur and Cerny in~\cite{alurExpressivenessStreamingString2010}, and which has the same expressive power as earlier models, such as two-way deterministic automata with output~\cite{shepherdson1959reduction} or string-to-string \mso transductions~\cite{engelfrietMSODefinableString2001}.
+
+The model is a deterministic automaton, where transitions are labelled by operations which manipulate registers that store parts of the output string.  Here is a picture of a streaming string transducer which has input alphabet $\set{a,b}$, output alphabet $\set{c,d}$ and uses two registers called $\set{X,Y}$.
+\mypic{1}
+
+A more formal definition, together with some terminology that will be used later on, is given below. There will be three versions of the model: the general  version (called \emph{copyful}) that  has outputs of potentially exponential size, a restricted \emph{copyless} version that has linear size outputs, and an intermediate \emph{layered} version that has outputs of polynomial size. Clearly the general version cannot have compressed evaluation, due to the output size. We will show that the other two versions have linear time compressed evaluation.
+
+
+Fix a set $R$ of register names and an output alphabet $\Gamma$.   A register valuation is defined to be  function of type 
+\begin{align*}
+    R \to \Gamma^*.
+\end{align*}
+The idea is that this function  says what the register contents are.
+%  for example the register valuation could be 
+% \begin{alltt}
+%     X = abaa
+%     Y = aa
+%     Z = aaaabba.
+% \end{alltt}
+To update a register valuation, we use  a simultaneous update of the registers, which is represented as a function of type 
+\begin{align*}
+    R \to (\Gamma + R)^*
+\end{align*}
+that assigns to each register name its new value, with the register names representing the old values. 
+%  in the following example 
+% \begin{alltt}
+%     A := BabC
+%     B := abaaaa
+%     C := aaAaa
+% \end{alltt}
+A register update can be applied to a register valuation, yielding a new register valuation. 
+
+An important restriction on register updates is the \emph{copyless restriction}, which is the following linearity condition: if one concatenates all right hand sides in the register update, then every register name appears at most once. A consequence of the copyless restriction is that if a register update is copyless and uses $k$ letters from the output alphabet on its right hand side, then applying the update increases the size of a register valuation by at most adding  $k$ (as opposed to, say, doubling it).
+
+The following model was introduced in~\cite{alurExpressivenessStreamingString2010} and proved to be equivalent to other models, such as \mso transductions or deterministic two-way automata with output.
+\begin{definition}
+    A \emph{copyless streaming string transducer} (copyless \sst) is a deterministic finite automaton, without accepting states, together with the following extra structure:
+    \begin{itemize}
+    \item a set of register names and an output alphabet;
+    \item a labelling of transitions by copyless register updates;
+    \item a designated output register.
+    \end{itemize}
+\end{definition}
+
+The semantics of the model is defined as follows. The automaton begins with the empty register valuation that has empty strings in all registers. Next, the automaton is run, and at each transition the corresponding register update is applied to the current register valuation. The output string is then defined to be the contents of the designated output register at the end of the computation. 
+
+A copyful \sst is defined in the same way, except that there is no restriction on the register updates being copyless. A copyful \sst can have outputs of exponential size. For example,  by duplicating a register in every step it can implement the function 
+\begin{align*}
+a^n \quad \mapsto \quad a^{2^n}.
+\end{align*}
+This function does not allow sub-exponential compressed evaluation, due to the output size. 
+Later, we will also consider an intermediate variant, between copyful and copyless, which corresponds to polynomial output growth, and which will allow linear compressed evaluation.
+ 
+
+
+\begin{theorem}\label{thm:sst} For every copyless streaming string transducer, the compressed evaluation problem can be solved in linear time.
+\end{theorem}
+
+\begin{proof}
+     We will care about the \emph{register update homomorphism}, which is  the function  of type
+    \begin{align*}
+    \myunderbrace{\Sigma^*}{input strings} 
+    \qquad \to  \qquad 
+    \myunderbrace{R \to (\Gamma + R)^*}{register updates}
+    \end{align*}
+    that maps each input string to the corresponding register update. This function is  a monoid homomorphism, with a naturally defined composition operation on register updates. The algorithm will compute the value of this homomorphism for all non-terminals in the grammar representing the input string, using the following compressed representation of register updates.
+
+    A \emph{compressed representation} of a register update consists of a set $\Delta$ of compressed strings over the output alphabet, together with a function
+    \begin{align*}
+    \myunderbrace{R \to (\Delta + R)^*}{this function is called the \emph{shape}}.
+    \end{align*}
+    We furthermore require that the shape has the following \emph{non-repeating property}: in every right-hand side (i.e.~every string from the range of the shape) there are no two consecutive letters from $\Delta$. By this property, the combined length of the right-hand sides in the shape is at most three times the number of registers, i.e.~it is constant once the transducer is fixed.  (This is where the copyless assumption is used, otherwise the non-repeating property would not give a bound on the right-hand side.)
+    
+    Suppose that we are given a grammar that represents an input string. By a bottom-up induction, for every non-terminal $X$ we  compute a compressed representation  of the value of the register update homomorphism on the input string represented by $X$.  This is a simple inductive  procedure: if the non-terminal has a rule $X \to YZ$,  we simply substitute one shape into another, and we apply extra compression if there is a violation of the non-repeating condition. In each step the amount of work is polynomial in the size of the transducer. Therefore, the algorithm runs in time 
+    \begin{align*}
+    poly(\text{transducer}) \cdot \Oo(\text{compressed input string})
+    \end{align*}
+\end{proof}
+
+
+\subsection{Layered streaming string transducers}
+In this section, we present a mild generalization of the algorithm from Theorem~\ref{thm:sst}, which covers a extension of copyless streaming string transducers that allows polynomial (and not just linear) growth. This extension was introduced in~\cite{douneautabot_et_al:LIPIcs:2020:12697}. For $k \in \set{1,2,\ldots}$, 
+a $k$-layered streaming string transducer is the following generalization of streaming string transducers. The transducer has $k$ sets of registers $R_1,\ldots,R_k$.
+For each input letter $a$ and layer  $i \in \set{1,\ldots,k}$, there is a corresponding register update of type
+\begin{align*}
+R_i \to (\Gamma + R_1 + \cdots + R_i)^*
+\end{align*}
+which satisfies the copyless restriction if the registers are viewed as $R_i$ and the output  alphabet is viewed as $\Gamma + R_1 + \cdots + R_{i-1}$. Such a transducer can be viewed as a special case of a copyful streaming string transducer where the set of registers is 
+\begin{align*}
+R = R_1 + \cdots + R_k.
+\end{align*}
+It is not hard to see that the output size is polynomial, with the degree of the polynomial being the number of layers. Functions computed by these transducers are a special case of the polyregular functions that will be discussed in the next section, as shown in~\cite[Theorem 20]{douneautabot_et_al:LIPIcs:2020:12697}.
+
+\begin{theorem}\label{thm:sst-layered} For every layered copyless streaming string transducer, the compressed evaluation problem can be solved in linear time.
+\end{theorem}
+\begin{proof}
+    The same proof as for Theorem~\ref{thm:sst}, except that we process the compressed version of the input string once for each layer. 
+\end{proof}
+
+\section{Squaring and polyregular functions}
+In this section, we discuss polyregular functions. This is a class of transducers that was introduced in~\cite{bojanczykPolyregularFunctions2018}, building on the pebble transducers introduced in~\cite{milo2000typechecking,engelfriet2002two}. We will show that, despite having polynomial size outputs, these outputs can be exponential in terms of the compressed representation, and therefore one cannot efficiently evaluate them in compressed form. 
+
+On the positive side, we will show that a certain sub-class of the polyregular functions, namely the comparison-free polyregular functions of~\cite{NguyenNP21}, does have linear time compressed evaluation. This positive result is an addition to Theorem~\ref{thm:sst-layered}, which also showed linear time compressed evaluation for a fragment of the polyregular functions. 
+
+Both the negative and positive results in this section will concentrate on two variants of the squaring operation for strings. 
+
+\subsection{A positive result}
+We begin with the positive result. The starting point is that a certain form of squaring admits linear time compressed evaluation, as stated in the following straightforward lemma. 
+\begin{lemma}\label{lem:blind-squaring}
+    For every finite alphabet $\Sigma$, the  compressed evaluation problem can be solved in  linear time  for the  following function
+    \begin{align*}
+    \myunderbrace{a_1 a_2 \cdots a_n}{w} \in \Sigma^*  \quad \mapsto  \quad a_1w a_2w \cdots a_n w
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    In the grammar defining the input string, attach the entire grammar next to each terminal.
+\end{proof}
+
+The function in the above lemma is interesting because it is used to characterize the class of comparison-free polyregular functions. This is a class of string-to-string functions with motivations in linear logic. From the point of view of this paper, we can take as a definition the following characterization~\cite{NguyenNP21}: a function is comparison-free polyregular if and only if it is a finite composition of functions which are either copyless streaming string transducers, or the function from Lemma~\ref{lem:blind-squaring}. Since the class of functions with a linear time solution of compressed evaluation is closed under composition, from Theorem~\ref{thm:sst} and Lemma~\ref{lem:blind-squaring} we conclude the following corollary. 
+
+\begin{corollary}\label{cor:blind}
+    For every comparison-free polyregular function, the compressed evaluation problem can be solved in linear time.
+\end{corollary}
+
+
+\subsection{A negative result}
+We now give the negative result, which says that general polyregular functions do not admit efficient compressed evaluation. Since it is enough to give one counterexample to prove this negative  result, we do not define the class of polyregular functions, but only give the one polyregular function that is used as counterexample. This function is the  squaring function that is illustrated in the following example 
+\begin{align*}
+1234 \quad \mapsto \quad \underline{1}234 \underline{12}34 \underline{123}4 \underline{1234}
+\end{align*}
+More formally, for every finite alphabet $\Sigma$, there is a squaring function of type 
+\begin{align*}
+\Sigma^* \to (\myunderbrace{\Sigma + \Sigma}{two copies of the input alphabet, \\ \scriptsize one underlined and one not})^*
+\end{align*}
+which inputs a string $w$ of length $n$, and produces $n$ copies of it, with the $i$-th copy having the first $i$ letters underlined. The polyregular functions are exactly finite compositions of \sst's and this operation of squaring~\cite{bojanczykPolyregularFunctions2018}. Therefore, if we could prove that squaring has linear time compressed evaluation, the same would follow for all polyregular functions. Unfortunately, this is not true, already for squaring over a one letter alphabet. 
+\begin{lemma}\label{lem:nonblind-squaring}
+    The   compressed evaluation problem cannot be solved in  linear time  for the  following function
+    \begin{align*}
+    a^n  \quad \mapsto  \quad  \underline a a^{n-1}\  \underline{aa}a^{n-2}\  \cdots  \underline{a^n}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+    We show a stronger result: the compression of the output string might need to be exponentially bigger than the compression of the input. Indeed, a string $a^n$ can be compressed to logarithmic size. We will prove, however, that every compression of the output string cannot have logarithmic size. This will use the following claim, which is not hard to prove.
+
+    \begin{claim} If $G$ is a compression of a string $w \in \set{a,\underline a}^*$ then $w$ can have at most 
+        $
+        poly(G)
+        $
+infixes in the language $\underline a a^* \underline a$.         
+    \end{claim}
+    Since the output string has $n$ infixes in the language from the claim, it follows that its compression must be polynomial in $n$ (the claim does not rule out a polynomial compressed size such as $\sqrt n$).
+\end{proof}
+
+
+Since the squaring operation from Lemma~\ref{lem:nonblind-squaring} does not have linear time compressed evaluation, unlike comparison-free polyregular functions and layered streaming string transducers, we obtain the following corollary. 
+\begin{corollary}
+    The squaring function, even for a unary input alphabet, is neither comparison-free polyregular, nor computed by a layered streaming string transducer.
+\end{corollary}
+
+
+\nocite{bojanczyk_recobook}
+\bibliographystyle{plain}
+\bibliography{bib}
+
+
+
+\end{document}
