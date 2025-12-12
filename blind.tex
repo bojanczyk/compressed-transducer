@@ -1,0 +1,340 @@
+
+
+
+
+\newcommand{\leftterm}{\mathtt{Left}}
+\newcommand{\rightterm}{\mathtt{Right}}
+\newcommand{\fstterm}{\mathtt{fst}}
+\newcommand{\sndterm}{\mathtt{snd}}
+\newcommand{\mapterm}{\mathtt{map}}
+\newcommand{\casesterm}{\mathtt{either}}
+\newcommand{\splitterm}{\mathtt{split}}
+\newcommand{\multterm}{\mathtt{mult}}
+\newcommand{\headtailterm}{\mathtt{headtail}}
+\newcommand{\concatterm}{\mathtt{concat}}
+\newcommand{\headterm}{\mathtt{head}}
+\newcommand{\tailterm}{\mathtt{tail}}
+\newcommand{\blockterm}{\mathtt{block}}
+\newcommand{\typecolor}[1]{{\color{cyan}#1}}
+\newcommand{\church}[2]{#1^{\typecolor{#2}}}
+
+\section{A functional programming language}
+\label{sec:functional-lang}
+We think that the weak polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is weakly polyregular. Proving this conjecture seems difficult, and we leave it for future work.  
+
+In this section, we give other evidence for the importance of weak polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not weak) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the weak fragment.  Let us start with an example.
+
+
+% We begin by discussing  the programming language for the (not weak) polyregular functions. This is  a  variant of the simply typed $\lambda$-calculus, with type constructors for pairs, disjoint unions and lists, as well as  certain atomic functions which operate on these types, such as a concatenation
+% \begin{align*}
+% \fstterm : A \times B \to A \quad 
+% \concatterm : A^{**} \to A^* \quad 
+% \mapterm : (A \to B) \to A^* \to B^*,
+% \end{align*}
+% Among the atomic functions, only one  has non-linear output size, namely the  function 
+% \begin{align}
+%     \label{eq:split}
+% \splitterm : A^* \to (A^* \times A^*)^*,
+% \end{align}
+
+% The programming language that we propose for the weak polyregular functions is based on the following observation:  even if we omit the split function, and keep only atomic functions of linear growth,  the mechanics of the $\lambda$-calculus  can be used to define functions of non-linear growth. For example, the squaring function from Example~\ref{ex:squaring} can be defined as follows:
+% \begin{align*}
+%     \lambda x: A^*. \concatterm (\mapterm (\lambda y: A^*.x) x)
+% \end{align*}
+% Based on this observation, we define below the programming language for the weak polyregular functions, by taking the programming language for the polyregular function, and eliminating the  split function, thus obtaining a programming language where all atomic functions have linear output size.
+
+\begin{myexample}[Duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us write a program in a Haskell-like language that implements the duplication function from Example~\ref{ex:duplication}:
+    \begin{align*}
+    \lambda x : A^*. \concatterm [x,x].
+    \end{align*}
+Here, the function $\concatterm$ concatenates a list of lists into a single list. Next, we write a program that implements
+     the squaring function from Example~\ref{ex:squaring}. 
+    \begin{align*}
+    \lambda x : A^* .\ \concatterm\ (\mapterm \ (\lambda y : A.\ x)\ x)
+    \end{align*}
+The subprogram $\mapterm \ (\lambda y : A.\ x)\ x$ applies the function $\lambda y.x$ to each list element, which means that each letter in the list $x$ will be replaced by the list $x$ itself. For example, if the input to this subprogram is $[1,2,3]$, then its output will be the nested list $[[1,2,3],[1,2,3],[1,2,3]]$. The nesting is then removed by the $\concatterm$ function. 
+Using a similar program, we can implement the rectangle function from Example~\ref{ex:strength}:
+\begin{align*}
+    \lambda x: A^*.\ \concatterm (\mapterm\ 
+    (\lambda y: A^*.\ \concatterm\ [[y], x])\ 
+    x)
+\end{align*}
+\end{myexample}
+
+
+% For a type constructed without using the list constructor, the domain will be finite, and therefore such types will be called \emph{finite types}.
+We now describe the corresponding programming language in detail. It is called the \emph{polyregular $\lambda$-calculus}, and its purpose is to define exactly the polyregular functions. 
+
+\paragraph*{Syntax.} The polyregular $\lambda$-calculus is a variant of the simply typed $\lambda$-calculus, and therefore its programs are a certain kind of $\lambda$-terms. We will use the word \emph{programs} for these terms, or \emph{programs of the polyregular $\lambda$-calculus} in case there is some ambiguity about the kind of programs in consideration.   The programs use variables, which are taken from an infinite set of variables. Both programs and variables have associated types, which are unique, i.e.~the same variable or  program cannot be associated with two different types. The types  are built using the following type constructors: 
+\begin{align*}
+    \myunderbrace{1}{a set \\ with one \\ element}
+    \qquad 
+    \myunderbrace{A \times B}{product} \qquad 
+    \myunderbrace{A + B}{disjoint\\ union} \qquad 
+    \myunderbrace{A^*}{lists} \qquad 
+    \myunderbrace{A \to B}{functions}
+\end{align*}
+
+Here is the inductive definition of the syntax  of the programs.
+
+\newcommand{\lambdarule}[3]{\frac{#1}{#2}\text{\ (#3)}}
+\begin{enumerate}
+    \item \textbf{Variables, application and abstraction} \label{item:language-variables}  We begin with the basic elements of the $\lambda$-calculus: each variable $x$ is a program, and we  can construct programs using application and $\lambda$-abstraction:
+    \begin{align*}
+    \lambdarule{M : A \to B \quad N : A}{M N : B}{application}
+    \qquad 
+    \lambdarule{\myoverbrace{x : A}{variable}\quad  M : B}{\lambda x.\ M : A \to B}{$\lambda$-abstraction}
+    \end{align*}
+    The descriptions above should be read as usual in the $\lambda$-calculus, with premises  above the line and the conclusion below it. 
+    \item \textbf{Data constructors and destructors.} Next, the programming language has features to access the data types for pairs, co-pairs, lists, and the atomic unit type $1$.  For the unit type, there is a program of this type, which generates the unique value in this type; this program  is denoted by $()$. For the remaining type constructors, there are data constructors described as follows:
+    \begin{align*}
+    \lambdarule{M : A \quad N : B}{(M,N) : A \times B}{pair}
+    \qquad 
+    \lambdarule{M_1 : A \quad \cdots \quad M_n : A}{[M_1,\ldots,M_n] : A^*}{list} \\[0.3cm]
+    \lambdarule{M : A}{\leftterm M : A + B}{left co-pair}
+    \qquad 
+    \lambdarule{M : B}{\rightterm M : A + B}{right co-pair}
+    \end{align*}
+    In the data constructors $\leftterm$, the other type $B$ is part of the syntax, since it cannot be inferred from the argument $M$. Similarly, for $\rightterm$, but with $B$. We also have  atomic programs for deconstructing data:
+        \begin{align*}
+     \fstterm & :  A \times B \to A \\
+     \sndterm & : A \times B \to B \\
+        \mathtt{uncons} & : A^* \to 1 + A \times A^* \\
+        \casesterm & : (A \to C) \to (B \to C) \to (A + B) \to C. 
+    \end{align*}
+        The above list is not finite, since each program represents a family of programs, which is parameterized by the choice of types $A,B,C$.
+    \item \textbf{List processing.}  \label{item:language-list-processing} The polyregular $\lambda$-calculus does not have any mechanisms for recursion, iteration, or even a fold function\footnote{The omission of the fold function is discussed at length in~\cite{polyregular-fold}.}. For this reason, computation on lists of unbounded length  must be done using dedicated atomic programs. These are listed below (again, the list is infinite, since each program is parameterized by a choice of types $A,B$):
+    \begin{align*}
+        \concatterm & : A^{**} \to A^* \\
+        \mapterm & : (A \to B) \to A^* \to B^* \\
+        \splitterm & : A^* \to (A^* \times A^*)^* \\
+                \blockterm & : (A+B)^* \to A^* \times (B \times A)^*
+    \end{align*}
+        
+
+    \item \textbf{Rational.} For every finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic function\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
+\end{enumerate}
+
+\paragraph*{Semantics.} The only part of the polyregular $\lambda$-calculus that is not completely standard is the two functions $\splitterm$ and $\blockterm$, so we begin by explaining those.  The function 
+   $\splitterm$ is used to split a list into all possible (prefix, suffix) pairs, sorted by increasing prefixes,  as  explained in this example 
+\begin{align*}
+[1,2,3] 
+\quad \mapsto \quad 
+[([],[1,2,3]), ([1],[2,3]), ([1,2],[3]), ([1,2,3],[])].
+\end{align*}
+    The function $\blockterm$ inputs a list which has elements of two kinds, and collects into blocks the consecutive  elements of the first kind, as explained in the following example, in which $A$ is letters and $B$ is digits:
+        \begin{align*}
+        [a, b, 1, c, d, e, 2, 3, f] 
+        \quad \mapsto \quad ([a,b], [(1,[c,d,e]),(2,[]),(3,[f])]).
+        \end{align*}
+    
+Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$; which is appropriate to our language since it can only define always-terminating functions.  
+If a program has free variables of types $A_1,\ldots,A_n$, and the program itself has type $A$, then its semantics will be a function 
+\begin{align*}
+\myunderbrace{\sem {A_1} \times \cdots \times \sem{A_n}}{values of the\\ free variables} 
+\quad \to \quad 
+\myunderbrace{\sem{A}}{value of the\\ program},
+\end{align*}
+which is  by induction on the structure of the program in the expected way.
+If the program is \emph{closed}, i.e.~it has no free variables, then its semantics will be in $\sem A$. This completes the definition of the polyregular $\lambda$-calculus.
+
+\paragraph*{String-to-string functions.} 
+We are mainly interested in closed programs that define string-to-string functions, as we now explain. 
+  Every finite alphabet can be represented as a type, e.g.~$1 + 1 + 1$ can be seen as representing an alphabet with three letters\footnote{The choice of representation is not important, since if we have two finite types of the same cardinality, then the bijection between them can be realised using a program. Here, a \emph{finite type}  is one whose semantics is a finite set, which is the same as saying that the list constructor is not used.}. Therefore, by abuse of notation, we will identify finite alphabets and finite types. Under this identification, our programming language defines exactly the polyregular functions.
+  
+  \begin{theorem}[{\cite[Theorem 4.1]{polyregular-survey}}]
+      Let $A$ and $B$ be finite alphabets. Then
+        \begin{align*}
+    f : A^* \to B^*
+    \end{align*}
+    is polyregular if and only if it can be defined in the polyregular $\lambda$-calculus.
+    \end{theorem}
+  
+The purpose of this section is to identify the subclass which corresponds to the weakly polyregular functions. This is done in the following theorem, which identifies the $\splitterm$ function as the only obstruction.
+
+
+
+\begin{theorem}\label{thm:weakly-polyregular-programs-split-free}
+    Let $A$ and $B$ be finite alphabets. Then 
+    \begin{align*}
+    f : A^* \to B^*
+    \end{align*}
+    is  weakly polyregular if and only if it can be defined in  the polyregular $\lambda$-calculus without using $\splitterm$.
+\end{theorem}
+\begin{proof}
+    We will use the name \emph{split-free program} for programs of the polyregular $\lambda$-calculus that do not use the split function. We begin with the easier inclusion, namely 
+    \begin{align*}
+    \text{weak polyregular} 
+    \quad \subseteq \quad 
+    \text{split-free programs}.
+    \end{align*}
+    The split-free programs contain all rational functions by definition, and they are easily seen to be closed under composition, as witnessed by the program 
+    $ \lambda w.\ M\  (N\  w).$
+    Also, they are closed under map and reverse, since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
+    This completes the proof of the first inclusion. 
+
+    The rest of this proof is devoted to the converse inclusion, namely
+    \begin{align*}
+    \text{split-free programs} 
+    \quad \subseteq \quad 
+    \text{weak polyregular}.
+    \end{align*}
+    This proof is much longer, and it  follows the same lines as the proof of the corresponding inclusion for the  (not necessarily weak) polyregular functions in~\cite[Theorem 4.1]{polyregular-survey}. The general idea is to 
+write down a program as a string, and to then evaluate it be using string rewriting. If done carefully, the evaluation can be done by a weakly polyregular function.
+
+
+    
+    % It is  based on the following observations: (1) when evaluating a program that represents a string-to-string function by using normalisation, the intermediate steps of the normalisation are consistent with certain resource bounds, such as the variables and types that are used and the height of the term; (2) once the resource bounds are fixed, then the number of normalisation steps is bounded, if one uses a normalisation strategy which does some reductions in parallel; and (3) each step of the normalisation strategy mentioned in the previous item can be implemented using a weakly polyregular function.    
+
+    \paragraph*{String representation of programs.} We begin by explaining how programs are represented as strings. This is the usual representation, which have already used above when writing example programs. In this representation, we assume that the variable names and the atomic programs are single letters. In particular, the alphabet is infinite, since there are infinitely many variables and infinitely many atomic programs.  (There are infinitely many atomic programs  since the type annotation is important, for example different letters will be used for $\concatterm$ depending on the type $A$ that is involved.) If we pick some convention on writing parentheses, then the string representation can be made unique, so that each program has a unique string representation.
+    
+    A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using weakly polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. Another restriction that we impose concerns the height of the syntax tree in the program. Let us begin by explaining the notion of height, by using a doubly nested list:
+    \mypic{2}
+    It turns out that a polyregular function cannot  deal with trees of unbounded height, since it is essentially a finite automaton, and finite automata on strings cannot handle trees of unbounded height. For this reason, we will impose a bound on the height of programs. 
+These  are summarised  in the following definition.
+
+    \begin{definition}
+        Define a \emph{resource bound} to be a triple consisting of: (a) a finite set of variables; (b) a finite set of atomic programs; and (c)  a height bound in $\set{1,2,\ldots}$.        
+    \end{definition}
+    We say that a program is \emph{consistent} with a resource bound if  its variables are contained in the set from item (a), its atomic programs are contained in the  set from item (b), and its  height is at most  the number from item (c). If we fix a resource bound, then programs consistent with this resource bound can be written as strings over a finite alphabet (for this, the height bound is unimportant). Furthermore, the set of strings that are representations of programs is a regular language over this alphabet (for this, the height bound is important). 
+
+
+        \begin{figure}
+         \begin{align*}
+     \fstterm (M,N) & \leadsto M \\
+     \sndterm (M,N) & \leadsto  N \\
+        \mathtt{uncons} []  & \leadsto \leftterm ()  \\
+        \mathtt{uncons} [M_1,\ldots,M_n] \text{ for $n \ge 1$} & \leadsto \rightterm (M_1, [M_2,\ldots,M_n]) \\
+        \casesterm \ M_1\  M_2\  (\leftterm\  N) & \leadsto M_1\ N \\
+        \casesterm \ M_1\  M_2\  (\rightterm\  N) & \leadsto M_2\ N \\ 
+        \concatterm [[M^1_{1},\ldots,M^1_{n_1}],\ldots, [M^{k}_{1},\ldots,M^{k}_{n_k}]] & \leadsto [M^1_1,\ldots,M^k_{n_k}] \\ 
+        \mapterm\  M\  [N_1,\ldots,N_n] & \leadsto [M\ N_1,\ldots,M\ N_n]\\
+        \blockterm\ [M_1,\ldots, M_n] & \leadsto \text{result as in definition of $\blockterm$}
+    \end{align*}
+    \caption{\label{fig:reduction-rules} Reduction rules.  
+%     In the last rule, the outcome is 
+%     \(
+%     (N_0, [(M_{i_1}, N_1),\ldots,(M_{i_k}, N_k)])
+% \), where $M_{i_1},\ldots,M_{i_k}$ are the terms of type $A$ in the input list, and $N_j$ is the list of all terms of type $B$ between $M_{i_j}$ and $M_{i_{j+1}}$, with the convention that $i_0$ represents the beginning of the input, and $i_{k+1}$ represents its end.
+}
+    \end{figure}
+
+
+        \paragraph*{Reduction} So far, we have explained how a program can be written as a string over finite alphabet. We now explain how programs can be evaluated under this representation. 
+    When defining the semantics of the polyregular $\lambda$-calculus, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable: 
+    \begin{align}\label{eq:beta-reduction}
+    (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
+    \end{align}
+The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming bound variables. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
+
+
+    The key lemma in the proof is the following, which shows that a weakly polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from Example~\ref{ex:strength}. 
+    \begin{lemma}\label{lem:substitution}
+        Fix a resource bound $\Rr$. There is a weakly polyregular function which does the following, with programs represented as strings:
+        \begin{itemize}
+            \item \textbf{Input.} A program of the form $(\lambda x. M) \ N$, which is consistent with $\Rr$; 
+            \item \textbf{Output.} The program $M[x:=N]$.
+        \end{itemize}
+    \end{lemma}
+    \begin{proof}Thanks to the resource bound, there are finitely many possible choices for the variable $x$, and therefore we can think of this variable as being fixed. 
+        We first annotate the letters in the string representation of  $N$ using a special alphabet, so that they can be distinguished from the letters in $M$. This can be done by a rational function, thanks to the height bound. (The rational function can guess for each letter its distance from the root of the syntax tree, since this distance is bounded by the height.) Next, we use the rectangle function to insert a copy of the string representation of the program $N$ after every letter in the string representation of the program $M$. Then, we can use a rational function to keep only the copies which are necessary, i.e.~those that immediately follow an occurrence of the variable $x$. 
+    \end{proof}
+
+    The above lemma is the only place where our proof differs from the one in~\cite{polyregular-survey}. Essentially, the content of the above lemma is the  observation that a weaker mechanism than the full polyregular functions, namely the rectangle function, is sufficient to implement term substitution.
+
+    \paragraph*{A reduction strategy.} The rest of this proof follows the same lines as the on in~\cite[Theorem 4.1]{polyregular-survey}. Define a \emph{redex} in a program to be a node in its syntax tree to which a reduction rule can be applied. A redex can also be seen as an infix of the string representation of the program. Here is an example of a program with some (in fact, all) redexes underlined:
+    \begin{align*}
+    [ \myunderbrace{(\lambda x.x) []}{a redex for \\ $\lambda$-abstraction}, [], [], \myunderbrace{\mapterm (\lambda x. x) [[],[],[]]}{a redex for \\ $\mapterm$}, \myunderbrace{\fstterm ([],())}{a redex \\ for $\fstterm$}].
+    \end{align*}
+    Usually in the $\lambda$-calculus, one chooses a reduction strategy which picks some redex, reduces it, and then repeats this process. However, in the current proof, we will need to use a more general notion of reduction strategy, which allows reducing several redexes in parallel. This will allow us to reduce a program to normal form in constant time, once resource bounds are fixed. Define a 
+     \emph{parallel reduction strategy} to be a function which assigns to each term a subset of its redexes, such that the redexes are non-overlapping (i.e.~the corresponding infixes in the string representation do not overlap). The result of applying such a strategy to a program is obtained by reducing all the selected redexes in parallel, which can be done since the redexes are assumed to be non-overlapping. The following lemma shows that, once the resource bounds are fixed, there is a parallel reduction strategy which leads to normal form in a bounded number of steps.
+     
+
+    \begin{lemma}[{\cite[Lemma 8.6]{bojanczykPolyregularFunctions2018}}] \label{lem:reduction-strategy} Fix a resource bound $\Rr$. There exist: 
+        \begin{enumerate}
+            \item a parallel reduction strategy; and 
+            \item a time bound $k \in \set{1,2,\ldots}$;
+       \end{enumerate}
+       such that for every program consistent with the  resource bound, applying the reduction strategy $k$ times  leads to a term in normal form. Furthermore, the reduction strategy can be implemented by a rational function, with the redexes marked in the ouptut using begin/end markers.
+    \end{lemma}
+
+    The above lemma was proved for the (not necessarily weak) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
+
+    We now put the above results together to conclude that split-free programs can be evaluated using weakly polyregular functions, as stated in the following corollary.
+
+    \begin{corollary}\label{cor:normalisation}
+        Fix a resource bound $\Rr$. There is a weakly polyregular function which does the following, with programs represented as strings:
+        \begin{itemize}
+            \item \textbf{Input.} A split-free program consistent with  $\Rr$;
+            \item \textbf{Output.} A program in normal form obtained from it by applying reductions.
+        \end{itemize}
+    \end{corollary}
+    \begin{proof}
+        By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bounds and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the weak polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a weak polyregular function.
+        
+        We first argue that a single redex can be reduced by a weak polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. One other interesting example of a redex corresponds to the $\mapterm$ function, which is:
+        \begin{align*}
+        \mapterm\  M\  [N_1,\ldots,N_n] 
+        \quad \leadsto \quad 
+        [M\ N_1, \ldots, M\ N_n].
+        \end{align*}
+        This redex can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. For the remaining reduction rules, see Figure~\ref{fig:reduction-rules}, the reduction can be done by rational functions, since no substitution is involved. This completes the proof that a single redex can be reduced by a weak polyregular function.
+
+        Our reduction strategies are parallel, which means that multiple redexes need to be reduced in one step. However, since these redexes are non-overlapping, the parallel execution corresponds to using the map combinator from Section~\ref{sec:map}. Since this combinator is part of the definition of the weak polyregular functions, we can complete the proof of (2), and therefore also the proof of the corollary.
+    \end{proof}
+
+    Using the above corollary, we complete the proof of the inclusion
+        \begin{align*}
+    \text{split-free programs} 
+    \quad \subseteq \quad 
+    \text{weak polyregular}.
+    \end{align*}
+Fix  a split-free program $M$ of type  $A^* \to B^*$. The output string is computed as follows: (a) given an input string in $A^*$, replace it by  a term of the form $M N$, where $N$ is a program that represents the input string; (b) reduce the term $M N$ to normal form; (c) extract the output string from the normal form. Each of these steps can be computed by a weak polyregular function, which completes the proof of the inclusion. Indeed, (b) is a weak polyregular function by Corollary~\ref{cor:normalisation}, while steps (a) and (c) can even be implemented using rational functions, since  there is very little difference between strings over a finite alphabet $A$ and the string representations of the corresponding programs of type $A^*$ that are in normal form. 
+\end{proof}
+
+
+\subsection{Programs with combinators instead of $\lambda$-abstraction}
+We finish this section with another characterisation of the weak polyregular functions. This is a variant of a characterisation of the polyregular functions, see~\cite[Section 4]{bojanczykPolyregularFunctions2018}, which is similar to the polyregular $\lambda$-calculus, but uses a programming language that is based on  combinators instead of  $\lambda$-abstraction. A nice feature of this characterisation is that it highlights the role of the strength function 
+\begin{align} \label{eq:strength}
+        \mathtt{strength} : A \times B^* & \to (A \times B)^* \\
+        (a, [b_1,\ldots,b_n]) & \mapsto [(a,b_1),\ldots,(a,b_n)], \nonumber
+        \end{align}
+which is an important function that arises in category theory, especially in the context of monads.
+
+In the programming language discussed now, we will not have higher-order functions. We will only authorise functions of type $A \to B$, where both input and output types are \emph{arrow-free}, i.e.~they are constructed using only the unit, product, disjoint union and list type constructors. In type theory, such functions are said to have \emph{first-order function type}, but we avoid this terminology here, since it may be confused with first-order logic, which also plays a role in the study of polyregular functions. 
+
+The idea behind the programming language  is to start with a set of atomic functions, which have types of the form $A \to B$ with arrow-free $A$ and $B$, and then to close this set under certain combinators, namely 
+\begin{align*}
+\lambdarule{f_1 : A_1 \to B \quad f_2 : A_2 \to B}{f_1 + f_2 : A_1 + A_2 \to B}{co-product} \qquad & 
+\lambdarule{f : A \to B_1 \quad g : A \to B_2}{(f,g) : A \to B_1 \times B_2}{product} \\
+\lambdarule{f : A \to B \quad g : B \to C}{g \circ f : A \to C}{composition} \qquad  & 
+\lambdarule{f : A \to B}{\mathtt{map}\ f : A^* \to B^*}{map}.
+\end{align*}
+Depending on the choice of the initial set of atomic functions, one can obtain various classes of string-to-string functions. In~\cite[Section 6]{bojanczykRegularFirstOrderList2018}, one can find a choice that leads to the so-called regular functions, which are a well known transducer class. If one adds the function $\splitterm$ (formally speaking, the variant of this  function for all possible arrow-free types $A$), then one  gets exactly the polyregular functions. As we show below, replacing $\splitterm$ by strength leads to the weakly polyregular functions.
+
+\begin{theorem}
+    Let $A$ and $B$ finite alphabets. A string-to-string function
+    \begin{align*}
+    f : A^* \to B^*
+    \end{align*}
+    is weakly polyregular if and only if it belongs to the least class of functions which:
+    \begin{enumerate}
+        \item \label{item:closure-combinators} is closed under the combinators for co-product, product, composition and map;
+        \item \label{item:atomic-regular} contains the atomic functions for the regular functions, as  in~\cite[Section 6]{bojanczykRegularFirstOrderList2018};
+        \item \label{item:atomic-strength} contains, for each arrow-free types $A$ and $B$, the strength function explained in~\eqref{eq:strength}.
+        
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    It is enough to show that the class of functions from this theorem sits between the two equal classes from Theorem~\ref{thm:weakly-polyregular-programs-split-free}: 
+    \begin{align*}
+        \text{weak polyregular} 
+    \quad \subseteq \quad
+    \text{functions from this theorem}
+    \quad \subseteq \quad
+    \text{split-free programs}.
+    \end{align*}
+    The second inclusion is essentially immediate, since all functions from items \ref{item:atomic-regular} and \ref{item:atomic-strength} in this theorem can easily be defined using split-free programs, and split-free programs have the closure properties from item \ref{item:closure-combinators}. (For item \ref{item:atomic-regular}, one needs to consult the list of atomic functions in~\cite{bojanczykRegularFirstOrderList2018}, but we assure the reader that this is a simple check.) 
+    Consider now the first inclusion. Since the functions from this theorem are closed under composition, it is enough to show that they contain the atomic functions from Lemma~\ref{lem:map-normal-form}, namely the rational functions, map reverse and map rectangle. As shown in~\cite[Theorem 6.1]{bojanczykRegularFirstOrderList2018}, even without using the strength function, one can derive all regular string-to-string  functions, which contain both rational functions and map reverse. We are left with map rectangle, which is easily derived using the strength function and map.
+\end{proof}
+

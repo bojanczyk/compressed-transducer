@@ -1,0 +1,133 @@
+\section{Transducers compatible with compression}
+\label{sec:compatible}
+We will be interested in compatibility with compression of  string-to-string functions that are computed by various transducer models, i.e.~finite automata with output. There will be three kinds of transducer models considered in this paper: 
+\begin{align*}
+\text{rational functions} 
+\quad \subseteq \quad 
+\text{regular functions}
+\quad \subseteq \quad 
+\text{polyregular functions.}
+\end{align*}
+We will show that the rational and regular functions are compatible with compression, while the polyregular functions are not, in general. We will then identify a subclass of the polyregular functions that is compatible with compression.
+
+
+
+\subsection{Rational functions}
+\label{sec:rational}
+We begin with the class of rational functions, which was introduced by Eilenberg~\cite[Chapter IX]{Eilenberg74} and has been studied extensively since then. Among several equivalent definitions, we use one that is based on \nfa with output.
+
+
+Let us begin with the definition of a {rational relation}, and then we will identify the \emph{rational functions} as the special case of rational relations which are functions. A rational relation is described by an \nfa with output. This is the same as an \nfa, except that there is an additional labelling which assigns output strings (possibly empty) to: (a) initial states; (b) transitions; and (c) final states. Here is a picture of an \nfa with output: 
+\mypic{1}
+
+Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
+The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. An relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string.
+
+
+
+\begin{theorem}
+    \label{thm:rational}
+    Rational functions are compatible with compression.
+\end{theorem}
+\begin{proof}
+     It is well known that context-free languages are preserved under images of rational relations~\cite[Chapter V]{berstel2013transductions}. This means that for every context-free language $L \subseteq A^*$ and every rational relation $R \subseteq A^* \times B^*$, the image 
+\begin{align*}
+\setbuild{ w \in B^* }{$(v,w) \in R$ for some $v \in L$}
+\end{align*}
+is also context-free. The proof is a simple product construction, in particular the size of the output grammar is polynomial in the sizes of the input grammar and the automaton defining the rational relation. If the input grammar generates exactly one string, and the rational relation is in fact a function, then the output grammar will also generate exactly one string. 
+\end{proof}
+
+%     We prove that  for every (possibly ambiguous) \textsc{nfa} with output, and every context-free grammar $G$, one can compute in polynomial time a new context-free grammar that generates the image 
+%     \begin{align*}
+%     \setbuild{ w }{$w$ is a possible output of the \textsc{nfa} over some input from $G$}.
+%     \end{align*}
+%     If the grammar is generates exactly one string, and the automaton is unambiguous, the the new grammar will generate exactly one string.
+    
+%     To define the output grammar
+%     For each non-terminal $X$ in the input grammar and each pair of states $p,q \in Q$ of the automaton, we create a new non-terminal $X_{p,q}$ which represents the possible outputs of the transducer on runs which input a string derived from $X$, start in state $q$ and end in state $p$. Assuming that the input grammar is in Chomsky normal form, this is done as follows. For every rule $X \to a$ in the input grammar that generates a single letter and states $p,q$, we create new rules in the output grammar that generate all possible outputs of transitions that go from $p$ to $q$ when reading $a$. For every rule $X \to YZ$ in the input grammar and every states $p,q,r$ in the transducer, we create in the output grammar a rule of the form
+%     \begin{align*}
+%     X_{p,r} \to Y_{p,q} Z_{q,r}.
+%     \end{align*}
+%     Under this construction, the desired  output language is the union  
+%     \begin{align*}
+%    \bigcup_{p,q} \text{(initial output string for $p$)}X_{p,q}\text{(final output string for $q$)},
+%     \end{align*}
+%     where $X$ is the starting non-terminal of the input grammar, $p$ ranges over initial states, and $q$ ranges over final states. This is implemented by creating a new starting non-terminal with appropriate rules.
+% \end{proof}
+
+
+\subsection{The map combinator}
+\label{sec:map}
+Before moving to more expressive transducer models, we prove a closure property for functions that are compatible with compression. This will be useful in the rest of the paper, which will use an approach to transducer classes which emphasises closure properties.
+
+The first closure property, which is immediate from the definition, is that functions compatible with compression  are closed under function composition. Another closure property concerns the \emph{map} operation. The general idea is that a function $f$ is lifted from strings to lists of strings, where it is applied to every list item separately. Since -- for now -- we are working with strings only, we need to represent lists using a separator symbol, as in the following lemma.
+
+\begin{lemma}\label{lem:map}
+    Consider a string-to-string function 
+    \begin{align*}
+    f : A^* \to B^*,
+    \end{align*}
+    and let $|$ be a fresh separator symbol that is neither in $A$ nor $B$. If $f$ is compatible with compression, then so is its \emph{map lifting}, which is defined to be the function
+    \begin{align*}
+    w_1 | \cdots | w_n  
+    \quad \mapsto \quad 
+    f(w_1) |  \cdots | f(w_n) 
+    \qquad \text{for $w_1,\ldots,w_n \in A^*$}.
+    \end{align*}
+\end{lemma}
+\begin{proof}
+     The input  string for the map lifting uses separators.  We begin by improving the  compression of the input string  so that the structure of the grammar  is consistent with the separators. This is done using the following \emph{normal form}:  the nonterminals (except for the starting one) can be partitioned into two groups, called \emph{inner} (depicted in \blue{blue} below) and \emph{outer} (depicted in \red{red}), such that every rule in the grammar has one of the following forms: 
+    \begin{align*}
+    S \to \blue Y \red Z \qquad
+    \red X \to \red Y \red Z \qquad
+    \red X \to | \blue Y \qquad 
+     \blue X \to \blue Y \blue Z \qquad 
+     \blue X \to a,
+    \end{align*}
+    where $S$ is the starting nonterminal, red nonterminals are outer, blue nonterminals are inner, and $a \in A$.  Observe that the partition, if it exists, is unique: the inner nonterminals are those which do not use the separator symbol (they correspond to parts of list items), and the outer ones are those which do (they correspond to sequences of list items).
+
+
+    \begin{claim}
+        Every compression over the alphabet $A \cup \set{
+        |}$ can be converted in polynomial time into an equivalent compression which has normal form.
+    \end{claim}
+    \begin{proof}
+        For a string $w$ that uses at least one separator, define three parts, as in the following picture:
+        \mypic{3}
+        Observe that the last separator is not in any of the parts, and the remaining separators are in the middle part.
+        Given a grammar that is not necessarily in normal form, we compute a new grammar in normal form, such that for every nonterminal $X$ in the original grammar, there are three corresponding nonterminals in the new grammar, which generate its start, middle and finish, respectively. The construction is a straightforward induction, it can be implemented in polynomial time, and the output grammar has linear size in the size of the input grammar. From the new grammar, we easily get a grammar in normal form that generates the same string as the original grammar, by suitably choosing the production for the starting nonterminal.
+    \end{proof}
+    
+    Once we have normalized the input compression, we can easily prove the lemma. 
+    The input string can be seen as a list of strings over the alphabet $A^*$, separated by the symbol $|$. In the compression, each list item will be found as a value of the inner nonterminal $\blue Y$  in rules of the form
+    \begin{align*}
+    S \to \blue Y \red Z \qquad \red X \to  |\blue Y,
+    \end{align*}
+    and it will be found nowhere else. Therefore, we can modify the grammar by replacing every occurrence of $\blue Y$ with the corresponding compression of the output string, which is obtained by the assumption that $f$ is compatible with compression. This gives the desired compression of the output string of the map lifting.
+\end{proof}
+
+\subsection{Regular functions}
+\label{sec:regular}
+Having proved that the rational string-to-string functions are compatible with compression, we now move to the next class of functions, namely the regular string-to-string functions. The latter class of  functions can be defined  using several different models, such as two-way automata with output~\cite{shepherdson1959reduction}, \mso transductions~\cite{engelfrietMSODefinableString2001}, or streaming string transducers~\cite{alurExpressivenessStreamingString2010}. Instead of presenting any of these machine models, we use a characterization of the regular functions that uses concepts that have already been introduced in this paper. For the reader who is unfamiliar with regular functions, the following theorem, see~\cite[Theorem 18]{bojanczykstefanski2020},  can be taken as the definition of regular functions\footnote{Let us explain in more detail the relation of Theorem~\ref{thm:regular-def} and \cite[Theorem 18]{bojanczykstefanski2020}. The latter result is in fact stronger, because it allows certain kinds of infinite alphabets, and has fewer closure properties than those mentioned in items~\ref{item:reg-char-rational}-\ref{item:reg-char-map} of Theorem~\ref{thm:regular-def}. The difficult implication in the theorems is that the regular functions are contained in the  least class with the closure properties, which means that  \cite[Theorem 18]{bojanczykstefanski2020} implies Theorem~\ref{thm:regular-def}.}.
+
+\begin{theorem}\label{thm:regular-def}
+    The class of \emph{regular functions} is the smallest class of string-to-string functions which: 
+    \begin{enumerate}
+        \item  \label{item:reg-char-rational} contains all rational functions;
+        \item \label{item:reg-char-dup-and-rev} contains the duplication and reverse functions from Examples~\ref{ex:duplication} and~\ref{ex:reversal};
+        \item is closed under composition of functions;
+        \item \label{item:reg-char-map} is closed under the map combinator from Lemma~\ref{lem:map}.
+    \end{enumerate}
+\end{theorem}
+
+Thanks to the above characterization and the results proved so far, we can immediately deduce compatibility with compression for regular functions.
+
+\begin{theorem}
+    \label{thm:regular-compatible}
+    Regular string-to-string functions are compatible with compression.
+\end{theorem}
+\begin{proof}
+    The rational functions are compatible with compression by Theorem~\ref{thm:rational}. The duplication and reversal functions are compatible with compression by Examples~\ref{ex:duplication} and~\ref{ex:reversal}. The class of functions compatible with compression is closed under composition essentially by definition, and it is closed under the map combinator by Lemma~\ref{lem:map}. Therefore, by Theorem~\ref{thm:regular-def}, all regular functions are compatible with compression.
+\end{proof}
+
+Observe that the proof of the above theorem would continue to work if we would extend the basic functions from item~\ref{item:reg-char-dup-and-rev} by adding the  squaring function from Example~\ref{ex:squaring}, or any other function compatible with compression. This observation will be useful in the next section. 
