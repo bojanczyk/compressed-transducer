@@ -8,7 +8,42 @@
 
 \title{Transducers on compressed strings}
 \maketitle
-In this paper, we investigate transducers that operate on compressed strings. The compression in question is grammar based compression: a \emph{compression} of a string $w \in A^*$ is a context-free grammar which generates the string $w$ and no other strings.  An equivalent representation is \emph{straight line program}, which is a sequence of instructions that assign values to variables, using concatenation and constants, as in the following example:
+
+
+\paragraph{Algorithms on compressed data.}
+
+Data compression is a core technology in computer science that has gained additional importance in the era of big data.
+For an introduction into classical compression techniques see  \cite{Say00}. 
+The primary motivation for this work stems from the paradigm of {\em algorithmics on compressed data}. 
+Its principal idea is to process data that is given in compressed form without first decompressing it and then operating on the uncompressed data.
+There are three main applications for algorithms of this kind (see  \cite{Loh12survey} for references).
+\begin{itemize}
+\item  In many areas, large data have to be not only stored
+in compressed form, but the original (uncompressed) data has to be
+processed and analyzed as well. 
+In such cases, it makes sense to design algorithms that directly
+operate on the compressed data in order to
+save the time and space for (de)compression. 
+A typical example is the search for specific patterns in genomes that are
+stored in a compressed way.
+\item In some situations it makes sense to compute in a first
+phase a compressed representation of the input data, which makes
+regularities explicit. These regularities may be exploited in
+a second phase for speeding up an algorithm. This principle is 
+known as {\em acceleration by compression}. 
+\item Large and often highly compressible data may appear as 
+intermediate data structures in algorithms. In such a situation, one may try to 
+store a compressed representation of these intermediate data structures
+and to process this representation. This may lead to more efficient 
+algorithms. Examples for this strategy can be found for instance
+in computational topology or group theory; see e.g \cite{}.
+\end{itemize}
+For a formal investigation of algorithmics on compressed data, due aspects have to be clarified: 
+What compressed representation of data is used and what are the processing steps carried out 
+on the compressed data? 
+
+\paragraph{Grammar-based string compression.}
+Let us first address the first question. In this paper we consider strings (words) that are compressed using context-free grammars: a \emph{compression} of a string $w \in A^*$ is a context-free grammar which generates the string $w$ and no other strings.  An equivalent representation is a \emph{straight line program}, which is a sequence of instructions that assign values to variables, using concatenation and constants, as in the following example:
 \begin{lstlisting}
     x := 'a' 
     y := x $\cdot$ x
@@ -16,9 +51,10 @@ In this paper, we investigate transducers that operate on compressed strings. Th
 \end{lstlisting}
 The variables can be seen as non-terminals, and the last line can be seen as the starting non-terminal. The above program generates the string $aaaa$. A program with $n$ lines can generate a string of length up to $2^n$.
 
-In this paper, a \emph{string-to-string function} is any function $f : A^* \to B^*$ where $A$ and $B$ are finite alphabets. 
+\paragraph{String-to-string function.}
+The most general setting processing compressed strings would be to allow arbitrary
+ \emph{string-to-string functions}. A  string-to-string function is a function $f : A^* \to B^*$ where $A$ and $B$ are finite alphabets. 
 We are interested in string-to-string functions that can be evaluated using compressions, i.e.~given a compression of the input, one can return a compression of the output, in deterministic polynomial time. This is described in the following definition.
-
 
 \begin{definition}
     A string-to-string function $f : A^* \to B^*$ is called \emph{compatible with compression} if there is a deterministic polynomial time algorithm which does this: 
