@@ -1,14 +1,5 @@
 \section{Transducers compatible with compression}
 \label{sec:compatible}
-We will be interested in compatibility with compression of  string-to-string functions that are computed by various transducer models, i.e.~finite automata with output. There will be three kinds of transducer models considered in this paper: 
-\begin{align*}
-\text{rational functions} 
-\quad \subseteq \quad 
-\text{regular functions}
-\quad \subseteq \quad 
-\text{polyregular functions.}
-\end{align*}
-We will show that the rational and regular functions are compatible with compression, while the polyregular functions are not, in general. We will then identify a subclass of the polyregular functions that is compatible with compression.
 
 
 
@@ -21,7 +12,7 @@ Let us begin with the definition of a {rational relation}, and then we will iden
 \mypic{1}
 
 Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
-The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. An relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string.
+The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. A relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string.
 
 
 

@@ -3,6 +3,7 @@
 
 \usepackage{macros}
 
+\usepackage{enumitem}
 
 \begin{document}
 
@@ -36,23 +37,37 @@ intermediate data structures in algorithms. In such a situation, one may try to
 store a compressed representation of these intermediate data structures
 and to process this representation. This may lead to more efficient 
 algorithms. Examples for this strategy can be found for instance
-in computational topology or group theory; see e.g \cite{}.
+in computational topology or group theory; see e.g \cite{BKLMNRS20,Loh14}.
 \end{itemize}
 For a formal investigation of algorithmics on compressed data, due aspects have to be clarified: 
-What compressed representation of data is used and what are the processing steps carried out 
-on the compressed data? 
+\begin{enumerate}[(i)]
+\item \label{question1}
+What compressed representation of data is used?
+\item  \label{question2} 
+What are the processing steps carried out on the compressed data? 
+\end{enumerate}
 
 \paragraph{Grammar-based string compression.}
-Let us first address the first question. In this paper we consider strings (words) that are compressed using context-free grammars: a \emph{compression} of a string $w \in A^*$ is a context-free grammar which generates the string $w$ and no other strings.  An equivalent representation is a \emph{straight line program}, which is a sequence of instructions that assign values to variables, using concatenation and constants, as in the following example:
+Let us first address question~\ref{question1}. In this paper we consider strings (words) that are compressed using context-free grammars: a \emph{grammar compression} of a string $w \in A^*$ is a context-free grammar which generates the string $w$ and no other strings (we will also shortly speak of a 
+\emph{compression} of $w$).
+  An equivalent representation is a \emph{straight line program}, which is a sequence of instructions that assign values to variables, using concatenation and constants, as in the following example:
 \begin{lstlisting}
     x := 'a' 
     y := x $\cdot$ x
     z := y $\cdot$ y
 \end{lstlisting}
-The variables can be seen as non-terminals, and the last line can be seen as the starting non-terminal. The above program generates the string $aaaa$. A program with $n$ lines can generate a string of length up to $2^n$.
+The variables can be seen as non-terminals, and the variable $z$ in the last line can be seen as the starting non-terminal. The above straight line  program generates the string $aaaa$. A straight line  program with $n$ lines can generate a string of length up to $2^n$.
 
-\paragraph{String-to-string function.}
-The most general setting processing compressed strings would be to allow arbitrary
+Straight-line programs have been intensively used in algorithmics on compressed data. 
+Algorithmic problems that can be solved on grammar compressed strings are for instance
+checking equality \cite{HirshfeldJM94,MehlhornSU94,Pla94}, pattern matching \cite{KRS95,Jez15}, and membership in regular languages; see \cite{Loh12survey} for further details.
+On the other hand, testing membership of a grammar compressed string in a context-free language (and even a fixed
+visibly pushdown language) is a \textsf{PSPACE}-complete problem \cite{Lohrey11}.
+
+
+\paragraph{String-to-string functions.}
+We now come to the second question~\ref{question2}. 
+The most general option for processing compressed strings would be to allow arbitrary
  \emph{string-to-string functions}. A  string-to-string function is a function $f : A^* \to B^*$ where $A$ and $B$ are finite alphabets. 
 We are interested in string-to-string functions that can be evaluated using compressions, i.e.~given a compression of the input, one can return a compression of the output, in deterministic polynomial time. This is described in the following definition.
 
@@ -111,7 +126,18 @@ This function  is compatible with compression. To implement squaring on  straigh
     \end{align*}
     This function is not compatible with compression. The reason is that we can encode an input string of length $2^n$ using a straight line program with $n$ lines. The output string will be of doubly exponential length, and will therefore require a compression of exponential size. Such a compression cannot be constructed in polynomial time. 
 \end{myexample}
-
+Characterizing the class of all string-to-string functions that are compatible with compression is a hopless task. Therefore, we restrict
+to string-to-string functions that can be computed by certain models of string transducers.
+%We will be interested in compatibility with compression of  string-to-string functions that are computed by various transducer models, i.e.~finite automata with output. 
+There will be three kinds of transducer models considered in this paper, which the define the following function classes:
+\begin{align*}
+\text{rational functions} 
+\quad \subseteq \quad 
+\text{regular functions}
+\quad \subseteq \quad 
+\text{polyregular functions.}
+\end{align*}
+We will show that the rational and regular functions are compatible with compression, while the polyregular functions are not, in general. We will then identify a subclass of the polyregular functions that is compatible with compression.
 
 
 \input{linreg}
