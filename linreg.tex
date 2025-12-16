@@ -13,7 +13,8 @@ Let us begin with the definition of a {rational relation}, and then we will iden
 
 Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
 The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. A relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string.
-
+The following result extends \cite[Theorem 3.10]{Loh14}, which only covers the 
+class of sequential functions (a subclass of the rational functions):
 
 
 \begin{theorem}
@@ -67,30 +68,44 @@ The first closure property, which is immediate from the definition, is that func
     \end{align*}
 \end{lemma}
 \begin{proof}
-     The input  string for the map lifting uses separators.  We begin by improving the  compression of the input string  so that the structure of the grammar  is consistent with the separators. This is done using the following \emph{normal form}:  the nonterminals (except for the starting one) can be partitioned into two groups, called \emph{inner} (depicted in \blue{blue} below) and \emph{outer} (depicted in \red{red}), such that every rule in the grammar has one of the following forms: 
+     The input  string for the map lifting uses separators.  We begin by improving the  compression of the input string  so that the structure of the grammar  is consistent with the separators. This is done using the following \emph{normal form}:  the nonterminals (except for the starting one) can be partitioned into two groups, called \emph{inner} (depicted in \blue{blue} below) and \emph{outer} (depicted in \red{red}), such that every rule in the grammar has one of the following forms, where the string $\red v$ only consists of outer (\red{red}) nonterminals and $\blue u$ only consists of 
+ inner (\blue{blue}) nonterminals  and symbols from $A$:
     \begin{align*}
     S \to \blue Y \red Z \qquad
-    \red X \to \red Y \red Z \qquad
+    %\red X \to \red Y \red Z \qquad
+    \red X \to \red v \qquad
     \red X \to | \blue Y \qquad 
-     \blue X \to \blue Y \blue Z \qquad 
-     \blue X \to a,
+     %\blue X \to \blue Y \blue Z \qquad 
+    % \blue X \to a,
+     \blue X \to \blue u,
     \end{align*}
-    where $S$ is the starting nonterminal, red nonterminals are outer, blue nonterminals are inner, and $a \in A$.  Observe that the partition, if it exists, is unique: the inner nonterminals are those which do not use the separator symbol (they correspond to parts of list items), and the outer ones are those which do (they correspond to sequences of list items).
+   % where $S$ is the starting nonterminal red nonterminals are outer, blue nonterminals are inner,  and $a \in A$.  
+   Observe that the partition, if it exists, is unique: the inner nonterminals are those which cannot derive a string containing the separator symbol (they correspond to parts of list items), and the outer ones are those which do (they correspond to sequences of list items).
 
 
     \begin{claim}
         Every compression over the alphabet $A \cup \set{
         |}$ can be converted in polynomial time into an equivalent compression which has normal form.
-    \end{claim}
+        \end{claim}
     \begin{proof}
         For a string $w$ that uses at least one separator, define three parts, as in the following picture:
         \mypic{3}
         Observe that the last separator is not in any of the parts, and the remaining separators are in the middle part.
-        Given a grammar that is not necessarily in normal form, we compute a new grammar in normal form, such that for every nonterminal $X$ in the original grammar, there are three corresponding nonterminals in the new grammar, which generate its start, middle and finish, respectively. The construction is a straightforward induction, it can be implemented in polynomial time, and the output grammar has linear size in the size of the input grammar. From the new grammar, we easily get a grammar in normal form that generates the same string as the original grammar, by suitably choosing the production for the starting nonterminal.
+        For a string with exactly one occurrence of $|$ the middle part is missing, whereas a string with no $|$ at all only
+        has a start. 
+        
+        Given a grammar that is not necessarily in normal form, we compute a new grammar in normal form, such that for every nonterminal $X$ in the original grammar, there are three corresponding nonterminals in the new grammar, which generate its start, middle and finish, respectively. The construction is a straightforward induction, it can be implemented in polynomial time, and the output grammar has linear size in the size of the input grammar. For instance, if the original grammar has the production $X \to YZ$ and $\blue{Y_s}$, $\red{Y_m}$, $\blue{Y_f}$ are the nonterminals for the start/middle/finish part of $Y$ (so, we assume that $Y$ produces at least two separators), 
+        and similarly for $Z$, then we introduce the following rules:
+         $\blue{X_s} \to \blue{u}$ if $\blue{Y_s} \to \blue{u}$,
+        $\blue{X_f} \to \blue v$ if $\blue{Z_f} \to \blue v$,
+        $\blue U \to \blue{Y_f Z_s}$, $\red V \to | \blue U$, and $\red{X_m} \to \red{Y_m V Z_m}$.\footnote{Similar but slightly different constructions can be found in \cite{}.}
+
+        
+        From the new grammar, we easily get a grammar in normal form that generates the same string as the original grammar, by suitably choosing the production for the starting nonterminal.
     \end{proof}
     
     Once we have normalized the input compression, we can easily prove the lemma. 
-    The input string can be seen as a list of strings over the alphabet $A^*$, separated by the symbol $|$. In the compression, each list item will be found as a value of the inner nonterminal $\blue Y$  in rules of the form
+    The input string can be seen as a list of strings over the alphabet $A^*$, separated by the symbol $|$. In the compression, each list item will be found as the value of an inner nonterminal $\blue Y$  in rules of the form
     \begin{align*}
     S \to \blue Y \red Z \qquad \red X \to  |\blue Y,
     \end{align*}
