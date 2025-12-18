@@ -42,7 +42,8 @@ what are the processing steps carried out on the compressed data?
 
 \paragraph{Grammar-based string compression.}
 Let us first address question (i), which is about the compression format. In this paper we consider strings (words) that are compressed using context-free grammars: a \emph{grammar compression} of a string $w \in A^*$ is a context-free grammar which generates the string $w$ and no other strings (we will also shortly speak of a 
-\emph{compression} of $w$).
+\emph{compression} of $w$). Syntactically, this can be ensured by only considering context-free grammars that are acyclic (there is no nonterminal $X$ and a non-empty derivation $X \Rightarrow^+ u$ such that $X$ appears in $u$) and where every nonterminal $X$ has
+a unique production with left-hand side $Y$.
   An equivalent representation is a \emph{straight line program}, which is a sequence of instructions that assign values to variables, using concatenation and constants, as in the following example, which generates the string $aaaa$:
 \begin{lstlisting}
     x := 'a' 
@@ -120,7 +121,7 @@ This function  is compatible with compression. To implement squaring on  straigh
     This function is not compatible with compression. The reason is that we can encode an input string of length $2^n$ using a straight line program with $n$ lines. The output string will be of doubly exponential length, and will therefore require a compression of exponential size. Such a compression cannot be constructed in polynomial time. 
 \end{myexample}
 
-Characterizing the class of all string-to-string functions that are compatible with compression is a hopeless task. Therefore, we restrict
+Characterizing the class of all string-to-string functions that are compatible with compression is a hopless task. Therefore, we restrict
 to string-to-string functions that can be computed by certain models of string transducers.
 There will be three kinds of transducer models considered in this paper, which the define the following function classes:
 \begin{align*}
