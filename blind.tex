@@ -20,12 +20,12 @@
 
 \section{A functional programming language}
 \label{sec:functional-lang}
-We think that the weak polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is weakly polyregular. Proving this conjecture seems difficult, and we leave it for future work.  
+We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. Proving this conjecture seems difficult, and we leave it for future work.  
 
-In this section, we give other evidence for the importance of weak polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not weak) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the weak fragment.  Let us start with an example.
+In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular ) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the rectangular  fragment.  Let us start with an example.
 
 
-% We begin by discussing  the programming language for the (not weak) polyregular functions. This is  a  variant of the simply typed $\lambda$-calculus, with type constructors for pairs, disjoint unions and lists, as well as  certain atomic functions which operate on these types, such as a concatenation
+% We begin by discussing  the programming language for the (not rectangular ) polyregular functions. This is  a  variant of the simply typed $\lambda$-calculus, with type constructors for pairs, disjoint unions and lists, as well as  certain atomic functions which operate on these types, such as a concatenation
 % \begin{align*}
 % \fstterm : A \times B \to A \quad 
 % \concatterm : A^{**} \to A^* \quad 
@@ -37,11 +37,11 @@ In this section, we give other evidence for the importance of weak polyregular f
 % \splitterm : A^* \to (A^* \times A^*)^*,
 % \end{align}
 
-% The programming language that we propose for the weak polyregular functions is based on the following observation:  even if we omit the split function, and keep only atomic functions of linear growth,  the mechanics of the $\lambda$-calculus  can be used to define functions of non-linear growth. For example, the squaring function from Example~\ref{ex:squaring} can be defined as follows:
+% The programming language that we propose for the rectangular polyregular functions is based on the following observation:  even if we omit the split function, and keep only atomic functions of linear growth,  the mechanics of the $\lambda$-calculus  can be used to define functions of non-linear growth. For example, the squaring function from Example~\ref{ex:squaring} can be defined as follows:
 % \begin{align*}
 %     \lambda x: A^*. \concatterm (\mapterm (\lambda y: A^*.x) x)
 % \end{align*}
-% Based on this observation, we define below the programming language for the weak polyregular functions, by taking the programming language for the polyregular function, and eliminating the  split function, thus obtaining a programming language where all atomic functions have linear output size.
+% Based on this observation, we define below the programming language for the rectangular polyregular functions, by taking the programming language for the polyregular function, and eliminating the  split function, thus obtaining a programming language where all atomic functions have linear output size.
 
 \begin{myexample}[Duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us write a program in a Haskell-like language that implements the duplication function from Example~\ref{ex:duplication}:
     \begin{align*}
@@ -150,21 +150,21 @@ We are mainly interested in closed programs that define string-to-string functio
     is polyregular if and only if it can be defined in the polyregular $\lambda$-calculus.
     \end{theorem}
   
-The purpose of this section is to identify the subclass which corresponds to the weakly polyregular functions. This is done in the following theorem, which identifies the $\splitterm$ function as the only obstruction.
+The purpose of this section is to identify the subclass which corresponds to the rectangular polyregular functions. This is done in the following theorem, which identifies the $\splitterm$ function as the only obstruction.
 
 
 
-\begin{theorem}\label{thm:weakly-polyregular-programs-split-free}
+\begin{theorem}\label{thm:rectangular -polyregular-programs-split-free}
     Let $A$ and $B$ be finite alphabets. Then 
     \begin{align*}
     f : A^* \to B^*
     \end{align*}
-    is  weakly polyregular if and only if it can be defined in  the polyregular $\lambda$-calculus without using $\splitterm$.
+    is  rectangular polyregular if and only if it can be defined in  the polyregular $\lambda$-calculus without using $\splitterm$.
 \end{theorem}
 \begin{proof}
     We will use the name \emph{split-free program} for programs of the polyregular $\lambda$-calculus that do not use the split function. We begin with the easier inclusion, namely 
     \begin{align*}
-    \text{weak polyregular} 
+    \text{rectangular polyregular} 
     \quad \subseteq \quad 
     \text{split-free programs}.
     \end{align*}
@@ -177,18 +177,18 @@ The purpose of this section is to identify the subclass which corresponds to the
     \begin{align*}
     \text{split-free programs} 
     \quad \subseteq \quad 
-    \text{weak polyregular}.
+    \text{rectangular polyregular}.
     \end{align*}
-    This proof is much longer, and it  follows the same lines as the proof of the corresponding inclusion for the  (not necessarily weak) polyregular functions in~\cite[Theorem 4.1]{polyregular-survey}. The general idea is to 
-write down a program as a string, and to then evaluate it be using string rewriting. If done carefully, the evaluation can be done by a weakly polyregular function.
+    This proof is much longer, and it  follows the same lines as the proof of the corresponding inclusion for the  (not necessarily rectangular ) polyregular functions in~\cite[Theorem 4.1]{polyregular-survey}. The general idea is to 
+write down a program as a string, and to then evaluate it be using string rewriting. If done carefully, the evaluation can be done by a rectangular polyregular function.
 
 
     
-    % It is  based on the following observations: (1) when evaluating a program that represents a string-to-string function by using normalisation, the intermediate steps of the normalisation are consistent with certain resource bounds, such as the variables and types that are used and the height of the term; (2) once the resource bounds are fixed, then the number of normalisation steps is bounded, if one uses a normalisation strategy which does some reductions in parallel; and (3) each step of the normalisation strategy mentioned in the previous item can be implemented using a weakly polyregular function.    
+    % It is  based on the following observations: (1) when evaluating a program that represents a string-to-string function by using normalisation, the intermediate steps of the normalisation are consistent with certain resource bounds, such as the variables and types that are used and the height of the term; (2) once the resource bounds are fixed, then the number of normalisation steps is bounded, if one uses a normalisation strategy which does some reductions in parallel; and (3) each step of the normalisation strategy mentioned in the previous item can be implemented using a rectangular polyregular function.    
 
     \paragraph*{String representation of programs.} We begin by explaining how programs are represented as strings. This is the usual representation, which have already used above when writing example programs. In this representation, we assume that the variable names and the atomic programs are single letters. In particular, the alphabet is infinite, since there are infinitely many variables and infinitely many atomic programs.  (There are infinitely many atomic programs  since the type annotation is important, for example different letters will be used for $\concatterm$ depending on the type $A$ that is involved.) If we pick some convention on writing parentheses, then the string representation can be made unique, so that each program has a unique string representation.
     
-    A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using weakly polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. Another restriction that we impose concerns the height of the syntax tree in the program. Let us begin by explaining the notion of height, by using a doubly nested list:
+    A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. Another restriction that we impose concerns the height of the syntax tree in the program. Let us begin by explaining the notion of height, by using a doubly nested list:
     \mypic{2}
     It turns out that a polyregular function cannot  deal with trees of unbounded height, since it is essentially a finite automaton, and finite automata on strings cannot handle trees of unbounded height. For this reason, we will impose a bound on the height of programs. 
 These  are summarised  in the following definition.
@@ -228,9 +228,9 @@ These  are summarised  in the following definition.
 The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming bound variables. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
 
 
-    The key lemma in the proof is the following, which shows that a weakly polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from Example~\ref{ex:strength}. 
+    The key lemma in the proof is the following, which shows that a rectangular polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from Example~\ref{ex:strength}. 
     \begin{lemma}\label{lem:substitution}
-        Fix a resource bound $\Rr$. There is a weakly polyregular function which does the following, with programs represented as strings:
+        Fix a resource bound $\Rr$. There is a rectangular polyregular function which does the following, with programs represented as strings:
         \begin{itemize}
             \item \textbf{Input.} A program of the form $(\lambda x. M) \ N$, which is consistent with $\Rr$; 
             \item \textbf{Output.} The program $M[x:=N]$.
@@ -258,43 +258,43 @@ The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It 
        such that for every program consistent with the  resource bound, applying the reduction strategy $k$ times  leads to a term in normal form. Furthermore, the reduction strategy can be implemented by a rational function, with the redexes marked in the ouptut using begin/end markers.
     \end{lemma}
 
-    The above lemma was proved for the (not necessarily weak) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
+    The above lemma was proved for the (not necessarily rectangular ) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
 
-    We now put the above results together to conclude that split-free programs can be evaluated using weakly polyregular functions, as stated in the following corollary.
+    We now put the above results together to conclude that split-free programs can be evaluated using rectangular polyregular functions, as stated in the following corollary.
 
     \begin{corollary}\label{cor:normalisation}
-        Fix a resource bound $\Rr$. There is a weakly polyregular function which does the following, with programs represented as strings:
+        Fix a resource bound $\Rr$. There is a rectangular polyregular function which does the following, with programs represented as strings:
         \begin{itemize}
             \item \textbf{Input.} A split-free program consistent with  $\Rr$;
             \item \textbf{Output.} A program in normal form obtained from it by applying reductions.
         \end{itemize}
     \end{corollary}
     \begin{proof}
-        By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bounds and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the weak polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a weak polyregular function.
+        By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bounds and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
         
-        We first argue that a single redex can be reduced by a weak polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. One other interesting example of a redex corresponds to the $\mapterm$ function, which is:
+        We first argue that a single redex can be reduced by a rectangular polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. One other interesting example of a redex corresponds to the $\mapterm$ function, which is:
         \begin{align*}
         \mapterm\  M\  [N_1,\ldots,N_n] 
         \quad \leadsto \quad 
         [M\ N_1, \ldots, M\ N_n].
         \end{align*}
-        This redex can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. For the remaining reduction rules, see Figure~\ref{fig:reduction-rules}, the reduction can be done by rational functions, since no substitution is involved. This completes the proof that a single redex can be reduced by a weak polyregular function.
+        This redex can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. For the remaining reduction rules, see Figure~\ref{fig:reduction-rules}, the reduction can be done by rational functions, since no substitution is involved. This completes the proof that a single redex can be reduced by a rectangular polyregular function.
 
-        Our reduction strategies are parallel, which means that multiple redexes need to be reduced in one step. However, since these redexes are non-overlapping, the parallel execution corresponds to using the map combinator from Section~\ref{sec:map}. Since this combinator is part of the definition of the weak polyregular functions, we can complete the proof of (2), and therefore also the proof of the corollary.
+        Our reduction strategies are parallel, which means that multiple redexes need to be reduced in one step. However, since these redexes are non-overlapping, the parallel execution corresponds to using the map combinator from Section~\ref{sec:map}. Since this combinator is part of the definition of the rectangular polyregular functions, we can complete the proof of (2), and therefore also the proof of the corollary.
     \end{proof}
 
     Using the above corollary, we complete the proof of the inclusion
         \begin{align*}
     \text{split-free programs} 
     \quad \subseteq \quad 
-    \text{weak polyregular}.
+    \text{rectangular polyregular}.
     \end{align*}
-Fix  a split-free program $M$ of type  $A^* \to B^*$. The output string is computed as follows: (a) given an input string in $A^*$, replace it by  a term of the form $M N$, where $N$ is a program that represents the input string; (b) reduce the term $M N$ to normal form; (c) extract the output string from the normal form. Each of these steps can be computed by a weak polyregular function, which completes the proof of the inclusion. Indeed, (b) is a weak polyregular function by Corollary~\ref{cor:normalisation}, while steps (a) and (c) can even be implemented using rational functions, since  there is very little difference between strings over a finite alphabet $A$ and the string representations of the corresponding programs of type $A^*$ that are in normal form. 
+Fix  a split-free program $M$ of type  $A^* \to B^*$. The output string is computed as follows: (a) given an input string in $A^*$, replace it by  a term of the form $M N$, where $N$ is a program that represents the input string; (b) reduce the term $M N$ to normal form; (c) extract the output string from the normal form. Each of these steps can be computed by a rectangular polyregular function, which completes the proof of the inclusion. Indeed, (b) is a rectangular polyregular function by Corollary~\ref{cor:normalisation}, while steps (a) and (c) can even be implemented using rational functions, since  there is very little difference between strings over a finite alphabet $A$ and the string representations of the corresponding programs of type $A^*$ that are in normal form. 
 \end{proof}
 
 
 \subsection{Programs with combinators instead of $\lambda$-abstraction}
-We finish this section with another characterisation of the weak polyregular functions. This is a variant of a characterisation of the polyregular functions, see~\cite[Section 4]{bojanczykPolyregularFunctions2018}, which is similar to the polyregular $\lambda$-calculus, but uses a programming language that is based on  combinators instead of  $\lambda$-abstraction. A nice feature of this characterisation is that it highlights the role of the strength function 
+We finish this section with another characterisation of the rectangular polyregular functions. This is a variant of a characterisation of the polyregular functions, see~\cite[Section 4]{bojanczykPolyregularFunctions2018}, which is similar to the polyregular $\lambda$-calculus, but uses a programming language that is based on  combinators instead of  $\lambda$-abstraction. A nice feature of this characterisation is that it highlights the role of the strength function 
 \begin{align} \label{eq:strength}
         \mathtt{strength} : A \times B^* & \to (A \times B)^* \\
         (a, [b_1,\ldots,b_n]) & \mapsto [(a,b_1),\ldots,(a,b_n)], \nonumber
@@ -310,14 +310,14 @@ The idea behind the programming language  is to start with a set of atomic funct
 \lambdarule{f : A \to B \quad g : B \to C}{g \circ f : A \to C}{composition} \qquad  & 
 \lambdarule{f : A \to B}{\mathtt{map}\ f : A^* \to B^*}{map}.
 \end{align*}
-Depending on the choice of the initial set of atomic functions, one can obtain various classes of string-to-string functions. In~\cite[Section 6]{bojanczykRegularFirstOrderList2018}, one can find a choice that leads to the so-called regular functions, which are a well known transducer class. If one adds the function $\splitterm$ (formally speaking, the variant of this  function for all possible arrow-free types $A$), then one  gets exactly the polyregular functions. As we show below, replacing $\splitterm$ by strength leads to the weakly polyregular functions.
+Depending on the choice of the initial set of atomic functions, one can obtain various classes of string-to-string functions. In~\cite[Section 6]{bojanczykRegularFirstOrderList2018}, one can find a choice that leads to the so-called regular functions, which are a well known transducer class. If one adds the function $\splitterm$ (formally speaking, the variant of this  function for all possible arrow-free types $A$), then one  gets exactly the polyregular functions. As we show below, replacing $\splitterm$ by strength leads to the rectangular polyregular functions.
 
 \begin{theorem}
     Let $A$ and $B$ finite alphabets. A string-to-string function
     \begin{align*}
     f : A^* \to B^*
     \end{align*}
-    is weakly polyregular if and only if it belongs to the least class of functions which:
+    is rectangular polyregular if and only if it belongs to the least class of functions which:
     \begin{enumerate}
         \item \label{item:closure-combinators} is closed under the combinators for co-product, product, composition and map;
         \item \label{item:atomic-regular} contains the atomic functions for the regular functions, as  in~\cite[Section 6]{bojanczykRegularFirstOrderList2018};
@@ -326,9 +326,9 @@ Depending on the choice of the initial set of atomic functions, one can obtain v
     \end{enumerate}
 \end{theorem}
 \begin{proof}
-    It is enough to show that the class of functions from this theorem sits between the two equal classes from Theorem~\ref{thm:weakly-polyregular-programs-split-free}: 
+    It is enough to show that the class of functions from this theorem sits between the two equal classes from Theorem~\ref{thm:rectangular ly-polyregular-programs-split-free}: 
     \begin{align*}
-        \text{weak polyregular} 
+        \text{rectangular polyregular} 
     \quad \subseteq \quad
     \text{functions from this theorem}
     \quad \subseteq \quad

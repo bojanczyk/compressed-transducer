@@ -63,8 +63,8 @@ If the input is not of the form $A^*B^*$, then the output is the empty string. O
 \end{myexample}
 
 As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any function compatible with compression to the basic functions in the theorem will lead a class that is compatible with compression. We believe -- with some justification presented in Section~\ref{sec:functional-lang} --  that the particular choice of the rectangle function is worthwhile, which leads us to the following definition. 
-\begin{definition}[Weak polyregular functions]\label{def:weak-polyregular}
-    Define the class of \emph{weak polyregular functions} to be the smallest class of string-to-string functions which:
+\begin{definition}[Rectangular polyregular functions]\label{def:rectangular-polyregular}
+    Define the class of \emph{rectangular polyregular functions} to be the smallest class of string-to-string functions which:
     \begin{enumerate}
         \item contains all rational functions;
         \item contains the duplication, reverse and rectangle functions from Examples~\ref{ex:duplication},~\ref{ex:reversal} and~\ref{ex:strength};
@@ -75,31 +75,31 @@ As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any func
 
 The above class is a contained in the polyregular functions (we will show in a moment that the containment is strict). This is because the rectangle function is polyregular, and the polyregular functions have all the other closure properties from the definition above. In the above definition, duplication is redundant. This is because it can be simulated using rectangles, by first prepending $12$ to the input string. Also, we could eliminate reverse, by using a variant of the rectangle function in which the word from $B^*$ is reversed. However, we do not apply these optimisations, in order to underline the analogy with Theorem~\ref{thm:regular-def}.
 
-By design, the weak polyregular functions are compatible with compression, which is proved using the same argument as for regular functions in Theorem~\ref{thm:regular-compatible}.
+By design, the rectangular polyregular functions are compatible with compression, which is proved using the same argument as for regular functions in Theorem~\ref{thm:regular-compatible}.
 
 \begin{theorem}
     \label{thm:polyregular-compatible}
-    Weak polyregular functions are compatible with compression.
+    Rectangular polyregular functions are compatible with compression.
 \end{theorem}
 
 
 
-One corollary of Theorem~\ref{thm:polyregular-compatible} is that the weak polyregular functions are a proper subclass of the polyregular functions, since the latter are not necessarily compatible with compression, as shown by Lemma~\ref{lem:nonblind-squaring}. This is stated in the following theorem, which also relates the classes to another known subclass of the polyregular functions, namely the comparison-free polyregular functions from~\cite{NguyenNP21} (this model  will be explained in the proof of the theorem).
+One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangular polyregular functions are a proper subclass of the polyregular functions, since the latter are not necessarily compatible with compression, as shown by Lemma~\ref{lem:nonblind-squaring}. This is stated in the following theorem, which also relates the classes to another known subclass of the polyregular functions, namely the comparison-free polyregular functions from~\cite{NguyenNP21} (this model  will be explained in the proof of the theorem).
 
-\begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular $\subsetneq$ weak polyregular $\subsetneq$ polyregular.
+\begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular $\subsetneq$ rectangular polyregular $\subsetneq$ polyregular.
 \end{theorem}
 \begin{proof}
-    We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:weak-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} uses does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
+    We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} uses does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
 \end{proof}
 
-\paragraph*{A normal form.} We finish this section with slightly different characterization of the weak polyregular functions, which does not use the map combinator in the closure properties, only composition. 
-In the definition of the weak polyregular functions from Definition~\ref{def:weak-polyregular}, map and function composition could be applied in alternation, e.g.~we could apply  map, followed by composition, followed by map, etc. The following lemma shows that such alternation is not necessary, since it is enough to compose functions, each of which is either rational, or map reverse, or map rectangle. Here, map reverse refers to the function obtained by applying the map combinator to the reverse function, and similarly for map rectangle. In other words, map can be pushed inside composition, and it only needs to be used once.
+\paragraph*{A normal form.} We finish this section with slightly different characterization of the rectangular polyregular functions, which does not use the map combinator in the closure properties, only composition. 
+In the definition of the rectangular polyregular functions from Definition~\ref{def:rectangular-polyregular}, map and function composition could be applied in alternation, e.g.~we could apply  map, followed by composition, followed by map, etc. The following lemma shows that such alternation is not necessary, since it is enough to compose functions, each of which is either rational, or map reverse, or map rectangle. Here, map reverse refers to the function obtained by applying the map combinator to the reverse function, and similarly for map rectangle. In other words, map can be pushed inside composition, and it only needs to be used once.
 
             \begin{lemma}\label{lem:map-normal-form}
-                Every weak polyregular function can be obtained as a composition of functions, each of which is either: (a) rational; or (b) map reverse; or (c) map rectangle.  
+                Every rectangular polyregular function can be obtained as a composition of functions, each of which is either: (a) rational; or (b) map reverse; or (c) map rectangle.  
     \end{lemma}
     \begin{proof}
-        It is enough to show that the class of functions in the statement of the lemma has the necessary closure properties. It contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:weak-polyregular}, we can also recover duplication, which can be obtained as follows: 
+        It is enough to show that the class of functions in the statement of the lemma has the necessary closure properties. It contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:rectangular-polyregular}, we can also recover duplication, which can be obtained as follows: 
         \begin{align*}
         w 
         \qquad \stackrel{\text{rational}}\mapsto \qquad 
