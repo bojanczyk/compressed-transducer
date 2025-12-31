@@ -20,7 +20,7 @@
 
 \section{A functional programming language}
 \label{sec:functional-lang}
-We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. Proving this conjecture seems difficult, and we leave it for future work.  
+We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. \todo{Is there some evidence supporting this conjecture?} Proving this conjecture seems difficult, and we leave it for future work.  
 
 In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the rectangular  fragment.  Let us start with an example.
 
@@ -89,6 +89,7 @@ Here is the inductive definition of the syntax  of the programs.
     \qquad 
     \lambdarule{\myoverbrace{x : A}{variable}\quad  M : B}{\lambda x.\ M : A \to B}{$\lambda$-abstraction}
     \end{align*}
+    \todo[inline]{Small detail: In the above examples you wrote $\lambda x : A . \ M$.}
     The descriptions above should be read as usual in the $\lambda$-calculus, with premises  above the line and the conclusion below it. 
     \item \textbf{Data constructors and destructors.} Next, the programming language has features to access the data types for pairs, co-pairs, lists, and the atomic unit type $1$.  For the unit type, there is a program of this type, which generates the unique value in this type; this program  is denoted by $()$. For the remaining type constructors, there are data constructors described as follows:
     \begin{align*}
@@ -140,7 +141,7 @@ If a program has free variables of types $A_1,\ldots,A_n$, and the program itsel
 \quad \to \quad 
 \myunderbrace{\sem{A}}{value of the\\ program},
 \end{align*}
-which is  by induction on the structure of the program in the expected way.
+which is  defined by induction on the structure of the program in the expected way.
 If the program is \emph{closed}, i.e.~it has no free variables, then its semantics will be in $\sem A$. This completes the definition of the polyregular $\lambda$-calculus.
 
 \paragraph*{String-to-string functions.} 
@@ -175,7 +176,7 @@ The purpose of this section is to identify the subclass which corresponds to the
     \end{align*}
     The split-free programs contain all rational functions by definition, and they are easily seen to be closed under composition, as witnessed by the program 
     $ \lambda w.\ M\  (N\  w).$
-    Also, they are closed under map and reverse, since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
+    Also, they are closed under map and reverse, \todo{I cannot find reverse in the syntax of the polyregular $\lambda$-calculus.} since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
     This completes the proof of the first inclusion. 
 
     The rest of this proof is devoted to the converse inclusion, namely
