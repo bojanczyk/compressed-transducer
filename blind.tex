@@ -204,6 +204,12 @@ These  are summarised  in the following definition.
         Define a \emph{resource bound} to be a triple consisting of: (a) a finite set of variables; (b) a finite set of atomic programs; and (c)  a height bound in $\set{1,2,\ldots}$.        
     \end{definition}
     We say that a program is \emph{consistent} with a resource bound if  its variables are contained in the set from item (a), its atomic programs are contained in the  set from item (b), and its  height is at most  the number from item (c). If we fix a resource bound, then programs consistent with this resource bound can be written as strings over a finite alphabet (for this, the height bound is unimportant). Furthermore, the set of strings that are representations of programs is a regular language over this alphabet (for this, the height bound is important). 
+    
+\todo[inline]{I think, concerning the height of a program on should  be a bit more formal. At the end it should be a simple inductive definition.
+Is the following correct?
+ height of single variable $x$ or an atomic program = 0. \\
+ height of $MN$ (application) = 1 + height of $M$ + height of $N$ \\  (similarly for $(M,N)$ and $[M_1, \ldots, M_n]$). \\
+ height of $\lambda x. M$ = 1 + height of $M$ (similarly for $\rightterm M$ and $\leftterm M$).}
 
 
         \begin{figure}
