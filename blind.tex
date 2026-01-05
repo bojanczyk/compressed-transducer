@@ -1,7 +1,7 @@
 
 
 
-
+\newcommand{\reverseterm}{\mathtt{reverse}}
 \newcommand{\leftterm}{\mathtt{Left}}
 \newcommand{\rightterm}{\mathtt{Right}}
 \newcommand{\fstterm}{\mathtt{fst}}
@@ -20,7 +20,7 @@
 
 \section{A functional programming language}
 \label{sec:functional-lang}
-We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. \todo{Is there some evidence supporting this conjecture?} Proving this conjecture seems difficult, and we leave it for future work.  
+We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. \todo{Is there some evidence supporting this conjecture?} \mb{I was thinking about it for a few hours, and it seems a plausible enough to conjecture, there are even some possible lines of attack.} Proving this conjecture seems difficult, and we leave it for future work.  
 
 In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the rectangular  fragment.  Let us start with an example.
 
@@ -60,6 +60,7 @@ Using a similar program, we can implement the rectangle function from Example~\r
     x)
 \end{align*}
 \todo[inline]{I do not understand the last expression. Should it be the following?}
+\mb{You are correct, the above code referred to a different version of rectangle. Your version is good, but it refers to a typed version, where two strings are given as a pair. So it is a slight mismatch with the string-to-string setting.}
 \begin{align*}
     \lambda x: A^*.\  \lambda y: B^*. \  \concatterm ( \mapterm \ ( \lambda z:A . \ \concatterm [[z],y] ) \ x )
   \end{align*}
@@ -90,6 +91,7 @@ Here is the inductive definition of the syntax  of the programs.
     \lambdarule{\myoverbrace{x : A}{variable}\quad  M : B}{\lambda x.\ M : A \to B}{$\lambda$-abstraction}
     \end{align*}
     \todo[inline]{Small detail: In the above examples you wrote $\lambda x : A . \ M$.}
+    \mb{That's true, I'm not sure how to achieve consistency.}
     The descriptions above should be read as usual in the $\lambda$-calculus, with premises  above the line and the conclusion below it. 
     \item \textbf{Data constructors and destructors.} Next, the programming language has features to access the data types for pairs, co-pairs, lists, and the atomic unit type $1$.  For the unit type, there is a program of this type, which generates the unique value in this type; this program  is denoted by $()$. For the remaining type constructors, there are data constructors described as follows:
     \begin{align*}
@@ -101,6 +103,7 @@ Here is the inductive definition of the syntax  of the programs.
     \lambdarule{M : B}{\rightterm M : A + B}{right co-pair}
     \end{align*}
     In the data constructors $\leftterm$ (resp., $\rightterm$), the other type $B$ (resp., $A$) is part of the syntax, since it cannot be inferred from the argument $M$. \todo[inline]{Does this mean that, strictly speaking, we should write $\rightterm_A M$ and $\leftterm_B M$? I do not say that we should do this, but as a remark this might make the point clearer.}
+    \mb{Yes, that is correct.}
     We also have  atomic programs for deconstructing data:
         \begin{align*}
      \fstterm & :  A \times B \to A \\
@@ -111,13 +114,15 @@ Here is the inductive definition of the syntax  of the programs.
         The above list is not finite, since each program represents a family of programs, which is parameterized by the choice of types $A,B,C$.
     \item \textbf{List processing.}  \label{item:language-list-processing} The polyregular $\lambda$-calculus does not have any mechanisms for recursion, iteration, or even a fold function\footnote{The omission of the fold function is discussed at length in~\cite{polyregular-fold}.}. For this reason, computation on lists of unbounded length  must be done using dedicated atomic programs. These are listed below (again, the list is infinite, since each program is parameterized by a choice of types $A,B$):
     \begin{align*}
+        \reverseterm & : A^* \to A^* \\
         \concatterm & : A^{**} \to A^* \\
         \mapterm & : (A \to B) \to A^* \to B^* \\
         \splitterm & : A^* \to (A^* \times A^*)^* \\
-                \blockterm & : (A+B)^* \to A^* \times (B \times A)^*
+                \blockterm & : (A+B)^* \to A^* \times (B \times A^*)^*
     \end{align*}
     \todo[inline]{Should the previous line be: 
                 $\blockterm : (A+B)^* \to A^* \times (B \times A^*)^*$ ?}
+    \mb{Yes, you are correct, thanks, fixed it!}
 
     \item \textbf{Rational.} For every finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic function\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
 \end{enumerate}
@@ -177,7 +182,8 @@ The purpose of this section is to identify the subclass which corresponds to the
     \end{align*}
     The split-free programs contain all rational functions by definition, and they are easily seen to be closed under composition, as witnessed by the program 
     $ \lambda w.\ M\  (N\  w).$
-    Also, they are closed under map and reverse, \todo{I cannot find reverse in the syntax of the polyregular $\lambda$-calculus.} since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
+    Also, they are closed under map and reverse, \todo{I cannot find reverse in the syntax of the polyregular $\lambda$-calculus.} 
+    \mb{Thanks, fixed this omission!} since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
     This completes the proof of the first inclusion. 
 
     The rest of this proof is devoted to the converse inclusion, namely
@@ -210,6 +216,7 @@ Is the following correct?
  height of single variable $x$ or an atomic program = 0. \\
  height of $MN$ (application) = 1 + height of $M$ + height of $N$ \\  (similarly for $(M,N)$ and $[M_1, \ldots, M_n]$). \\
  height of $\lambda x. M$ = 1 + height of $M$ (similarly for $\rightterm M$ and $\leftterm M$).}
+ \mb{Oh, I see that it was unclear, because the definition you spell out is not the one that I had in mind. For me, the height is the maximum distance from the root to a leaf, so for example in application it will be 1 + max( height of M, height of N), and similarly for pairs and lists.} 
 
 
         \begin{figure}
