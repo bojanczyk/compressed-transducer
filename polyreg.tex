@@ -9,22 +9,23 @@ Similarly to the rational and regular functions discussed in the previous sectio
 \begin{align*}
 1234 \quad \mapsto \quad \underline{1}234 1\underline{2}34 12\underline{3}4 123\underline{4}
 \end{align*}
-Formally speaking, the output alphabet is two copies of the input alphabet, one with and one without underlining.
+Formally speaking, the output alphabet consists of two copies of the input alphabet, one with and one without underlining.
 \end{myexample}
 
 The marked squaring function is an example of a polyregular function, and in fact the class of polyregular functions can be defined by adding marked squaring to the definition of regular functions from Theorem~\ref{thm:regular-def}. As we show below, marked squaring is not compatible with compression, which implies that not all polyregular functions are compatible with compression.
 
-
-
 \begin{lemma}\label{lem:nonblind-squaring}
     Marked squaring is not compatible with compression.
 \end{lemma}
+
 \begin{proof}
-    Similarly to Example~\ref{ex:exp-output}, the problem is not in computing the output compression, but simply in the fact that it does not exist in polynomial size. Consider an input string of the form 
+    Similarly to Example~\ref{ex:exp-output}, the problem is not in computing the output compression, but simply in the fact that it does not exist in polynomial size. Consider the input string 
     \begin{align*}
-    a^{2^n}b.
+    v_n = a^{2^n}b.
     \end{align*}
-    This string has a compression of linear size. We will show, however, that the output of marked squaring does not have any compression of subexponential size. The reason is that the output string contains an infix of the form  $ba^i\underline a$ for every $i \in \set{1,\ldots,{2^n}}$. On the other hand, the number of such infixes is limited by the size of any compression, as shown in the following claim.
+    This string has a compression of size $\mathcal{O}(n)$. Let $w_n$ be the marked squaring of $v_n$. We will show that 
+    any compression of $w_n$ must have size $2^n$. The reason is that $w_n$ contains an infix of the form  $ba^i\underline a$ for every $i \in \set{1,\ldots,{2^n}}$. On the other hand, the number of such infixes is limited by the size of any compression, as shown in the following claim
+    (which is similar to the so-called $mk$-lemma from \cite[Lemma~3]{CLLLPPSS05}).
     \begin{claim}
         Let $a,b,c$ be distinct letters. If a string $w$ has a compression of size $m$, then 
         \begin{align*}
@@ -52,14 +53,14 @@ which does not have the underlines, and which is compatible with compression. We
         \label{eq:rectangle}
     (123,abcd) \quad \mapsto \quad 1abcd2abcd3abcd4abcd.
     \end{align}
-    This can be seen as a generalization of squaring, since squaring is obtained by taking both input strings to be the same.
+    This can be seen as a generalization of squaring, since squaring is obtained by taking both input strings to be the same and then removing the letters from the first string.
 Since for the moment we want to work with functions that input strings (and not pairs of strings), we will view the  rectangle function as a string-to-string function in the following way. There are two disjoint alphabets $A$ and $B$, and the function has  type 
     \begin{align*}
     (A+B)^* \to (A+B)^*.
     \end{align*}
 If the input is not of the form $A^*B^*$, then the output is the empty string. Otherwise, the input is split into two strings, and then we apply the rectangle operation as above. (An alternative definition, which would not change the results below, would be to untangle the input string over alphabet $A+B$ into two strings, by projecting onto the respective alphabets. We choose the previous definition to underline the fact that we are only interested in inputs where the two parts are clearly separated.)
 
-    Let us show that the rectangle function is compatible with compression. Suppose that we are given a compression of some string over alphabet $A+B$. We can first check in polynomial time if this string is in $A^*B^*$; this can be done  because regular languages can be evaluated in polynomial time on compressed inputs. Next, we extract in polynomial time compressions for the two parts of the input string, one in $A^*$ and one in $B^*$; this can be done by removing the nonterminals from the unused part of the alphabet.  Finally, in the compression for the first  string from $A^*$, we append a copy of the compression for the second string from $B^*$ after each terminal symbol. 
+    Let us show that the rectangle function is compatible with compression. Suppose that we are given a compression of some string over alphabet $A+B$. We can first check in polynomial time if this string is in $A^*B^*$; this can be done  because membership in a regular language can be checked in polynomial time for compressed inputs \cite{PlandowskiR99}. Next, we extract in polynomial time compressions for the two parts of the input string, one in $A^*$ and one in $B^*$; this can be done by removing the nonterminals from the unused part of the alphabet.  Finally, in the compression for the first  string from $A^*$, we append a copy of the compression for the second string from $B^*$ after each terminal symbol. 
 \end{myexample}
 
 As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any function compatible with compression to the basic functions in the theorem will lead a class that is compatible with compression. We believe -- with some justification presented in Section~\ref{sec:functional-lang} --  that the particular choice of the rectangle function is worthwhile, which leads us to the following definition. 
@@ -92,14 +93,14 @@ One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangula
     We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} uses does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
 \end{proof}
 
-\paragraph*{A normal form.} We finish this section with slightly different characterization of the rectangular polyregular functions, which does not use the map combinator in the closure properties, only composition. 
-In the definition of the rectangular polyregular functions from Definition~\ref{def:rectangular-polyregular}, map and function composition could be applied in alternation, e.g.~we could apply  map, followed by composition, followed by map, etc. The following lemma shows that such alternation is not necessary, since it is enough to compose functions, each of which is either rational, or map reverse, or map rectangle. Here, map reverse refers to the function obtained by applying the map combinator to the reverse function, and similarly for map rectangle. In other words, map can be pushed inside composition, and it only needs to be used once.
+\paragraph*{A normal form.} We conclude this section with a slightly different characterization of rectangular polyregular functions, which relies only on composition in the closure properties and does not use the map combinator. 
+In the definition of the rectangular polyregular functions from Definition~\ref{def:rectangular-polyregular}, map and function composition could be applied in alternation, e.g.~we could apply  map, followed by composition, followed by map, etc. The following lemma shows that such alternation is not necessary, since it is enough to compose functions, each of which is either rational, or map reverse, or map rectangle. Here, map reverse refers to the function obtained by applying the map combinator to the reverse function, and similarly for map rectangle. In other words, map can be pushed inside composition and is not nested.
 
             \begin{lemma}\label{lem:map-normal-form}
                 Every rectangular polyregular function can be obtained as a composition of functions, each of which is either: (a) rational; or (b) map reverse; or (c) map rectangle.  
     \end{lemma}
     \begin{proof}
-        It is enough to show that the class of functions in the statement of the lemma has the necessary closure properties. It contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:rectangular-polyregular}, we can also recover duplication, which can be obtained as follows: 
+        It is enough to show that the class of functions in the statement of the lemma has the  closure properties from Definition~\ref{def:rectangular-polyregular}. It contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:rectangular-polyregular}, we can also recover duplication, which can be obtained as follows: 
         \begin{align*}
         w 
         \qquad \stackrel{\text{rational}}\mapsto \qquad 
@@ -109,7 +110,8 @@ In the definition of the rectangular polyregular functions from Definition~\ref{
         \qquad \stackrel{\text{rational}}\mapsto \qquad  \mapsto ww.
         \end{align*}
         
-        It remains to show that the class is closed under applying map. Map commutes with composition, and therefore it is enough to show that map can be applied to the atomic functions (a), (b), (c). In other words, it is easy to see that map can be pushed inside composition, but it remains to be argued that it does not need to be applied twice.  The class of rational functions is closed under applying map, and therefore we only need to show that applying map twice to reverse or rectangle  yields  a function as in the statement of the lemma. We only do the case of the rectangle, and we leave the case of reverse to the reader.  
+        It remains to show that the class is closed under applying map. Map commutes with composition ($\mathop{map}(f \circ g) =
+        \mathop{map}(f) \circ \mathop{map}(g)$), and therefore it is enough to show that map can be applied to the atomic functions (a), (b), (c). In other words, it is easy to see that map can be pushed inside composition, but it remains to be argued that it does not need to be applied twice.  The class of rational functions is closed under applying map, and therefore we only need to show that applying map twice to reverse or rectangle  yields  a function as in the statement of the lemma. We only do this for the case of the rectangle, and we leave the case of reverse to the reader.  
         
         Suppose then that we apply map twice to the rectangle function. In this case, there are two separators: one for the outer map (which we denote using a vertical bar) and one for the inner map (which we denote using a comma). 
         Here is an example 
@@ -117,11 +119,17 @@ In the definition of the rectangular polyregular functions from Definition~\ref{
         a01,bc234|de56|fg78,hij9  \quad \mapsto \quad 
         a01,b234c234|d56e56|f78g78,h9i9j9.
         \end{align*}
-        This is implemented by using a map rectangle where  both kinds of separator are treated in the same way. Formally speaking, we need to introduce a third separator (say $\#$), which is appended to both kinds of a separator using a rational function, as in the following example:
+        This is implemented by using a map rectangle where  both kinds of separators are treated in the same way. Formally speaking, we need to introduce a third separator (say $\#$), which is appended to both kinds of a separator using a rational function, as in the following example:
                 \begin{align*}
                     a01,bc234|de56|fg78,hij9  \quad \mapsto \quad
                     a01,\#bc234|\#de56|\#fg78,\#hij9 .
         \end{align*}
-        Next, we apply map rectangle with the new separator. This gives us essentially the correct output, except that the squares have an extra iteration, and there are many copies of the new separator.
-        The result can then be cleaned up using a regular function, in order to obtain the correct output.
+        Next, we apply map rectangle with the new separator, which yields
+        \begin{align*}
+                    a01,\# b234|c234|\#d56|e56|\#f78,g78,\#h9i9j9 .
+        \end{align*}
+        From this we obtain the correct output by removing every comma or $|$ that that does not directly follow a $\#$ 
+        and finally remove every $\#$.  \todo{I added a few more details. Is it correct?} This is a regular function.
+%        This gives us essentially the correct output, except that the squares have an extra iteration, and there are many copies of the new separator.
+%        The result can then be cleaned up using a regular function, in order to obtain the correct output.
     \end{proof}

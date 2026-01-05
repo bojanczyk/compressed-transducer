@@ -15,28 +15,26 @@
 % Mikolaj: I would prefer to avoid the term "big data", especially in a first sentence, otherwise my colleagues will complain that this is just buzzwording :) I guess people know that compression is important.
 % Data compression is a core technology in computer science that has gained additional importance in the era of big data.
 % For an introduction into classical compression techniques see  \cite{Say00}. 
-The primary motivation for this work stems from the paradigm of {\em algorithmics on compressed data}. 
+The starting point for this work stems from the paradigm of {\em algorithmics on compressed data}. 
 Its principal idea is to process data that is given in compressed form without first decompressing it and then operating on the uncompressed data.
 There are three main applications for algorithms of this kind (see  \cite{Loh12survey} for references).
 \begin{itemize}
-\item  Often, one needs to not only store compressed large data, but also to 
-process and analyse it as well. 
-In such cases, it makes sense to design algorithms that directly
-operate on the compressed data in order to
-save the time and space for (de)compression. 
-A typical example is the search for specific patterns in genomes that are
-stored in a compressed way.
+\item  In many applications one has to combine compression and querying. A typical example 
+is a genom database where DNA sequences are stored in compressed form and searched for specific patterns (e.g. genes).
+This leads to so-called compressed text indices \cite{CNP21,FeMa05}
 \item A compressed representation of the input data might reveal
 certain regularities, which could be used to speed up an algorithm. This principle is 
-known as {\em acceleration by compression}. 
+known as {\em acceleration by compression}. An example can be found in \cite{LMWZiv07},
+where Viterbi's algorithms for decoding  
+hidden Markov chains is speeded up using compression.
 \item Large and often highly compressible data may appear as 
 intermediate data structures in algorithms. In such a situation, one may try to 
 store a compressed representation of these intermediate data structures
 and to process this representation. This may lead to more efficient 
-algorithms. One example, which arises in group theory, is the compressed word problem:  checking if two compressed representations describe the same group element, see the surveys~\cite{BKLMNRS20}  and~\cite{Loh14}.
+algorithms. One example, which arises in group theory, is the compressed word problem:  checking if two compressed representations describe the same group element, see the surveys~\cite{BKLMNRS20,Loh14}.
 \end{itemize}
-We begin our investigation of algorithmics on compressed data by claryfing two aspects: (i)
-what compressed representation of data is used?; and (ii)
+We begin our investigation of algorithmics on compressed data by clarifying two aspects: (i)
+what compressed representation of data is used and (ii)
 what are the processing steps carried out on the compressed data? 
 
 
@@ -44,23 +42,34 @@ what are the processing steps carried out on the compressed data?
 Let us first address question (i), which is about the compression format. In this paper we consider strings (words) that are compressed using context-free grammars: a \emph{grammar compression} of a string $w \in A^*$ is a context-free grammar which generates the string $w$ and no other strings (we will also shortly speak of a 
 \emph{compression} of $w$). Syntactically, this can be ensured by only considering context-free grammars that are acyclic (there is no nonterminal $X$ and a non-empty derivation $X \Rightarrow^+ u$ such that $X$ appears in $u$) and where every nonterminal $X$ has
 a unique production with left-hand side $Y$.
-  An equivalent representation is a \emph{straight line program}, which is a sequence of instructions that assign values to variables, using concatenation and constants, as in the following example, which generates the string $aaaa$:
+  An equivalent representation is a \emph{straight line program}, which is a sequence of instructions 
+  of the form $x := a$ and $x := y \cdot z$ for variables $x,y,z$ and a terminal symbol $a$.
+ The following straight line program generates the string $aaaa$:
 \begin{lstlisting}
-    x := 'a' 
+    x := a
     y := x $\cdot$ x
     z := y $\cdot$ y
 \end{lstlisting}
-The variables can be seen as non-terminals, and the variable $z$ in the last line can be seen as the starting non-terminal. A straight line  program can achieve exponential compression, but not more: if the program has $n$ lines then it can generate a string of length up to $2^n$.
+The variables can be seen as non-terminals, and the variable $z$ in the last line can be seen as the starting non-terminal. 
+Note that a straight line program corresponds to a context-free grammar in Chomsky normal form. We define the size of 
+a straight line program as the number of instructions (or, equivalently, the number of non-terminals in the corresponding Chomsky
+normal form grammar).
+A straight line  program can achieve exponential compression, but not more: every program of size $n$ generates a string of length at most $2^n$.
+It is well known that every string of length $n$ over an alphabet of size $\sigma$ can be generated by a straight line program of size
+$\mathcal{O}(n / \log_\sigma n)$ \cite{BerstelB87}.
+
+Although computing a straight line  program for a given string is not possible in polynomial time unless \textsf{P} = \textsf{NP} \cite{CLLLPPSS05},
+there exist several compressors that achieve a good approximation of a smallest straight line program \cite{CLLLPPSS05,Jez15approx,Ryt03}.
 
 Straight-line programs have been intensively used in algorithmics on compressed data. 
-Algorithmic problems that can be solved on grammar compressed strings are for instance
-checking equality \cite{HirshfeldJM94,MehlhornSU94,Pla94}, pattern matching \cite{KRS95,Jez15}, and membership in regular languages; see \cite{Loh12survey} for further details.
-On the other hand, testing membership of a grammar compressed string in a context-free language (and even a fixed
+Algorithmic problems that can be solved in polynomial time on grammar compressed strings are for instance
+checking equality \cite{HirshfeldJM94,MehlhornSU94,Pla94}, pattern matching \cite{KRS95,Jez15}, and membership in regular languages \cite{PlandowskiR99}; see the survey \cite{Loh12survey} for further details.
+On the negative side, testing membership of a grammar compressed string in a context-free language (and even a fixed
 visibly pushdown language) is a \textsf{PSPACE}-complete problem \cite[Theorem 9]{Lohrey11}.
 
 
 \paragraph{String-to-string functions.}
-We now come to the second question (ii), which is about the form of compression that we use. 
+We now come to the second question (ii): What are the processing steps carried out on the compressed data?
 The most general option for processing compressed strings would be to allow arbitrary
  \emph{string-to-string functions}. A  string-to-string function is a function $f : A^* \to B^*$ where $A$ and $B$ are finite alphabets. 
 We are interested in string-to-string functions that can be evaluated using compressions, i.e.~given a compression of the input, one can return a compression of the output, in deterministic polynomial time. This is described in the following definition.
@@ -115,13 +124,15 @@ This function  is compatible with compression. To implement squaring on  straigh
 
 \begin{myexample}[Exponential outputs] \label{ex:exp-output} This is a non-example, i.e.~a function that is not compatible with compression.
     Assume that the input and output alphabets have one letter only, and consider the function 
-    \begin{align*}
+    \begin{equation} \label{exp-map}
     a^n \quad \mapsto \quad a^{2^n}.
-    \end{align*}
-    This function is not compatible with compression. The reason is that we can encode an input string of length $2^n$ using a straight line program with $n$ lines. The output string will be of doubly exponential length, and will therefore require a compression of exponential size. Such a compression cannot be constructed in polynomial time. 
+    \end{equation}
+    This function is not compatible with compression. The reason is that we can produce $a^{2^k}$ by a straight line program of size $k$.
+    The  function \eqref{exp-map} maps $a^{2^k}$ to $a^{2^{2^k}}$ which requires a compression of size $2^k$. 
+    Such a compression cannot be constructed in polynomial time from a compression of size $k$.
 \end{myexample}
 
-Characterizing the class of all string-to-string functions that are compatible with compression is a hopless task. Therefore, we restrict
+Characterizing the class of all string-to-string functions that are compatible with compression is a hopeless task. Therefore, we restrict
 to string-to-string functions that can be computed by certain models of string transducers.
 There will be three kinds of transducer models considered in this paper, which the define the following function classes:
 \begin{align*}

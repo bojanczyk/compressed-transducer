@@ -13,7 +13,7 @@ Let us begin with the definition of a {rational relation}, and then we will iden
 
 Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
 The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. A relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string.
-The following result extends \cite[Theorem 3.10]{Loh14}, which only covers the 
+The following result extends \cite[Theorem~1]{BeChRa08}, which only covers the 
 class of sequential functions (a subclass of the rational functions):
 
 
@@ -98,8 +98,7 @@ The first closure property, which is immediate from the definition, is that func
         and similarly for $Z$, then we introduce the following rules:
          $\blue{X_s} \to \blue{u}$ if $\blue{Y_s} \to \blue{u}$,
         $\blue{X_f} \to \blue v$ if $\blue{Z_f} \to \blue v$,
-        $\blue U \to \blue{Y_f Z_s}$, $\red V \to | \blue U$, and $\red{X_m} \to \red{Y_m V Z_m}$.\footnote{Similar but slightly different constructions can be found in \cite{}.}
-
+        $\blue U \to \blue{Y_f Z_s}$, $\red V \to | \blue U$, and $\red{X_m} \to \red{Y_m V Z_m}$.
         
         From the new grammar, we easily get a grammar in normal form that generates the same string as the original grammar, by suitably choosing the production for the starting nonterminal.
     \end{proof}
