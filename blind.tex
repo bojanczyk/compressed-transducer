@@ -102,8 +102,8 @@ Here is the inductive definition of the syntax  of the programs.
     \qquad 
     \lambdarule{M : B}{\rightterm M : A + B}{right co-pair}
     \end{align*}
-    In the data constructors $\leftterm$ (resp., $\rightterm$), the other type $B$ (resp., $A$) is part of the syntax, since it cannot be inferred from the argument $M$. \todo[inline]{Does this mean that, strictly speaking, we should write $\rightterm_A M$ and $\leftterm_B M$? I do not say that we should do this, but as a remark this might make the point clearer.}
-    \mb{Yes, that is correct.}
+    In the data constructors $\leftterm$ (resp., $\rightterm$), the other type $B$ (resp., $A$) is part of the syntax, since it cannot be inferred from the argument $M$. So, strictly speaking, one should write $\rightterm_A M$ and $\leftterm_B M$.
+   
     We also have  atomic programs for deconstructing data:
         \begin{align*}
      \fstterm & :  A \times B \to A \\
@@ -120,10 +120,7 @@ Here is the inductive definition of the syntax  of the programs.
         \splitterm & : A^* \to (A^* \times A^*)^* \\
                 \blockterm & : (A+B)^* \to A^* \times (B \times A^*)^*
     \end{align*}
-    \todo[inline]{Should the previous line be: 
-                $\blockterm : (A+B)^* \to A^* \times (B \times A^*)^*$ ?}
-    \mb{Yes, you are correct, thanks, fixed it!}
-
+   
     \item \textbf{Rational.} For every finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic function\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
 \end{enumerate}
 
@@ -182,8 +179,7 @@ The purpose of this section is to identify the subclass which corresponds to the
     \end{align*}
     The split-free programs contain all rational functions by definition, and they are easily seen to be closed under composition, as witnessed by the program 
     $ \lambda w.\ M\  (N\  w).$
-    Also, they are closed under map and reverse, \todo{I cannot find reverse in the syntax of the polyregular $\lambda$-calculus.} 
-    \mb{Thanks, fixed this omission!} since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
+    Also, they are closed under map and reverse, since both of these are included as atomic programs. Duplication and rectangle were treated in Example~\ref{ex:squaring-rectangle-duplication}.
     This completes the proof of the first inclusion. 
 
     The rest of this proof is devoted to the converse inclusion, namely
@@ -217,7 +213,7 @@ Is the following correct?
  height of $MN$ (application) = 1 + height of $M$ + height of $N$ \\  (similarly for $(M,N)$ and $[M_1, \ldots, M_n]$). \\
  height of $\lambda x. M$ = 1 + height of $M$ (similarly for $\rightterm M$ and $\leftterm M$).}
  \mb{Oh, I see that it was unclear, because the definition you spell out is not the one that I had in mind. For me, the height is the maximum distance from the root to a leaf, so for example in application it will be 1 + max( height of M, height of N), and similarly for pairs and lists.} 
-
+\todo{Sure, I also had max in mind, but somehow I wrote $+$}
 
         \begin{figure}
          \begin{align*}
