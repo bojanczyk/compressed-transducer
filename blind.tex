@@ -243,12 +243,12 @@ These  are summarised  in the following definition.
     \end{figure}
 
 
-        \paragraph*{Reduction} So far, we have explained how a program can be written as a string over finite alphabet. We now explain how programs can be evaluated under this representation. 
-    When defining the semantics of the polyregular $\lambda$-calculus, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable: 
+        \paragraph*{Reduction} So far, we have explained how a program can be written as a string over a finite alphabet. We now explain how programs can be evaluated under this representation. 
+    When defining the semantics of the polyregular $\lambda$-calculus in \cite{}, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable: 
     \begin{align}\label{eq:beta-reduction}
     (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
     \end{align}
-The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming bound variables. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
+The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables. \todo{Can we cite some work here?} If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
 
 
     The key lemma in the proof is the following, which shows that a rectangular polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from Example~\ref{ex:strength}. 
