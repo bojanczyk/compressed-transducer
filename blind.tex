@@ -17,10 +17,13 @@
 \newcommand{\blockterm}{\mathtt{block}}
 \newcommand{\typecolor}[1]{{\color{cyan}#1}}
 \newcommand{\church}[2]{#1^{\typecolor{#2}}}
+\newcommand{\height}{\mathtt{height}}
 
 \section{A functional programming language}
 \label{sec:functional-lang}
-We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. \todo{Is there some evidence supporting this conjecture?} \mb{I was thinking about it for a few hours, and it seems a plausible enough to conjecture, there are even some possible lines of attack.} Proving this conjecture seems difficult, and we leave it for future work.  
+We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular.  \mb{I was thinking about it for a few hours, and it seems a plausible enough to conjecture, there are even some possible lines of attack.} 
+\todo{It would be could to write a few lines supporting the conjecture. As a referee I would ask in this direction.}
+Proving this conjecture seems difficult, and we leave it for future work.  
 
 In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the rectangular  fragment.  Let us start with an example.
 
@@ -102,6 +105,7 @@ Here is the inductive definition of the syntax  of the programs.
     \qquad 
     \lambdarule{M : B}{\rightterm M : A + B}{right co-pair}
     \end{align*}
+    \todo[inline]{In the rule (list), I guess $n=0$ is allowed. So $[]$ is a program. Is this the same as $()$?}
     In the data constructors $\leftterm$ (resp., $\rightterm$), the other type $B$ (resp., $A$) is part of the syntax, since it cannot be inferred from the argument $M$. So, strictly speaking, one should write $\rightterm_A M$ and $\leftterm_B M$.
    
     We also have  atomic programs for deconstructing data:
@@ -121,7 +125,7 @@ Here is the inductive definition of the syntax  of the programs.
                 \blockterm & : (A+B)^* \to A^* \times (B \times A^*)^*
     \end{align*}
    
-    \item \textbf{Rational.} For every finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic function\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
+    \item \textbf{Rational.} For all finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic program\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
 \end{enumerate}
 
 \paragraph*{Semantics.} The only part of the polyregular $\lambda$-calculus that is not completely standard is the two functions $\splitterm$ and $\blockterm$, so we begin by explaining those.  The function 
@@ -199,6 +203,16 @@ write down a program as a string, and to then evaluate it be using string rewrit
     
     A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. Another restriction that we impose concerns the height of the syntax tree in the program. Let us begin by explaining the notion of height, by using a doubly nested list:
     \mypic{2}
+    \todo[inline]{I added a formal definition of the height. I think this is needed here to avoid missinterpretations. Please check whether it is correct.}
+  Formally, define the height of a program inductively as follows, where $M$, $N$, $M_1, \ldots, M_n$ are programs:
+  \begin{itemize}
+  \item the height of a single variable $x$ and an atomic program is zero,
+  \item $\height(MN) = 1+ \max\{ \height(M), \height(N) \}$,
+  \item $\height(\lambda x. M) = 1+\height(M)$,
+  \item $\height((M,N)) = 1+ \max\{ \height(M), \height(N) \}$.
+  \item $\height([M_1, \ldots, M_n]) = 1 + \max \{ \height(M_i) : 1 \le i \le n \}$ for $n \geq 1$ and $\height([]) = 0$.
+  \item $\height(\leftterm M) = \height(\rightterm M) = 1 + \height(M)$.
+  \end{itemize}  
     It turns out that a polyregular function cannot  deal with trees of unbounded height, since it is essentially a finite automaton, and finite automata on strings cannot handle trees of unbounded height. For this reason, we will impose a bound on the height of programs. 
 These  are summarised  in the following definition.
 
@@ -207,13 +221,6 @@ These  are summarised  in the following definition.
     \end{definition}
     We say that a program is \emph{consistent} with a resource bound if  its variables are contained in the set from item (a), its atomic programs are contained in the  set from item (b), and its  height is at most  the number from item (c). If we fix a resource bound, then programs consistent with this resource bound can be written as strings over a finite alphabet (for this, the height bound is unimportant). Furthermore, the set of strings that are representations of programs is a regular language over this alphabet (for this, the height bound is important). 
     
-\todo[inline]{I think, concerning the height of a program on should  be a bit more formal. At the end it should be a simple inductive definition.
-Is the following correct?
- height of single variable $x$ or an atomic program = 0. \\
- height of $MN$ (application) = 1 + height of $M$ + height of $N$ \\  (similarly for $(M,N)$ and $[M_1, \ldots, M_n]$). \\
- height of $\lambda x. M$ = 1 + height of $M$ (similarly for $\rightterm M$ and $\leftterm M$).}
- \mb{Oh, I see that it was unclear, because the definition you spell out is not the one that I had in mind. For me, the height is the maximum distance from the root to a leaf, so for example in application it will be 1 + max( height of M, height of N), and similarly for pairs and lists.} 
-\todo{Sure, I also had max in mind, but somehow I wrote $+$}
 
         \begin{figure}
          \begin{align*}
