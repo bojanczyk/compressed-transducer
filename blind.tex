@@ -130,16 +130,16 @@ Here is the inductive definition of the syntax  of the programs.
 
 \paragraph*{Semantics.} The only part of the polyregular $\lambda$-calculus that is not completely standard is the two functions $\splitterm$ and $\blockterm$, so we begin by explaining those.  The function 
    $\splitterm$ is used to split a list into all possible (prefix, suffix) pairs, sorted by increasing prefixes,  as  explained in this example 
-\begin{align*}
+\begin{equation} \label{def-split}
 [1,2,3] 
 \quad \mapsto \quad 
 [([],[1,2,3]), ([1],[2,3]), ([1,2],[3]), ([1,2,3],[])].
-\end{align*}
+\end{equation}
     The function $\blockterm$ inputs a list which has elements of two kinds, and collects into blocks the consecutive  elements of the first kind, as explained in the following example, in which $A$ is letters and $B$ is digits:
-        \begin{align*}
+  \begin{equation} \label{def-block}
         [a, b, 1, c, d, e, 2, 3, f] 
         \quad \mapsto \quad ([a,b], [(1,[c,d,e]),(2,[]),(3,[f])]).
-        \end{align*}
+        \end{equation}
     
 Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$; which is appropriate to our language since it can only define always-terminating functions.  
 If a program has free variables of types $A_1,\ldots,A_n$, and the program itself has type $A$, then its semantics will be a function 
@@ -224,15 +224,17 @@ These  are summarised  in the following definition.
 
         \begin{figure}
          \begin{align*}
-     \fstterm (M,N) & \leadsto M \\
-     \sndterm (M,N) & \leadsto  N \\
-        \mathtt{uncons} []  & \leadsto \leftterm ()  \\
-        \mathtt{uncons} [M_1,\ldots,M_n] \text{ for $n \ge 1$} & \leadsto \rightterm (M_1, [M_2,\ldots,M_n]) \\
-        \casesterm \ M_1\  M_2\  (\leftterm\  N) & \leadsto M_1\ N \\
-        \casesterm \ M_1\  M_2\  (\rightterm\  N) & \leadsto M_2\ N \\ 
-        \concatterm [[M^1_{1},\ldots,M^1_{n_1}],\ldots, [M^{k}_{1},\ldots,M^{k}_{n_k}]] & \leadsto [M^1_1,\ldots,M^k_{n_k}] \\ 
-        \mapterm\  M\  [N_1,\ldots,N_n] & \leadsto [M\ N_1,\ldots,M\ N_n]\\
-        \blockterm\ [M_1,\ldots, M_n] & \leadsto \text{result as in definition of $\blockterm$}
+     \fstterm (M,N) & \ \leadsto \ M \\
+     \sndterm (M,N) &  \ \leadsto  \  N \\
+        \mathtt{uncons} []   & \ \leadsto  \ \leftterm ()  \\
+        \mathtt{uncons} [M_1,\ldots,M_n] \text{ for $n \ge 1$} & \  \leadsto  \ \rightterm (M_1, [M_2,\ldots,M_n]) \\
+        \casesterm \ M_1\  M_2\  (\leftterm\  N) &  \ \leadsto \  M_1\ N \\
+        \casesterm \ M_1\  M_2\  (\rightterm\  N) & \  \leadsto  \ M_2\ N \\ 
+        \reverseterm [M_1,\ldots,M_n]  & \ \leadsto \ [M_n, \ldots, M_1] \\
+        \concatterm [[M^1_{1},\ldots,M^1_{n_1}],\ldots, [M^{k}_{1},\ldots,M^{k}_{n_k}]] & \ \leadsto \ [M^1_1,\ldots,M^k_{n_k}] \\ 
+        \mapterm\  M\  [N_1,\ldots,N_n] & \ \leadsto \ [M\ N_1,\ldots,M\ N_n]\\
+        \splitterm\ [M_1,\ldots, M_n] & \ \leadsto \ \text{result as in \eqref{def-split}} \\
+        \blockterm\ [M_1,\ldots, M_n] & \ \leadsto \ \text{result as in \eqref{def-block}}
     \end{align*}
     \caption{\label{fig:reduction-rules} Reduction rules.  
 %     In the last rule, the outcome is 
@@ -244,11 +246,13 @@ These  are summarised  in the following definition.
 
 
         \paragraph*{Reduction} So far, we have explained how a program can be written as a string over a finite alphabet. We now explain how programs can be evaluated under this representation. 
-    When defining the semantics of the polyregular $\lambda$-calculus in \cite{}, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable: 
+    When defining the semantics of the polyregular $\lambda$-calculus in \cite{}, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable (known as $\beta$-reduction: 
     \begin{align}\label{eq:beta-reduction}
     (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
     \end{align}
-The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables. \todo{Can we cite some work here?} If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
+The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. \todo{I added $\splitterm$ and $\reverseterm$in the Figure.}
+It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables. \todo{Can we cite some work here?} If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing. Note that if $R$ is an atomic
+program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
 
 
     The key lemma in the proof is the following, which shows that a rectangular polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from Example~\ref{ex:strength}. 
@@ -260,12 +264,14 @@ The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. It 
         \end{itemize}
     \end{lemma}
     \begin{proof}Thanks to the resource bound, there are finitely many possible choices for the variable $x$, and therefore we can think of this variable as being fixed. 
-        We first annotate the letters in the string representation of  $N$ using a special alphabet, so that they can be distinguished from the letters in $M$. This can be done by a rational function, thanks to the height bound. (The rational function can guess for each letter its distance from the root of the syntax tree, since this distance is bounded by the height.) Next, we use the rectangle function to insert a copy of the string representation of the program $N$ after every letter in the string representation of the program $M$. Then, we can use a rational function to keep only the copies which are necessary, i.e.~those that immediately follow an occurrence of the variable $x$. 
+        We first annotate the letters in the string representation of  $N$ using a special alphabet, so that they can be distinguished from the letters in $M$. This can be done by a rational function, thanks to the height bound. (The rational function can guess for each letter its distance from the root of the syntax tree, since this distance is bounded by the height.) \todo[inline]{I think I understand the proof but the remark about guessing the height is not really clear to me. Is it about detecting the end of $M$ and the beginning of $N$ (after which the letters in $N$ can be renamed)?
+This can be done by a finite automaton whose state stores a stack of height $h$ (the height bound in the resource bound).}
+           Next, we use the rectangle function to insert a copy of the string representation of the program $N$ after every letter in the string representation of the program $M$. Then, we can use a rational function to keep only the copies which are necessary, i.e.~those that immediately follow an occurrence of the variable $x$. 
     \end{proof}
 
     The above lemma is the only place where our proof differs from the one in~\cite{polyregular-survey}. Essentially, the content of the above lemma is the  observation that a weaker mechanism than the full polyregular functions, namely the rectangle function, is sufficient to implement term substitution.
 
-    \paragraph*{A reduction strategy.} The rest of this proof follows the same lines as the on in~\cite[Theorem 4.1]{polyregular-survey}. Define a \emph{redex} in a program to be a node in its syntax tree to which a reduction rule can be applied. A redex can also be seen as an infix of the string representation of the program. Here is an example of a program with some (in fact, all) redexes underlined:
+    \paragraph*{A reduction strategy.} The rest of this proof follows the same lines as the one in~\cite[Theorem 4.1]{polyregular-survey}. Define a \emph{redex} in a program to be a node in its syntax tree to which a reduction rule can be applied. A redex can also be seen as an infix of the string representation of the program. Here is an example of a program with some (in fact, all) redexes underlined:
     \begin{align*}
     [ \myunderbrace{(\lambda x.x) []}{a redex for \\ $\lambda$-abstraction}, [], [], \myunderbrace{\mapterm (\lambda x. x) [[],[],[]]}{a redex for \\ $\mapterm$}, \myunderbrace{\fstterm ([],())}{a redex \\ for $\fstterm$}].
     \end{align*}
