@@ -167,7 +167,7 @@ The purpose of this section is to identify the subclass which corresponds to the
 
 
 
-\begin{theorem}\label{thm:rectangular -polyregular-programs-split-free}
+\begin{theorem}\label{thm:rectangular-polyregular-programs-split-free}
     Let $A$ and $B$ be finite alphabets. Then 
     \begin{align*}
     f : A^* \to B^*
@@ -246,11 +246,11 @@ These  are summarised  in the following definition.
 
 
         \paragraph*{Reduction} So far, we have explained how a program can be written as a string over a finite alphabet. We now explain how programs can be evaluated under this representation. 
-    When defining the semantics of the polyregular $\lambda$-calculus in \cite{}, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable (known as $\beta$-reduction: 
+    When defining the semantics of the polyregular $\lambda$-calculus in \cite{polyregular-survey}, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable (known as $\beta$-reduction: 
     \begin{align}\label{eq:beta-reduction}
     (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
     \end{align}
-The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. \todo{I added $\splitterm$ and $\reverseterm$in the Figure.}
+The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. \todo{I added $\splitterm$ and $\reverseterm$ in the Figure.}
 It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables. \todo{Can we cite some work here?} If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing. Note that if $R$ is an atomic
 program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
 
@@ -276,7 +276,7 @@ This can be done by a finite automaton whose state stores a stack of height $h$ 
     [ \myunderbrace{(\lambda x.x) []}{a redex for \\ $\lambda$-abstraction}, [], [], \myunderbrace{\mapterm (\lambda x. x) [[],[],[]]}{a redex for \\ $\mapterm$}, \myunderbrace{\fstterm ([],())}{a redex \\ for $\fstterm$}].
     \end{align*}
     Usually in the $\lambda$-calculus, one chooses a reduction strategy which picks some redex, reduces it, and then repeats this process. However, in the current proof, we will need to use a more general notion of reduction strategy, which allows reducing several redexes in parallel. This will allow us to reduce a program to normal form in constant time, once resource bounds are fixed. Define a 
-     \emph{parallel reduction strategy} to be a function which assigns to each term a subset of its redexes, such that the redexes are non-overlapping (i.e.~the corresponding infixes in the string representation do not overlap). The result of applying such a strategy to a program is obtained by reducing all the selected redexes in parallel, which can be done since the redexes are assumed to be non-overlapping. The following lemma shows that, once the resource bounds are fixed, there is a parallel reduction strategy which leads to normal form in a bounded number of steps.
+     \emph{parallel reduction strategy} to be a function which assigns to each term a subset of its redexes, such that the redexes are non-overlapping (i.e.~the corresponding infixes in the string representation do not overlap). The result of applying such a strategy to a program is obtained by reducing all the selected redexes in parallel, which can be done since the redexes are assumed to be non-overlapping. The following lemma shows that, once the resource bounds are fixed, there is a parallel reduction strategy which leads to the normal form in a bounded number of steps.
      
 
     \begin{lemma}[{\cite[Lemma 8.6]{bojanczykPolyregularFunctions2018}}] \label{lem:reduction-strategy} Fix a resource bound $\Rr$. There exist: 
@@ -287,27 +287,28 @@ This can be done by a finite automaton whose state stores a stack of height $h$ 
        such that for every program consistent with the  resource bound, applying the reduction strategy $k$ times  leads to a term in normal form. Furthermore, the reduction strategy can be implemented by a rational function, with the redexes marked in the ouptut using begin/end markers.
     \end{lemma}
 
-    The above lemma was proved for the (not necessarily rectangular ) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
+    The above lemma was proved in \cite{bojanczykPolyregularFunctions2018} for the (not necessarily rectangular ) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
 
     We now put the above results together to conclude that split-free programs can be evaluated using rectangular polyregular functions, as stated in the following corollary.
 
     \begin{corollary}\label{cor:normalisation}
         Fix a resource bound $\Rr$. There is a rectangular polyregular function which does the following, with programs represented as strings:
         \begin{itemize}
-            \item \textbf{Input.} A split-free program consistent with  $\Rr$;
-            \item \textbf{Output.} A program in normal form obtained from it by applying reductions.
+            \item \textbf{Input.} A split-free program $M$ consistent with  $\Rr$;
+            \item \textbf{Output.} A program in normal form obtained from $M$ by applying reductions.
         \end{itemize}
     \end{corollary}
     \begin{proof}
-        By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bounds and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
+        By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bound and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
         
-        We first argue that a single redex can be reduced by a rectangular polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. One other interesting example of a redex corresponds to the $\mapterm$ function, which is:
+        We first argue that a single redex can be reduced by a rectangular polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. One other interesting example of a redex corresponds to the $\mapterm$ function with the reduction rule
         \begin{align*}
         \mapterm\  M\  [N_1,\ldots,N_n] 
         \quad \leadsto \quad 
         [M\ N_1, \ldots, M\ N_n].
         \end{align*}
-        This redex can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. For the remaining reduction rules, see Figure~\ref{fig:reduction-rules}, the reduction can be done by rational functions, since no substitution is involved. This completes the proof that a single redex can be reduced by a rectangular polyregular function.
+        This reduction rule can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. For the remaining reduction rules in Figure~\ref{fig:reduction-rules}, the reduction can be done by rational functions, since no substitution is involved. \todo{Are $\reverseterm$, $\blockterm$ and $\splitterm$ really rational? They are clearly regular, which suffices.}
+        This completes the proof that a single redex can be reduced by a rectangular polyregular function.
 
         Our reduction strategies are parallel, which means that multiple redexes need to be reduced in one step. However, since these redexes are non-overlapping, the parallel execution corresponds to using the map combinator from Section~\ref{sec:map}. Since this combinator is part of the definition of the rectangular polyregular functions, we can complete the proof of (2), and therefore also the proof of the corollary.
     \end{proof}
@@ -355,7 +356,8 @@ Depending on the choice of the initial set of atomic functions, one can obtain v
     \end{enumerate}
 \end{theorem}
 \begin{proof}
-    It is enough to show that the class of functions from this theorem sits between the two equal classes from Theorem~\ref{thm:rectangular ly-polyregular-programs-split-free}: 
+    It is enough to show that the class of functions from this theorem sits between the two equal classes from 
+    Theorem~\ref{thm:rectangular-polyregular-programs-split-free}:
     \begin{align*}
         \text{rectangular polyregular} 
     \quad \subseteq \quad
