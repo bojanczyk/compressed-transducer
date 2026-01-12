@@ -1,7 +1,8 @@
 \section{Transducers compatible with compression}
 \label{sec:compatible}
 
-
+In this section we will introduce the function classes mentioned in the introduction (rational functions, regular functions,
+polyregular functions) and study their compatibility with respect to compression.
 
 \subsection{Rational functions}
 \label{sec:rational}
@@ -50,7 +51,7 @@ is also context-free. The proof is a simple product construction, in particular 
 
 \subsection{The map combinator}
 \label{sec:map}
-Before moving to more expressive transducer models, we prove a closure property for functions that are compatible with compression. This will be useful in the rest of the paper, which will use an approach to transducer classes which emphasises closure properties.
+Before moving to more expressive regular functions, we prove a closure property for functions that are compatible with compression. This will be useful in the rest of the paper, which will use an approach to transducer classes which emphasises closure properties.
 
 The first closure property, which is immediate from the definition, is that functions compatible with compression  are closed under function composition. Another closure property concerns the \emph{map} operation. The general idea is that a function $f$ is lifted from strings to lists of strings, where it is applied to every list item separately. Since -- for now -- we are working with strings only, we need to represent lists using a separator symbol, as in the following lemma.
 

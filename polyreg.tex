@@ -1,4 +1,4 @@
-\section{Polyregular functions}
+\subsection{Polyregular functions}
 \label{sec:polyregular}
 
 Having shown that the rational and regular functions are compatible with compression, we now turn to a more expressive class of functions, namely the polyregular functions. We will show that this class is \emph{not} compatible with compression, and we will isolate a fragment that is. 
@@ -26,7 +26,7 @@ The marked squaring function is an example of a polyregular function, and in fac
     This string has a compression of size $\mathcal{O}(n)$. Let $w_n$ be the marked squaring of $v_n$. We will show that 
     any compression of $w_n$ must have size $2^n$. The reason is that $w_n$ contains an infix of the form  $ba^i\underline a$ for every $i \in \set{1,\ldots,{2^n}}$. On the other hand, the number of such infixes is limited by the size of any compression, as shown in the following claim
     (which is similar to the so-called $mk$-lemma from \cite[Lemma~3]{CLLLPPSS05}).
-    \begin{claim}
+    \begin{claim} \label{claim-infix}
         Let $a,b,c$ be distinct letters. If a string $w$ has a compression of size $m$, then 
         \begin{align*}
         |\setbuild{ i }{$w$ contains an infix of the form $ab^ic$}| \leq m.
@@ -39,10 +39,12 @@ The marked squaring function is an example of a polyregular function, and in fac
         \end{align*}
         The key observation is that this contribution contains at most one number $i$. This will imply the claim, since the set in the claim is the union of all contributions of variables in the program.  To see why the variable contributes at most one number, observe that the infix $ab^ic$ is either contained in \texttt y, or contained in \texttt z, or it crossed the boundary between \texttt y and \texttt z. In the first two cases, it is not counted in the contribution of \texttt x. In the last case, there is exactly one value of $i$ for which this can happen, namely the number of $b$'s between the last $a$ in \texttt y and the first $c$ in \texttt z.
     \end{proof}
-
+Claim~\ref{claim-infix} together with the fact that $v_n$ contains all infixes $b a^i \underline{a}$ for every $1 \le i \le 2^n $ immediately yields the lemma. 
 \end{proof}
 
-The above lemma proves that some polyregular functions are not compatible with compression. A natural idea to overcome this problem is to consider the weaker notion of squaring from Example~\ref{ex:squaring},
+\subsection{Rectangular polyregular functions}
+
+Lemma~\ref{lem:nonblind-squaring} proves that some polyregular functions are not compatible with compression. A natural idea to overcome this problem is to consider the weaker notion of squaring from Example~\ref{ex:squaring},
 \begin{align*}
 123 \quad \mapsto \quad 123123123,
 \end{align*}
