@@ -12,7 +12,14 @@
 \maketitle
 
 \begin{abstract}
-TODO
+The question, whether the image $f(w)$ of a compressed string $w$ under a string function $f$ is still compressible in the sense that
+the size of the compressed representation of $f(w)$ is polynomially bounded in the size of the compressed representation of $w$.
+We investigate this question in the setting, where the compressed representation of $w$ is a straight line program (a context free grammar
+that produces $\{w\}$) and $f$ is a polyregular function. We show that in this setting the above question has in general a negative answer, but a 
+positive answer can be obtained for a subclass of polyregular functions -- the so-called rectangular polyregular functions -- which properly contains 
+the class of regular 
+functions. Finally, we
+present a functional programming language that computes exactly the rectangular polyregular functions.
 \end{abstract}
 
 \section{Introduction}
@@ -149,7 +156,7 @@ There will be three kinds of transducer models considered in this paper, which t
 \end{align*}
 Rational functions are computed by nondeterministic one-way transducers, whereas regular functions are computed by deterministic 
 two-way transducers. Finally, polyregular functions are computed deterministic two-way transducers with pebbles. The regular and polyregular
-functions have many equivalent characterizations; in this paper we will use characterizations based on closure properties of string-to-string functions.
+functions have many equivalent characterizations \cite{polyregular-survey}; in this paper we will use characterizations based on closure properties of string-to-string functions.
 
 We will first prove that the rational functions are compatible with compression and then extend this result to the regular functions using
 a characterization of the latter class based on closure properties. In contrast, we will give an example of a 
@@ -159,8 +166,8 @@ is strictly located between the regular functions and the polyregular functions 
 functions \emph{rectangular polyregular}; their definition is again based on closure properties.
 
 In the second part of the paper we will investigate rectangular polyregular functions in more detail. In particular we will present a functional
-programming language that computes exactly the rectangular polyregular functions. 
-
+programming language that computes exactly the rectangular polyregular functions.  This programming language is a fragment of the 
+\emph{polyregular $\lambda$-calculus} from~\cite{polyregular-survey}.
 
 \input{linreg}
 \input{polyreg}
