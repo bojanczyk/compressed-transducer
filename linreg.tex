@@ -10,7 +10,7 @@ We begin with the class of rational functions, which was introduced by Eilenberg
 
 
 Let us begin with the definition of a {rational relation}, and then we will identify the \emph{rational functions} as the special case of rational relations which are functions. A rational relation is described by an \nfa with output. This is the same as an \nfa, except that there is an additional labelling which assigns output strings (possibly empty) to: (a) initial states; (b) transitions; and (c) final states. Here is a picture of an \nfa with output: 
-\mypic{1} \todo{The arrowheads in the figure are quite small, it would be nice to have them a little bit larger.}
+\mypic{1} 
 
 Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
 The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. A relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string.

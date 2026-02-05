@@ -21,12 +21,10 @@
 
 \section{A functional programming language}
 \label{sec:functional-lang}
-We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, it seems plausible that the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular.  \mb{I was thinking about it for a few hours, and it seems a plausible enough to conjecture, there are even some possible lines of attack.} 
-\todo{It would be could to write a few lines supporting the conjecture. As a referee I would ask in this direction.}
-Proving this conjecture seems difficult, and we leave it for future work.  
+We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, one could ask if the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. We are not aware of any counterexample to the converse implication, but proving it   seems difficult, and we leave it for future work.  
+\mb{I made the statement softer, since I do not know how to write a few  lines of supporting evidence that would not be completely incoherent}
 
-In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. We begin by discussing the larger programming language from~\cite{polyregular-survey}, which is called the \emph{polyregular $\lambda$-calculus}, and then we identify the rectangular  fragment.  Let us start with an example.
-
+In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. Before giving a formal definition, we present some example programs.
 
 % We begin by discussing  the programming language for the (not rectangular ) polyregular functions. This is  a  variant of the simply typed $\lambda$-calculus, with type constructors for pairs, disjoint unions and lists, as well as  certain atomic functions which operate on these types, such as a concatenation
 % \begin{align*}
@@ -46,34 +44,29 @@ In this section, we give other evidence for the importance of rectangular polyre
 % \end{align*}
 % Based on this observation, we define below the programming language for the rectangular polyregular functions, by taking the programming language for the polyregular function, and eliminating the  split function, thus obtaining a programming language where all atomic functions have linear output size.
 
-\begin{myexample}[Duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us write a program in a Haskell-like language that implements the duplication function from Example~\ref{ex:duplication}:
+
+
+\begin{myexample}[Duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us begin with a program in a Haskell-like language that implements the duplication function from Example~\ref{ex:duplication} (we use blue superscripts to indicate the types of  variables and  auxiliary functions):
     \begin{align*}
-    \lambda x : A^*. \concatterm [x,x].
+    \lambda \church x {\blue{A^*}}.\ \church \concatterm {\blue{A^{**} \to A^*}} [x,x].
     \end{align*}
 Here, the function $\concatterm$ concatenates a list of lists into a single list. Next, we write a program that implements
      the squaring function from Example~\ref{ex:squaring}. 
     \begin{align*}
-    \lambda x : A^* .\ \concatterm\ (\mapterm \ (\lambda y : A.\ x)\ x)
+    \lambda x^{\blue{A^*}}.\ \concatterm^{\blue{A^{**} \to A^*}} (\mapterm^{\blue{(A \to A^*) \to A^* \to A^{**}}} \ (\lambda y^{\blue{A}}.\ x)\ x)
     \end{align*}
 The subprogram $\mapterm \ (\lambda y : A.\ x)\ x$ applies the function $\lambda y.x$ to each list element of $x$, which means that each letter in the list $x$ will be replaced by the list $x$ itself. For example, if the input to this subprogram is $[1,2,3]$, then its output will be the nested list $[[1,2,3],[1,2,3],[1,2,3]]$. The nesting is then removed by the $\concatterm$ function. 
-Using a similar program, we can implement the rectangle function from Example~\ref{ex:strength}:
+Using a similar program, we can implement a variant of the rectangle function from Example~\ref{ex:strength}, in which the input is two strings
 \begin{align*}
-    \lambda x: A^*.\ \concatterm (\mapterm\ 
-    (\lambda y: A^*.\ \concatterm\ [[y], x])\ 
-    x)
-\end{align*}
-\todo[inline]{I do not understand the last expression. Should it be the following?}
-\mb{You are correct, the above code referred to a different version of rectangle. Your version is good, but it refers to a typed version, where two strings are given as a pair. So it is a slight mismatch with the string-to-string setting.}
-\begin{align*}
-    \lambda x: A^*.\  \lambda y: B^*. \  \concatterm ( \mapterm \ ( \lambda z:A . \ \concatterm [[z],y] ) \ x )
+    \lambda x^{\blue{A^*}}.\  \lambda y^{\blue{A^*}}. \  \concatterm^{\blue{A^{**} \to A^*}} ( \mapterm^{\blue{(A \to A^*) \to A^* \to A^{**}}} \ ( \lambda z^{\blue{A}} . \ \concatterm^{\blue{A^{**} \to A^*}} [[z],y] ) \ x )
   \end{align*}
 \end{myexample}
 
 
 % For a type constructed without using the list constructor, the domain will be finite, and therefore such types will be called \emph{finite types}.
-We now describe the corresponding programming language in detail. It is called the \emph{polyregular $\lambda$-calculus}, and its purpose is to define exactly the polyregular functions. 
+We now  give a formal definition of the  programming language in detail. It is called the \emph{polyregular $\lambda$-calculus}, and its purpose is to define exactly the polyregular functions. 
 
-\paragraph*{Syntax.} The polyregular $\lambda$-calculus is a variant of the simply typed $\lambda$-calculus, and therefore its programs are a certain kind of $\lambda$-terms. We will use the word \emph{programs} for these terms, or \emph{programs of the polyregular $\lambda$-calculus} in case there is some ambiguity about the kind of programs in consideration.   The programs use variables, which are taken from an infinite set of variables. Both programs and variables have associated types, which are unique, i.e.~the same variable or  program cannot be associated with two different types. The types  are built using the following type constructors: 
+\paragraph*{Syntax.} The polyregular $\lambda$-calculus is a variant of the simply typed $\lambda$-calculus, and therefore its programs are a certain kind of $\lambda$-terms. We will use the word \emph{programs} for these terms, or \emph{programs of the polyregular $\lambda$-calculus} in case there is some ambiguity about the kind of programs in consideration.   The programs use variables, which are taken from an infinite set of variables. Both programs and variables have associated types, which are unique, i.e.~the same variable or  program cannot be associated with two different types (as in Church typing). We indicate the types using blue subscripts. The types  are built using the following type constructors: 
 \begin{align*}
     \myunderbrace{1}{a set \\ with one \\ element}
     \qquad 
@@ -89,43 +82,39 @@ Here is the inductive definition of the syntax  of the programs.
 \begin{enumerate}
     \item \textbf{Variables, application and abstraction} \label{item:language-variables}  We begin with the basic elements of the $\lambda$-calculus: each variable $x$ is a program, and we  can construct programs using application and $\lambda$-abstraction:
     \begin{align*}
-    \lambdarule{M : A \to B \quad N : A}{M N : B}{application}
+    \lambdarule{\church M {A \to B} \quad \church N  A}{\church{(\church M {A \to B} \church N  A)}  B}{application}
     \qquad 
-    \lambdarule{\myoverbrace{x : A}{variable}\quad  M : B}{\lambda x.\ M : A \to B}{$\lambda$-abstraction}
+    \lambdarule{\myoverbrace{\church x  A}{variable}\quad  \church M  B}{\church {(\lambda \church x  A.\ \church M  B)} {A \to B}}{$\lambda$-abstraction}
     \end{align*}
-    \todo[inline]{Small detail: In the above examples you wrote $\lambda x : A . \ M$.}
-    \mb{That's true, I'm not sure how to achieve consistency.}
     The descriptions above should be read as usual in the $\lambda$-calculus, with premises  above the line and the conclusion below it. 
     \item \textbf{Data constructors and destructors.} Next, the programming language has features to access the data types for pairs, co-pairs, lists, and the atomic unit type $1$.  For the unit type, there is a program of this type, which generates the unique value in this type; this program  is denoted by $()$. For the remaining type constructors, there are data constructors described as follows:
     \begin{align*}
-    \lambdarule{M : A \quad N : B}{(M,N) : A \times B}{pair}
-    \qquad 
-    \lambdarule{M_1 : A \quad \cdots \quad M_n : A}{[M_1,\ldots,M_n] : A^*}{list} \\[0.3cm]
-    \lambdarule{M : A}{\leftterm M : A + B}{left co-pair}
-    \qquad 
-    \lambdarule{M : B}{\rightterm M : A + B}{right co-pair}
+    \lambdarule{\church M  A \quad \church N  B}{\church{(\church M  A,\church N  B)}{A \times B}}{pair}
+    & \quad 
+    \lambdarule{\church {M_1}  A \quad \cdots \quad \church {M_n}  A}{\church{[\church {M_1}  A,\ldots,\church {M_n}  A]}  {A^*}}{list} \\[0.3cm]
+    \lambdarule{\church M  A}{\church{(\church \leftterm {A \to A+B}\church M A)}{A + B}}{left co-pair}
+    & \quad 
+    \lambdarule{\church M  B}{\church{(\church \rightterm {B \to A + B} \church M B)}{A + B}}{right co-pair}
     \end{align*}
-    \todo[inline]{In the rule (list), I guess $n=0$ is allowed. So $[]$ is a program. Is this the same as $()$?}
-    In the data constructors $\leftterm$ (resp., $\rightterm$), the other type $B$ (resp., $A$) is part of the syntax, since it cannot be inferred from the argument $M$. So, strictly speaking, one should write $\rightterm_A M$ and $\leftterm_B M$.
+    In the rule list, the program $[]$ is also allowed, representing the empty list. Observe that in the data constructors for co-pairs,  the other type $B$ (resp, $A$) is part of the syntax, since it cannot be inferred from the argument $M$. 
    
     We also have  atomic programs for deconstructing data:
         \begin{align*}
-     \fstterm & :  A \times B \to A \\
-     \sndterm & : A \times B \to B \\
-        \mathtt{uncons} & : A^* \to 1 + A \times A^* \\
-        \casesterm & : (A \to C) \to (B \to C) \to (A + B) \to C. 
-    \end{align*}
+& \church     \fstterm {A \times B \to A} \\
+& \church     \sndterm {A \times B \to B} \\
+& \church     {\mathtt{uncons}} {A^* \to 1 + A \times A^*} \\
+& \church     \casesterm {(A \to C) \to (B \to C) \to (A + B) \to C}    \end{align*}
         The above list is not finite, since each program represents a family of programs, which is parameterized by the choice of types $A,B,C$.
     \item \textbf{List processing.}  \label{item:language-list-processing} The polyregular $\lambda$-calculus does not have any mechanisms for recursion, iteration, or even a fold function\footnote{The omission of the fold function is discussed at length in~\cite{polyregular-fold}.}. For this reason, computation on lists of unbounded length  must be done using dedicated atomic programs. These are listed below (again, the list is infinite, since each program is parameterized by a choice of types $A,B$):
     \begin{align*}
-        \reverseterm & : A^* \to A^* \\
-        \concatterm & : A^{**} \to A^* \\
-        \mapterm & : (A \to B) \to A^* \to B^* \\
-        \splitterm & : A^* \to (A^* \times A^*)^* \\
-                \blockterm & : (A+B)^* \to A^* \times (B \times A^*)^*
+       & \church \reverseterm {A^* \to A^*} \\
+        & \church \concatterm {A^{**} \to A^*} \\
+       & \church \mapterm {(A \to B) \to A^* \to B^*} \\
+       & \church \splitterm {A^* \to (A^* \times A^*)^*} \\
+        &        \church \blockterm {(A+B)^* \to A^* \times (B \times A^*)^*} \qquad 
     \end{align*}
    
-    \item \textbf{Rational.} For all finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic program\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
+    \item \textbf{Rational.} For every finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic program\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from items~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
 \end{enumerate}
 
 \paragraph*{Semantics.} The only part of the polyregular $\lambda$-calculus that is not completely standard is the two functions $\splitterm$ and $\blockterm$, so we begin by explaining those.  The function 
@@ -141,7 +130,7 @@ Here is the inductive definition of the syntax  of the programs.
         \quad \mapsto \quad ([a,b], [(1,[c,d,e]),(2,[]),(3,[f])]).
         \end{equation}
     
-Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$; which is appropriate to our language since it can only define always-terminating functions.  
+Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained, and also because the semantics are much simpler than those of a full-fledged programming language such as Haskell.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$; which is appropriate to our language since it can only define always-terminating functions.  
 If a program has free variables of types $A_1,\ldots,A_n$, and the program itself has type $A$, then its semantics will be a function 
 \begin{align*}
 \myunderbrace{\sem {A_1} \times \cdots \times \sem{A_n}}{values of the\\ free variables} 
@@ -201,20 +190,14 @@ write down a program as a string, and to then evaluate it be using string rewrit
 
     \paragraph*{String representation of programs.} We begin by explaining how programs are represented as strings. This is the usual representation, which we have already used above when writing example programs. In this representation, we assume that the variable names and the atomic programs are single letters. In particular, the alphabet is infinite, since there are infinitely many variables and infinitely many atomic programs.  (There are infinitely many atomic programs  since the type annotation is important. For example, different letters will be used for $\concatterm$ depending on the type $A$ that is involved.) If we pick some convention on writing parentheses, then the string representation can be made unique, so that each program has a unique string representation.
     
-    A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. Another restriction that we impose concerns the height of the syntax tree in the program. Let us begin by explaining the notion of height, by using a doubly nested list:
+    A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. 
+    
+    Another problem is that programs with deep syntax trees will be difficult to handle in their string representation. The syntax of the polyregular $\lambda$-calculus is defined inductively, and therefore each program has a corresponding syntax tree, in which nodes are labelled by term constructors. Here is a picture of such a syntax tree for a program which applies $\concatterm$ to a doubly nested list of type $1^{**}$:
     \mypic{2}
-    \todo[inline]{I added a formal definition of the height. I think this is needed here to avoid missinterpretations. Please check whether it is correct.}
-  Formally, define the height of a program inductively as follows, where $M$, $N$, $M_1, \ldots, M_n$ are programs:
-  \begin{itemize}
-  \item the height of a single variable $x$ and an atomic program is zero,
-  \item $\height(MN) = 1+ \max\{ \height(M), \height(N) \}$,
-  \item $\height(\lambda x. M) = 1+\height(M)$,
-  \item $\height((M,N)) = 1+ \max\{ \height(M), \height(N) \}$.
-  \item $\height([M_1, \ldots, M_n]) = 1 + \max \{ \height(M_i) : 1 \le i \le n \}$ for $n \geq 1$ and $\height([]) = 0$.
-  \item $\height(\leftterm M) = \height(\rightterm M) = 1 + \height(M)$.
-  \end{itemize}  
+    The height of a syntax tree is defined to be the maximal number of edges on a root-to-leaf path (in the above picture, the height is three), and the height of a program is defined to be the height of its syntax tree.
     It turns out that a polyregular function cannot  deal with trees of unbounded height, since it is essentially a finite automaton, and finite automata on strings cannot handle trees of unbounded height. For this reason, we will impose a bound on the height of programs. 
-These  are summarised  in the following definition.
+
+The assumptions discussed above are summarised  in the following definition.
 
     \begin{definition}
         Define a \emph{resource bound} to be a triple consisting of: (a) a finite set of variables; (b) a finite set of atomic programs; and (c)  a height bound in $\set{1,2,\ldots}$.        
@@ -224,6 +207,7 @@ These  are summarised  in the following definition.
 
         \begin{figure}
          \begin{align*}
+                    (\lambda x. M)\ N & \ \leadsto \ M[x:=N] \\
      \fstterm (M,N) & \ \leadsto \ M \\
      \sndterm (M,N) &  \ \leadsto  \  N \\
         \mathtt{uncons} []   & \ \leadsto  \ \leftterm ()  \\
@@ -234,9 +218,9 @@ These  are summarised  in the following definition.
         \concatterm [[M^1_{1},\ldots,M^1_{n_1}],\ldots, [M^{k}_{1},\ldots,M^{k}_{n_k}]] & \ \leadsto \ [M^1_1,\ldots,M^k_{n_k}] \\ 
         \mapterm\  M\  [N_1,\ldots,N_n] & \ \leadsto \ [M\ N_1,\ldots,M\ N_n]\\
         \splitterm\ [M_1,\ldots, M_n] & \ \leadsto \ \text{result as in \eqref{def-split}} \\
-        \blockterm\ [M_1,\ldots, M_n] & \ \leadsto \ \text{result as in \eqref{def-block}}
-    \end{align*}
-    \caption{\label{fig:reduction-rules} Reduction rules.  
+        \blockterm\ [M_1,\ldots, M_n] & \ \leadsto \ \text{result as in \eqref{def-block}} \\
+        f[M_1,\ldots,M_n] & \ \leadsto \ \text{output of the rational function $f$}    \end{align*}
+    \caption{\label{fig:reduction-rules} Reduction rules. The last rule is for an atomic program $f$ that is a rational function. In the last rule, we assume that the list elements $M_1,\ldots,M_n$, which have some finite type, are already been evaluated, i.e.~they are built only using the data constructors for the finite types, which are $()$, pairing and co-pairing.
 %     In the last rule, the outcome is 
 %     \(
 %     (N_0, [(M_{i_1}, N_1),\ldots,(M_{i_k}, N_k)])
@@ -246,13 +230,15 @@ These  are summarised  in the following definition.
 
 
         \paragraph*{Reduction} So far, we have explained how a program can be written as a string over a finite alphabet. We now explain how programs can be evaluated under this representation. 
-    When defining the semantics of the polyregular $\lambda$-calculus in \cite{polyregular-survey}, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is substituting an argument for a variable (known as $\beta$-reduction: 
+    When defining the semantics of the polyregular $\lambda$-calculus, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is $\beta$-reduction, which  substitutes an argument for a variable (we omit the blue superscripts with types to improve readability): 
     \begin{align}\label{eq:beta-reduction}
     (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
     \end{align}
-The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}. \todo{I added $\splitterm$ and $\reverseterm$ in the Figure.}
-It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables. \todo{Can we cite some work here?} If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing. Note that if $R$ is an atomic
-program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
+The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}.
+It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables~\cite[Corollary 1.4.9]{sorensenLecturesCurryHowardIsomorphism2006}. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
+\mb{I removed the comment about normal form for rational functions, which was incorrect. I added the appropriate reduction rule to the figure.} 
+% Note that if $R$ is an atomic
+% program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
 
 
     The key lemma in the proof is the following, which shows that a rectangular polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from Example~\ref{ex:strength}. 
@@ -264,8 +250,9 @@ program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ a
         \end{itemize}
     \end{lemma}
     \begin{proof}Thanks to the resource bound, there are finitely many possible choices for the variable $x$, and therefore we can think of this variable as being fixed. 
-        We first annotate the letters in the string representation of  $N$ using a special alphabet, so that they can be distinguished from the letters in $M$. This can be done by a rational function, thanks to the height bound. (The rational function can guess for each letter its distance from the root of the syntax tree, since this distance is bounded by the height.) \todo[inline]{I think I understand the proof but the remark about guessing the height is not really clear to me. Is it about detecting the end of $M$ and the beginning of $N$ (after which the letters in $N$ can be renamed)?
-This can be done by a finite automaton whose state stores a stack of height $h$ (the height bound in the resource bound).}
+
+        Since there is a fixed bound on the height of the input program, a rational function can use a stack of bounded height to  label each position in the string representation with the distance of this position from the root of the syntax tree. Using this stack, we can also identify the closing bracket $)$ that is just before $N$, by matching it with the opening bracket at the beginning of the term. This way, we can isolate the part of the input which represents the program $N$. 
+
            Next, we use the rectangle function to insert a copy of the string representation of the program $N$ after every letter in the string representation of the program $M$. Then, we can use a rational function to keep only the copies which are necessary, i.e.~those that immediately follow an occurrence of the variable $x$. 
     \end{proof}
 
@@ -301,13 +288,13 @@ This can be done by a finite automaton whose state stores a stack of height $h$ 
     \begin{proof}
         By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bound and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
         
-        We first argue that a single redex can be reduced by a rectangular polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. One other interesting example of a redex corresponds to the $\mapterm$ function with the reduction rule
+        We first argue that a single redex can be reduced by a rectangular polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. Let us now consider the remaining kinds of redexes, which correspond to the reduction rules in Figure~\ref{fig:reduction-rules}, except for $\splitterm$, which has been removed in the rectangular fragment that we are considering. Consider first the reduction rule for  $\mapterm$, which is 
         \begin{align*}
         \mapterm\  M\  [N_1,\ldots,N_n] 
         \quad \leadsto \quad 
         [M\ N_1, \ldots, M\ N_n].
         \end{align*}
-        This reduction rule can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. For the remaining reduction rules in Figure~\ref{fig:reduction-rules}, the reduction can be done by rational functions, since no substitution is involved. \todo{Are $\reverseterm$, $\blockterm$ and $\splitterm$ really rational? They are clearly regular, which suffices.}
+        This reduction rule can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. The reduction rule for reverse can be implemented by a regular function, and the remaining reduction rules are even rational. \mb{Rewrote this to explain your concerns. Block is rational (it is just a rearranging of parentheses).  Reverse indeed is not rational but regular.  Split is not even regular, but it is not allowed. }
         This completes the proof that a single redex can be reduced by a rectangular polyregular function.
 
         Our reduction strategies are parallel, which means that multiple redexes need to be reduced in one step. However, since these redexes are non-overlapping, the parallel execution corresponds to using the map combinator from Section~\ref{sec:map}. Since this combinator is part of the definition of the rectangular polyregular functions, we can complete the proof of (2), and therefore also the proof of the corollary.

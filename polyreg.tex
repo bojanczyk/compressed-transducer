@@ -12,7 +12,19 @@ Similarly to the rational and regular functions discussed in the previous sectio
 Formally speaking, the output alphabet consists of two copies of the input alphabet, one with and one without underlining.
 \end{myexample}
 
-The marked squaring function is an example of a polyregular function, and in fact the class of polyregular functions can be defined by adding marked squaring to the definition of regular functions from Theorem~\ref{thm:regular-def}. As we show below, marked squaring is not compatible with compression, which implies that not all polyregular functions are compatible with compression.
+The polyregular functions are then obtained from the regular ones by adding marked squaring to the basic functions, as in the following definition. 
+
+\begin{definition}\label{def:polyregular-def}
+    The class of \emph{polyregular functions} is the smallest class of string-to-string functions which: 
+    \begin{enumerate}
+        \item   contains all rational functions;
+        \item \label{item:reg-char-dup-and-rev-marked-square} contains the duplication, reverse and marked squaring functions from Examples~\ref{ex:duplication}, \ref{ex:reversal} and~\ref{ex:marked-squaring};
+        \item is closed under composition of functions;
+        \item is closed under the map combinator from Lemma~\ref{lem:map}.
+    \end{enumerate}
+\end{definition}
+
+According to the above definition, the polyregular functions extend the regular ones by adding marked squaring. Therefore, to show that the polyregular functions are compatible with compression, it would be enough to show this compatibility for the new function. Unfortunately, this is not the case. 
 
 \begin{lemma}\label{lem:nonblind-squaring}
     Marked squaring is not compatible with compression.
@@ -33,7 +45,7 @@ The marked squaring function is an example of a polyregular function, and in fac
         \end{align*}
     \end{claim}
     \begin{proof}
-        Consider a variable \texttt{x} in a straight line program, for which the corresponding rule is \texttt{x := y$\cdot$z}, where each of \texttt y and \texttt z is either a previously defined variable, or a letter, or the empty string $\varepsilon$.  Define the \emph{contribution} of variable \texttt{x} to be 
+        Consider a variable \texttt{x} in a straight line program,  which is defined by the  rule \texttt{x := y$\cdot$z}, where each of \texttt y and \texttt z is either a previously defined variable, or a letter, or the empty string $\varepsilon$.  Define the \emph{contribution} of variable \texttt{x} to be 
         \begin{align*}
         \setbuild{ i }{$ab^ic$ is an infix of \texttt x, but is not an infix of \texttt y or \texttt z}.
         \end{align*}
@@ -44,7 +56,7 @@ Claim~\ref{claim-infix} together with the fact that $v_n$ contains all infixes $
 
 \subsection{Rectangular polyregular functions}
 
-Lemma~\ref{lem:nonblind-squaring} proves that some polyregular functions are not compatible with compression. A natural idea to overcome this problem is to consider the weaker notion of squaring from Example~\ref{ex:squaring},
+As we have seen above, marked squaring is a polyregular function that is  not compatible with compression. A natural idea to overcome this problem is to consider the weaker notion of squaring from Example~\ref{ex:squaring},
 \begin{align*}
 123 \quad \mapsto \quad 123123123,
 \end{align*}
@@ -65,20 +77,12 @@ If the input is not of the form $A^*B^*$, then the output is the empty string. O
     Let us show that the rectangle function is compatible with compression. Suppose that we are given a compression of some string over alphabet $A+B$. We can first check in polynomial time if this string is in $A^*B^*$; this can be done  because membership in a regular language can be checked in polynomial time for compressed inputs \cite{PlandowskiR99}. Next, we extract in polynomial time compressions for the two parts of the input string, one in $A^*$ and one in $B^*$; this can be done by removing the nonterminals from the unused part of the alphabet.  Finally, in the compression for the first  string from $A^*$, we append a copy of the compression for the second string from $B^*$ after each terminal symbol. 
 \end{myexample}
 
-As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any function compatible with compression to the basic functions in the theorem will lead a class that is compatible with compression. We believe -- with some justification presented in Section~\ref{sec:functional-lang} --  that the particular choice of the rectangle function is worthwhile, which leads us to the following definition. 
+As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any function compatible with compression to the basic functions in the theorem will lead to a class that is compatible with compression. We believe -- with some justification presented in Section~\ref{sec:functional-lang} --  that the particular choice of the rectangle function is worthwhile, hence the following definition. 
 \begin{definition}[Rectangular polyregular functions]\label{def:rectangular-polyregular}
-    Define the class of \emph{rectangular polyregular functions} to be the smallest class of string-to-string functions which:
-    \begin{enumerate}
-        \item contains all rational functions;
-        \item contains the duplication, reverse and rectangle functions from Examples~\ref{ex:duplication},~\ref{ex:reversal} and~\ref{ex:strength};
-        \item is closed under composition of functions;
-        \item is closed under the map combinator from Lemma~\ref{lem:map}.
-    \end{enumerate}
+    Define the class of \emph{rectangular polyregular functions} in the same way as the polyregular functions from Definition~\ref{def:polyregular-def}, except that marked squaring is replaced by the rectangle function from Example~\ref{ex:strength}.
 \end{definition}
 
-The above class is a contained in the polyregular functions (we will show in a moment that the containment is strict). This is because the rectangle function is polyregular, and the polyregular functions have all the other closure properties from the definition above. In the above definition, duplication is redundant. This is because it can be simulated using rectangles, by first prepending $12$ to the input string. Also, we could eliminate reverse, by using a variant of the rectangle function in which the word from $B^*$ is reversed. However, we do not apply these optimisations, in order to underline the analogy with Theorem~\ref{thm:regular-def}.
-
-By design, the rectangular polyregular functions are compatible with compression, which is proved using the same argument as for regular functions in Theorem~\ref{thm:regular-compatible}.
+Since the marked squaring function is polyregular, it follows that the rectangular polyregular functions are a subclass of the polyregular functions. By design, this subclass is compatible with compression, as stated in the following theorem, which is proved using the same argument as for regular functions in Theorem~\ref{thm:regular-compatible}.
 
 \begin{theorem}
     \label{thm:polyregular-compatible}
@@ -87,13 +91,15 @@ By design, the rectangular polyregular functions are compatible with compression
 
 
 
-One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangular polyregular functions are a proper subclass of the polyregular functions, since the latter are not necessarily compatible with compression, as shown by Lemma~\ref{lem:nonblind-squaring}. This is stated in the following theorem, which also relates the classes to another known subclass of the polyregular functions, namely the comparison-free polyregular functions from~\cite{NguyenNP21} (this model  will be explained in the proof of the theorem).
+One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangular polyregular functions are a proper subclass of the polyregular functions, since the latter are not necessarily compatible with compression, as shown by Lemma~\ref{lem:nonblind-squaring}. This is stated in the following theorem, which also relates the classes to another known subclass of the polyregular functions, namely the comparison-free polyregular functions from~\cite{NguyenNP21} (this model  will be explained in the proof of the theorem). The comparison-free polyregular functions are the model most closely related with the rectangular ones, and can be seen as an inspiration for their definition.
 
 \begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular $\subsetneq$ rectangular polyregular $\subsetneq$ polyregular.
 \end{theorem}
 \begin{proof}
     We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} uses does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
 \end{proof}
+
+The second  separation in the above theorem, i.e.~the separation between rectangular and general polyregular functions, was proved using compression arguments. We believe that this is an interesting and clean technique, and much simpler than the intricate pumping arguments used for other separations, such as the first one in the above theorem. We believe that this lends further credence to the usefulness of compression techniques in the study of string-to-string functions.
 
 \paragraph*{A normal form.} We conclude this section with a slightly different characterization of rectangular polyregular functions, which relies only on composition in the closure properties and does not use the map combinator. 
 In the definition of the rectangular polyregular functions from Definition~\ref{def:rectangular-polyregular}, map and function composition could be applied in alternation, e.g.~we could apply  map, followed by composition, followed by map, etc. The following lemma shows that such alternation is not necessary, since it is enough to compose functions, each of which is either rational, or map reverse, or map rectangle. Here, map reverse refers to the function obtained by applying the map combinator to the reverse function, and similarly for map rectangle. In other words, map can be pushed inside composition and is not nested.
