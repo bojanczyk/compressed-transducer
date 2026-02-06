@@ -22,7 +22,7 @@
 \section{A functional programming language}
 \label{sec:functional-lang}
 We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, one could ask if the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. We are not aware of any counterexample to the converse implication, but proving it   seems difficult, and we leave it for future work.  
-\mb{I made the statement softer, since I do not know how to write a few  lines of supporting evidence that would not be completely incoherent}
+
 
 In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. Before giving a formal definition, we present some example programs.
 
@@ -235,8 +235,7 @@ The assumptions discussed above are summarised  in the following definition.
     (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
     \end{align}
 The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}.
-It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables~\cite[Corollary 1.4.9]{sorensenLecturesCurryHowardIsomorphism2006}. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type, normal forms and their string representations are essentially the same thing.
-\mb{I removed the comment about normal form for rational functions, which was incorrect. I added the appropriate reduction rule to the figure.} 
+It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables~\cite[Corollary 1.4.9]{sorensenLecturesCurryHowardIsomorphism2006}. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type $A^*$, normal forms and their string representations are essentially the same thing.
 % Note that if $R$ is an atomic
 % program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
 
