@@ -293,8 +293,8 @@ It is easy to see that applying a reduction rule changes neither the type nor th
         \quad \leadsto \quad 
         [M\ N_1, \ldots, M\ N_n].
         \end{align*}
-        This reduction rule can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. The reduction rule for reverse can be implemented by a regular function, and the remaining reduction rules are even rational. \mb{Rewrote this to explain your concerns. Block is rational (it is just a rearranging of parentheses).  Reverse indeed is not rational but regular.  Split is not even regular, but it is not allowed. }
-        This completes the proof that a single redex can be reduced by a rectangular polyregular function.
+        This reduction rule can be evaluated similarly to the proof of Lemma~\ref{lem:substitution}, by  using the rectangle function to copy the program $M$ into each of the $n$ list elements. The reduction rule for reverse can be implemented by a regular function, and the remaining reduction rules are even rational. 
+ This completes the proof that a single redex can be reduced by a rectangular polyregular function.
 
         Our reduction strategies are parallel, which means that multiple redexes need to be reduced in one step. However, since these redexes are non-overlapping, the parallel execution corresponds to using the map combinator from Section~\ref{sec:map}. Since this combinator is part of the definition of the rectangular polyregular functions, we can complete the proof of (2), and therefore also the proof of the corollary.
     \end{proof}
