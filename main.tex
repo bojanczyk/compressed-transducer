@@ -14,7 +14,7 @@
 \maketitle
 
 \begin{abstract}
-W study string-to-string functions which are compatible with compression in the following sense: given a compressed representation of an input string, one can compute in polynomial time a compressed representation of the output string. As the compression formalism, we use straight line programs (i.e. context-free grammars that produce only one string). As the functions, we use finite state transducers, with a focus on the regular and polyregular functions. We show that all regular functions are compatible with compression, but this is no longer true for the polyregular functions. We identify a subclass of the polyregular functions -- the so-called rectangular polyregular functions -- which is compatible with compression, and we characterise this subclass in terms of a functional programming language.\end{abstract}
+We study string-to-string functions which are compatible with compression in the following sense: given a compressed representation of an input string, one can compute in polynomial time a compressed representation of the output string. As the compression formalism, we use straight line programs (i.e. context-free grammars that produce only one string). As the functions, we use finite state transducers, with a focus on the regular and polyregular functions. We show that all regular functions are compatible with compression, but this is no longer true for the polyregular functions. We identify a subclass of the polyregular functions -- the so-called rectangular polyregular functions -- which is compatible with compression, and we characterise this subclass in terms of a functional programming language.\end{abstract}
 
 \newpage
 \section{Introduction}
@@ -27,7 +27,7 @@ Its principal idea is to process data that is given in compressed form without f
 There are three main applications for algorithms of this kind (see  \cite{Loh12survey} for a survey).
 \begin{itemize}
 \item  In many applications one has to combine compression and querying. A typical example 
-is a genom database where DNA sequences are stored in compressed form and searched for specific patterns (e.g. genes).
+is a genome database where DNA sequences are stored in compressed form and searched for specific patterns (e.g. genes).
 This leads to so-called compressed text indices \cite{CNP21,FeMa05}
 \item A compressed representation of the input data might reveal
 certain regularities, which could be used to speed up an algorithm. This principle is 
@@ -172,7 +172,7 @@ We have studied string-to-string transducers which are compatible with compressi
     \item  Can the rectangular polyregular functions be characterised in terms of an  imperative programming languages, such as the for-transducers from~\cite[Section 1]{polyregular-survey}?
 \end{enumerate}
 It is a tantalising possibility that the answers to all these questions are positive.
-\nocite{bojanczyk_recobook}
+
 \bibliographystyle{plain}
 \bibliography{bib}
 

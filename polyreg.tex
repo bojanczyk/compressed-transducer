@@ -51,7 +51,7 @@ According to the above definition, the polyregular functions extend the regular 
         \end{align*}
         The key observation is that this contribution contains at most one number $i$. This will imply the claim, since the set in the claim is the union of all contributions of variables in the program.  To see why the variable contributes at most one number, observe that the infix $ab^ic$ is either contained in \texttt y, or contained in \texttt z, or it crossed the boundary between \texttt y and \texttt z. In the first two cases, it is not counted in the contribution of \texttt x. In the last case, there is exactly one value of $i$ for which this can happen, namely the number of $b$'s between the last $a$ in \texttt y and the first $c$ in \texttt z.
     \end{proof}
-Claim~\ref{claim-infix} together with the fact that $v_n$ contains all infixes $b a^i \underline{a}$ for every $1 \le i \le 2^n $ immediately yields the lemma. 
+Claim~\ref{claim-infix} together with the fact that $w_n$ contains all infixes $b a^i \underline{a}$ for every $1 \le i \le 2^n $ immediately yields the lemma. 
 \end{proof}
 
 \subsection{Rectangular polyregular functions}
@@ -96,7 +96,7 @@ One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangula
 \begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular $\subsetneq$ rectangular polyregular $\subsetneq$ polyregular.
 \end{theorem}
 \begin{proof}
-    We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} uses does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
+    We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
 \end{proof}
 
 The second  separation in the above theorem, i.e.~the separation between rectangular and general polyregular functions, was proved using compression arguments. We believe that this is an interesting and clean technique, and much simpler than the intricate pumping arguments used for other separations, such as the first one in the above theorem. We believe that this lends further credence to the usefulness of compression techniques in the study of string-to-string functions.
@@ -108,7 +108,7 @@ In the definition of the rectangular polyregular functions from Definition~\ref{
                 Every rectangular polyregular function can be obtained as a composition of functions, each of which is either: (a) rational; or (b) map reverse; or (c) map rectangle.  
     \end{lemma}
     \begin{proof}
-        It is enough to show that the class of functions in the statement of the lemma has the  closure properties from Definition~\ref{def:rectangular-polyregular}. It contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:rectangular-polyregular}, we can also recover duplication, which can be obtained as follows: 
+        It is enough to show that the class of functions in the statement of the lemma has the  closure properties from Definition~\ref{def:rectangular-polyregular}. This class contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:rectangular-polyregular}, we can also recover duplication, which can be obtained as follows: 
         \begin{align*}
         w 
         \qquad \stackrel{\text{rational}}\mapsto \qquad 

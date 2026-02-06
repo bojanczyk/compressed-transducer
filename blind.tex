@@ -96,7 +96,7 @@ Here is the inductive definition of the syntax  of the programs.
     & \quad 
     \lambdarule{\church M  B}{\church{(\church \rightterm {B \to A + B} \church M B)}{A + B}}{right co-pair}
     \end{align*}
-    In the rule list, the program $[]$ is also allowed, representing the empty list. Observe that in the data constructors for co-pairs,  the other type $B$ (resp, $A$) is part of the syntax, since it cannot be inferred from the argument $M$. 
+    In the rule list, the program $[]$ is also allowed, representing the empty list. Observe that in the data constructors for co-pairs,  the other type $B$ (respectively, $A$) is part of the syntax, since it cannot be inferred from the argument $M$. 
    
     We also have  atomic programs for deconstructing data:
         \begin{align*}
@@ -181,7 +181,7 @@ The purpose of this section is to identify the subclass which corresponds to the
     \quad \subseteq \quad 
     \text{rectangular polyregular}.
     \end{align*}
-    This proof is much longer, and it  follows the same lines as the proof of the corresponding inclusion for the  (not necessarily rectangular ) polyregular functions in~\cite[Theorem 4.1]{polyregular-survey}. The general idea is to 
+    This proof is much longer, and it  follows the same lines as the proof of the corresponding inclusion for the  (not necessarily rectangular) polyregular functions in~\cite[Theorem 4.1]{polyregular-survey}. The general idea is to 
 write down a program as a string, and to then evaluate it be using string rewriting. If done carefully, the evaluation can be done by a rectangular polyregular function.
 
 
@@ -270,7 +270,7 @@ It is easy to see that applying a reduction rule changes neither the type nor th
             \item a parallel reduction strategy; and 
             \item a time bound $k \in \set{1,2,\ldots}$;
        \end{enumerate}
-       such that for every program consistent with the  resource bound, applying the reduction strategy $k$ times  leads to a term in normal form. Furthermore, the reduction strategy can be implemented by a rational function, with the redexes marked in the ouptut using begin/end markers.
+       such that for every program consistent with the  resource bound, applying the reduction strategy $k$ times  leads to a term in normal form. Furthermore, the reduction strategy can be implemented by a rational function, with the redexes marked in the output using begin/end markers.
     \end{lemma}
 
     The above lemma was proved in \cite{bojanczykPolyregularFunctions2018} for the (not necessarily rectangular ) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
