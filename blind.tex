@@ -1,6 +1,4 @@
 
-
-
 \newcommand{\reverseterm}{\mathtt{reverse}}
 \newcommand{\leftterm}{\mathtt{Left}}
 \newcommand{\rightterm}{\mathtt{Right}}
@@ -254,7 +252,6 @@ It is easy to see that applying a reduction rule changes neither the type nor th
 
            Next, we use the rectangle function to insert a copy of the string representation of the program $N$ after every letter in the string representation of the program $M$. Then, we can use a rational function to keep only the copies which are necessary, i.e.~those that immediately follow an occurrence of the variable $x$. 
     \end{proof}
-
     The above lemma is the only place where our proof differs from the one in~\cite{polyregular-survey}. Essentially, the content of the above lemma is the  observation that a weaker mechanism than the full polyregular functions, namely the rectangle function, is sufficient to implement term substitution.
 
     \paragraph*{A reduction strategy.} The rest of this proof follows the same lines as the one in~\cite[Theorem 4.1]{polyregular-survey}. Define a \emph{redex} in a program to be a node in its syntax tree to which a reduction rule can be applied. A redex can also be seen as an infix of the string representation of the program. Here is an example of a program with some (in fact, all) redexes underlined:
