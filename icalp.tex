@@ -54,7 +54,7 @@ This leads to so-called compressed text indices \cite{CNP21,FeMa05}
 certain regularities, which could be used to speed up an algorithm. This principle is 
 known as {\em acceleration by compression}. An example can be found in \cite{LMWZiv07},
 where Viterbi's algorithms for decoding  
-hidden Markov chains is speeded up using compression.
+hidden Markov chains is sped up using compression.
 \item Large and often highly compressible data may appear as 
 intermediate data structures in algorithms. In such a situation, one may try to 
 store a compressed representation of these intermediate data structures
@@ -157,7 +157,7 @@ polyregular function that is not compatible with compression. We then  identify 
 \section{Transducers compatible with compression}
 \label{sec:compatible}
 
-In this section we will introduce the function classes mentioned in the introduction (rational functions, regular functions,
+In this section we define the function classes mentioned in the introduction (rational functions, regular functions,
 polyregular functions) and study their compatibility with respect to compression.
 
 \subsection{Rational functions}
@@ -269,7 +269,10 @@ The first closure property, which is immediate from the definition, is that func
 
 \subsection{Regular functions}
 \label{sec:regular}
-Having proved that the rational string-to-string functions are compatible with compression, we now move to the next class of functions, namely the regular string-to-string functions. The latter class of  functions can be defined  using several different models, such as two-way automata with output~\cite{shepherdson1959reduction}, \mso transductions~\cite{engelfrietMSODefinableString2001}, or streaming string transducers~\cite{alurExpressivenessStreamingString2010}. Instead of presenting any of these machine models, we use a characterization of the regular functions that uses concepts that have already been introduced in this paper. For the reader who is unfamiliar with regular functions, the following theorem, see~\cite[Theorem 18]{bojanczykstefanski2020},  can be taken as the definition of regular functions\footnote{Let us explain in more detail the relation of Theorem~\ref{thm:regular-def} and \cite[Theorem 18]{bojanczykstefanski2020}. The latter result is in fact stronger, because it allows certain kinds of infinite alphabets, and has fewer closure properties than those mentioned in items~\ref{item:reg-char-rational}-\ref{item:reg-char-map} of Theorem~\ref{thm:regular-def}. The difficult implication in the theorems is that the regular functions are contained in the  least class with the closure properties, which means that  \cite[Theorem 18]{bojanczykstefanski2020} implies Theorem~\ref{thm:regular-def}.}.
+Having proved that the rational string-to-string functions are compatible with compression, we now move to the next class of functions, namely the regular string-to-string functions. The latter class of  functions can be defined  using several different models, such as two-way automata with output~\cite{shepherdson1959reduction}, \mso transductions~\cite{engelfrietMSODefinableString2001}, or streaming string transducers~\cite{alurExpressivenessStreamingString2010}. Instead of presenting any of these machine models, we use a characterization of the regular functions that uses concepts that have already been introduced in this paper. For the reader who is unfamiliar with regular functions, the following theorem, see~\cite[Theorem 18]{bojanczykstefanski2020},  can be taken as the definition of regular functions\footnote{Let us explain in more detail the relation of Theorem~\ref{thm:regular-def} and \cite[Theorem 18]{bojanczykstefanski2020}. The latter result is in fact stronger, because it allows certain kinds of infinite alphabets, and has fewer closure properties than those mentioned in items~\ref{item:reg-char-rational}-\ref{item:reg-char-map} of Theorem~\ref{thm:regular-def}. The difficult implication in 
+Theorem~\ref{thm:regular-def} is that the regular functions are contained in the  smallest class with the listed closure properties \ref{item:reg-char-rational}--\ref{item:reg-char-map}.
+Therefore,  \cite[Theorem 18]{bojanczykstefanski2020} implies Theorem~\ref{thm:regular-def}.}.
+\todo{ML: I changed the last sentence in the footnote slightly, see review 116D.}
 
 \begin{theorem}\label{thm:regular-def}
     The class of \emph{regular functions} is the smallest class of string-to-string functions which: 
@@ -280,7 +283,6 @@ Having proved that the rational string-to-string functions are compatible with c
         \item \label{item:reg-char-map} is closed under the map combinator from Lemma~\ref{lem:map}.
     \end{enumerate}
 \end{theorem}
-
 Thanks to the above characterization and the results proved so far, we can immediately deduce compatibility with compression for regular functions.
 
 \begin{theorem}
@@ -290,7 +292,6 @@ Thanks to the above characterization and the results proved so far, we can immed
 \begin{proof}
     The rational functions are compatible with compression by Theorem~\ref{thm:rational}. The duplication and reversal functions are compatible with compression by Examples~\ref{ex:duplication} and~\ref{ex:reversal}. The class of functions compatible with compression is closed under composition essentially by definition, and it is closed under the map combinator by Lemma~\ref{lem:map}. Therefore, by Theorem~\ref{thm:regular-def}, all regular functions are compatible with compression.
 \end{proof}
-
 Observe that the proof of the above theorem would continue to work if we would extend the basic functions from item~\ref{item:reg-char-dup-and-rev} by adding the  squaring function from Example~\ref{ex:squaring}, or any other function compatible with compression. This observation will be useful in the next section. 
 
 
@@ -361,7 +362,7 @@ which does not have the underlines, and which is compatible with compression. We
 \begin{myexample}[Rectangle] \label{ex:strength}  The essential idea behind this function is that it takes a lexicographic product of two input strings, as illustrated in the following example:
     \begin{align}
         \label{eq:rectangle}
-    (123,abcd) \quad \mapsto \quad 1abcd2abcd3abcd4abcd.
+    (123,abcd) \quad \mapsto \quad 1abcd2abcd3abcd.
     \end{align}
     This can be seen as a generalization of squaring, since squaring is obtained by taking both input strings to be the same and then removing the letters from the first string.
 Since for the moment we want to work with functions that input strings (and not pairs of strings), we will view the  rectangle function as a string-to-string function in the following way. There are two disjoint alphabets $A$ and $B$, and the function has  type 
@@ -377,7 +378,6 @@ As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any func
 \begin{definition}[Rectangular polyregular functions]\label{def:rectangular-polyregular}
     Define the class of \emph{rectangular polyregular functions} in the same way as the polyregular functions from Definition~\ref{def:polyregular-def}, except that marked squaring is replaced by the rectangle function from Example~\ref{ex:strength}.
 \end{definition}
-
 Since the marked squaring function is polyregular, it follows that the rectangular polyregular functions are a subclass of the polyregular functions. By design, this subclass is compatible with compression, as stated in the following theorem, which is proved using the same argument as for regular functions in Theorem~\ref{thm:regular-compatible}.
 
 \begin{theorem}
@@ -394,6 +394,8 @@ One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangula
 \begin{proof}
     We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
 \end{proof}
+By \cite[Theorem 6.1]{NguyenNP21}, the class of comparison-free polyregular functions contains the class of regular function. Hence, we also have the inclusion
+regular $\subsetneq$ rectangular polyregular. \todo{I added this comment; see Review 116E}
 
 The second  separation in the above theorem, i.e.~the separation between rectangular and general polyregular functions, was proved using compression arguments. We believe that this is an interesting and clean technique, and much simpler than the intricate pumping arguments used for other separations, such as the first one in the above theorem. We believe that this lends further credence to the usefulness of compression techniques in the study of string-to-string functions.
 
@@ -404,7 +406,9 @@ In the definition of the rectangular polyregular functions from Definition~\ref{
                 Every rectangular polyregular function can be obtained as a composition of functions, each of which is either: (a) rational; or (b) map reverse; or (c) map rectangle.  
     \end{lemma}
     \begin{proof}
-        It is enough to show that the class of functions in the statement of the lemma has the  closure properties from Definition~\ref{def:rectangular-polyregular}. This class contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. As we have remarked after Definition~\ref{def:rectangular-polyregular}, we can also recover duplication, which can be obtained as follows: 
+        It is enough to show that the class of functions in the statement of the lemma has the  closure properties from Definition~\ref{def:rectangular-polyregular}. This class contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. 
+      %As we have remarked after Definition~\ref{def:rectangular-polyregular}
+      Moreover, we can also recover duplication, which can be obtained as follows: 
         \begin{align*}
         w 
         \qquad \stackrel{\text{rational}}\mapsto \qquad 

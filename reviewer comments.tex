@@ -1,0 +1,136 @@
+# Minor comments/questions
+
+Proof of Lemma 2.12: I cannot find a remark on duplication after Definition 2.9.
+
+ML: done
+
+Could you discuss whether there exists a candidate automaton characterization of rectangular polyregular functions? Such a characterization could give a hint on “bad patterns“ present in non-rectangular functions, possibly leading to a lower bound.
+
+ML: TODO
+
+# On deciding rectangularity
+
+Since the authors pose the open question, whether rectangularity of polyregular functions is decidable, let me add the observation that equivalence of rectangular polyregular functions is reducible to deciding rectangularity. As far as I see, equivalence is also not known to be decidable for rectangular functions. Proof sketch: If $f,g \colon B^* \to B^*$ are polyregular then the following function $h \colon (A+B)^* \to (A+B)^*$ is effectively polyregular:
+
+$h(a_1 w_1 a_2 w_2 \dots a_n w_n) = \\ a_1 f(w_1) a_2 g(w_2) \dots a_n g(w_n) \\ a_1 g(w_1) a_2 f(w_2) \dots a_n g(w_n) \\ \dots \\ a_1 g(w_1) a_2 g(w_2) \dots a_n f(w_n)$
+where $w_i \in B^*$ and $a_i \in A$.
+
+Furthermore, if $f = g$ and $f$ is rectangular then $h$ is compatible with compression. If $f \neq g$ then marked squaring can be obtained from $h$ by post-composition with a rational function, and therefore $h$ is not compatible with compression. Therefore, equivalence of rectangular functions is reducible to testing rectangularity.
+
+This relationship between subclass equivalence checking to subclass membership seems to be „folklore“, see for example Friedman, Greibach: On Equivalence and Subclass Containment Problems for Deterministic Context-Free Languages. Inf. Process. Lett. 7(6): 287-290 (1978).
+
+ML: Not sure whether we should include this.
+
+------------
+
+
+MINOR COMMENTS
+
+* A mildly important comment:
+In the paper you use list constructors of the form [M1, ..., Mn] (see page 13, for instance), allowing terms of bounded height but 
+with unbounded arguments to represent arbitrarily long lists. To a non-expert reader, this choice might seem unusual, since lists 
+are more often constructed by prepending an element to another list, and because you also introduce a destructor function "uncons" 
+that is precisely the inverse of the latter constructor.
+I think it would be worth motivating this choice somewhere, e.g. by explaining that it is useful both because of the lack of a 
+recursion mechanism in the polyregular λ-calculus formalism and because of the intended proof strategy based on bounding the height 
+of syntax trees (if needed, one could even point to the reduction rule for map on page 19).
+
+* A general question/curiosity: 
+Is there any chance that the equivalence problem for rectangular polyregular functions turns out to be simpler than for unrestricted 
+polyregular functions?
+
+
+* Figure at page 5
+I would consider annotating the outputs along the initial and final arrows as /b rather than just b.
+
+ML: TODO
+
+* page 5 paragraph just before Theorem 2.1: "there is *exactly one* output string"
+Functional transducers / rational functions / etc. are usually defined as outputting *at most one* string per input. 
+Perhaps it is worth clarifying and motivating the tacit assumption that transducers here always produce an output.
+
+* colors: 
+Can you make the "blue" color darker? When printed, text in this color does not appear as clearly as the rest.
+
+* page 8 Definition 2.6
+This definition is somehow extracted from earlier results, e.g. from [7]. It would be nice to have a clear reference 
+here, to help the reader understand the origin of the current definition. The closest characterization, although not 
+exactly the same as Definition 2.6, seems to be Theorem 3.2 from [7]. Perhaps this could be cited, or one could 
+explain in more details how Definition 2.6 arises from earlier work.
+
+* page 10 end of Example 6
+"we append a copy..." -> "we insert a copy..."
+
+* page 10 paragraph before Theorem 2.10
+I would move the phrase "Since the marked squaring function..."”" to just after Theorem 2.10, 
+as a preliminary remark for the separation results stated later in Theorem 2.11.
+
+* page 12 "The subprogram map ..."
+The type annotation ":A" could be removed here.
+Also, a few lines below, when generalizing the technique to a variant of the rectangle function, you could 
+explain that  map(λz concat [[z,y]) x  transforms each element z of x into the list obtained by prepending
+z to y. An example with x = [a,b] and y = [1,2,3] may also help here.
+
+* page 13, third line from the top
+"blue subscripts" -> "blue superscripts"
+
+* pages 16-19, resource bounds and reductions
+Since the resource bound includes a bound on the height of programs, and β-reduction is implemented by substitution, 
+it seems that the same height bound need not be preserved after each reduction step (whereas the other constraints 
+of the resource bound are). My understanding is that this is nevertheless harmless: once the initial resource bound 
+is fixed, the chosen parallel reduction strategy performs only a bounded number of steps, so all intermediate 
+programs should remain within some larger resource bound depending only on the initial one. Thus one can still 
+carry out the argument uniformly within a bounded-resource setting. 
+I think it would be helpful to add a remark clarifying this point, or to explain it in another way.
+
+* page 17, reduction rules for either M1 M2 Left/Right N
+Somewhere you may want to recall that the destructor  either  is designed to works naturally 
+with the constructors  Left  and  Right  for the co-products.
+
+* page 19, (1) mark the redexes using a rational function
+I would clarify, even though it is already fairly clear, that the marked redexes need to be 
+non-overlapping, and that, for instance, one may mark w.l.o.g. the innermost redexes.
+
+* page 21, analogue of Conjecture 10.1 from [29]
+When inspecting [29] to understand the kind of restriction on interpretations that might capture 
+rectangular polyregular functions, I found the presentation a bit hard to parse. If space permits, 
+you could add a brief intuitive account of this interpretation, e.g. saying that one first applies 
+a kind of k-fold product to the input structure, obtaining elements that are k-tuples of input 
+positions together with copies of the input relations on each coordinate, and then applies a 
+one-dimensional FO interpretation to obtain the desired output structure (at least this is how 
+I understood it).
+
+
+----------------
+
+# Small editorial comments
+
+* pg2: speeded -> sped 
+
+ML: done
+
+* pg4: why is it a hopeless task?
+
+
+* pg4: I am not sure I agree with why alternative models like macro tree transducers are not considered. Your argument rather implies that the full power of these models is not necessary, but not that it makes no sense to consider them.
+
+* pg4, sec2: introduce ... introduction is a bit too much alliteration
+
+ML: done
+
+* pg7, footnote 1: least -> smallest; also, the last sentence in the footnote feels off... are you trying to support the earlier claim that [11, Thm 18] implies Thm 2.4 or did you want to give intuition about the converse?
+
+ML: done, see comment in the paper.
+* example 6: I think the first words should be 1234 since the suffix of the image has 4abcd
+* pg10, second paragraph: this argument was a bit too quick for me, what does the last sentence of the prove actually achieve? are there no steps missing to conclude the argument?
+
+ML: Done (I removed the suffix 4abcd).
+
+----------------
+
+Comments:
+
+- You do not formally state anywhere that the rectangular polyregular functions strictly extend the regular functions. Maybe this should be included somewhere.
+
+ML: Done, see comment in the paper.
+
