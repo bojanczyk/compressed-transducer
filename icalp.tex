@@ -1,6 +1,6 @@
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
 
-\usepackage{macros-icalp}
+\usepackage{macros-icalp,MnSymbol}
 %\usepackage{enumitem}
 
 \bibliographystyle{plainurl}
@@ -107,31 +107,31 @@ We now come to the second question (ii): What are the processing steps carried o
 \end{definition}
 Let us begin with some examples of functions that are compatible -- or not --  with compression. In the examples, we use straight line programs rather than grammars.
 
-\begin{myexample}[Duplication]\label{ex:duplication}
-    The string duplication function $w \mapsto ww$ is compatible with compression. The corresponding operation on straight line programs is to append one more line \texttt{x := y $\cdot$ y}, where \texttt{y} was the last variable used in the input program. 
-\end{myexample}
+\begin{example}[Duplication]\label{ex:duplication}
+    The string duplication function $w \mapsto ww$ is compatible with compression. The corresponding operation on straight line programs is to append one more line \texttt{x := y $\cdot$ y}, where \texttt{y} was the last variable used in the input program. \qed
+\end{example}
 
-\begin{myexample}[Reversal]\label{ex:reversal}
-    String reversal is also compatible with compression. The corresponding operation on straight line programs is to reverse the order of concatenation in every line. 
-\end{myexample}
+\begin{example}[Reversal]\label{ex:reversal}
+    String reversal is also compatible with compression. The corresponding operation on straight line programs is to reverse the order of concatenation in every line. \qed
+\end{example}
 
-\begin{myexample}[Squaring]\label{ex:squaring}
+\begin{example}[Squaring]\label{ex:squaring}
   Consider the squaring function illustrated as follows:
 \begin{align*}
     123 \quad \mapsto \quad 123123123.
 \end{align*}
-This function  is compatible with compression. To implement squaring on  straight line programs, we write the code of the program twice, with the second copy using the output of the first copy instead of the character constants. 
-\end{myexample}
+This function  is compatible with compression. To implement squaring on  straight line programs, we write the code of the program twice, with the second copy using the output of the first copy instead of the character constants. \qed
+\end{example}
 
-\begin{myexample}[Exponential outputs] \label{ex:exp-output} This is a non-example, i.e.~a function that is not compatible with compression.
+\begin{example}[Exponential outputs] \label{ex:exp-output} This is a non-example, i.e.~a function that is not compatible with compression.
     Assume that the input and output alphabets have one letter only, and consider the function 
     \begin{equation} \label{exp-map}
     a^n \quad \mapsto \quad a^{2^n}.
     \end{equation}
     This function is not compatible with compression. The reason is that we can produce $a^{2^k}$ by a straight line program of size $k$.
     The  function \eqref{exp-map} maps $a^{2^k}$ to $a^{2^{2^k}}$ which requires a compression of size $2^k$. 
-    Such a compression cannot be constructed in polynomial time from a compression of size $k$.
-\end{myexample}
+    Such a compression cannot be constructed in polynomial time from a compression of size $k$. \qed
+\end{example}
 
 Characterizing the class of all string-to-string functions that are compatible with compression is a hopeless task. In this paper, we are interested in  string-to-string functions that can be computed by finite-state transducer models. As explained in Example~\ref{ex:exp-output}, the transducers cannot have exponential size outputs, which excludes many important transducer models, such as copyful streaming string transducers \cite[Section 2.1]{filiotCopyfulStreamingString2017} or the even  more general model of  macro tree transducers (in the string-to-string case) \cite[Section 3.1]{DBLP:journals/jcss/EngelfrietV85}.  For this reason, we will only consider transducer models that produce outputs of polynomial size. The largest known class of string-to-string transducers with polynomial size outputs are the \emph{polyregular functions} \cite{polyregular-survey}, and thus all transducers in this paper will be special cases of the polyregular functions. We will consider three such classes: 
 \begin{align*}
@@ -283,6 +283,8 @@ Therefore,  \cite[Theorem 18]{bojanczykstefanski2020} implies Theorem~\ref{thm:r
         \item \label{item:reg-char-map} is closed under the map combinator from Lemma~\ref{lem:map}.
     \end{enumerate}
 \end{theorem}
+
+\noindent
 Thanks to the above characterization and the results proved so far, we can immediately deduce compatibility with compression for regular functions.
 
 \begin{theorem}
@@ -302,12 +304,12 @@ Having shown that the rational and regular functions are compatible with compres
 
 Similarly to the rational and regular functions discussed in the previous section, the class of  polyregular functions admits many characterizations, see the survey~\cite{polyregular-survey} for at least five such characterizations. For the purposes of this paper, it will be most convenient to work with a characterization using combinators, similar to the one from Theorem~\ref{thm:regular-def}. The idea is to extend the description from Theorem~\ref{thm:regular-def} with one more basic function, which is explained in the following example. 
 
-\begin{myexample} [Marked squaring] \label{ex:marked-squaring} The \emph{marked squaring} function is like the  square function  from Example~\ref{ex:squaring}, except that each copy of the input string is annotated with an underlined position, with the $i$-th copy having the $i$-th position underlined.  Here is an example: 
+\begin{example} [Marked squaring] \label{ex:marked-squaring} The \emph{marked squaring} function is like the  square function  from Example~\ref{ex:squaring}, except that each copy of the input string is annotated with an underlined position, with the $i$-th copy having the $i$-th position underlined.  Here is an example: 
 \begin{align*}
 1234 \quad \mapsto \quad \underline{1}234 1\underline{2}34 12\underline{3}4 123\underline{4}
 \end{align*}
-Formally speaking, the output alphabet consists of two copies of the input alphabet, one with and one without underlining.
-\end{myexample}
+Formally speaking, the output alphabet consists of two copies of the input alphabet, one with and one without underlining. \qed
+\end{example}
 
 The polyregular functions are then obtained from the regular ones by adding marked squaring to the basic functions, as in the following definition. 
 
@@ -359,7 +361,7 @@ As we have seen above, marked squaring is a polyregular function that is  not co
 \end{align*}
 which does not have the underlines, and which is compatible with compression. We can, however, do a bit better. 
 
-\begin{myexample}[Rectangle] \label{ex:strength}  The essential idea behind this function is that it takes a lexicographic product of two input strings, as illustrated in the following example:
+\begin{example}[Rectangle] \label{ex:strength}  The essential idea behind this function is that it takes a lexicographic product of two input strings, as illustrated in the following example:
     \begin{align}
         \label{eq:rectangle}
     (123,abcd) \quad \mapsto \quad 1abcd2abcd3abcd.
@@ -371,8 +373,9 @@ Since for the moment we want to work with functions that input strings (and not 
     \end{align*}
 If the input is not of the form $A^*B^*$, then the output is the empty string. Otherwise, the input is split into two strings, and then we apply the rectangle operation as above. (An alternative definition, which would not change the results below, would be to untangle the input string over alphabet $A+B$ into two strings, by projecting onto the respective alphabets. We choose the previous definition to underline the fact that we are only interested in inputs where the two parts are clearly separated.)
 
-    Let us show that the rectangle function is compatible with compression. Suppose that we are given a compression of some string over alphabet $A+B$. We can first check in polynomial time if this string is in $A^*B^*$; this can be done  because membership in a regular language can be checked in polynomial time for compressed inputs \cite{PlandowskiR99}. Next, we extract in polynomial time compressions for the two parts of the input string, one in $A^*$ and one in $B^*$; this can be done by removing the nonterminals from the unused part of the alphabet.  Finally, in the compression for the first  string from $A^*$, we append a copy of the compression for the second string from $B^*$ after each terminal symbol. 
-\end{myexample}
+    Let us show that the rectangle function is compatible with compression. Suppose that we are given a compression of some string over alphabet $A+B$. We can first check in polynomial time if this string is in $A^*B^*$; this can be done  because membership in a regular language can be checked in polynomial time for compressed inputs \cite{PlandowskiR99}. Next, we extract in polynomial time compressions for the two parts of the input string, one in $A^*$ and one in $B^*$; this can be done by removing the nonterminals from the unused part of the alphabet.  Finally, in the compression for the first  string from $A^*$, we insert a copy of the compression for the second string from $B^*$ after each terminal symbol. 
+    \qed
+\end{example}
 
 As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any function compatible with compression to the basic functions in the theorem will lead to a class that is compatible with compression. We believe -- with some justification presented in Section~\ref{sec:functional-lang} --  that the particular choice of the rectangle function is worthwhile, hence the following definition. 
 \begin{definition}[Rectangular polyregular functions]\label{def:rectangular-polyregular}
@@ -488,8 +491,7 @@ In this section, we give other evidence for the importance of rectangular polyre
 % Based on this observation, we define below the programming language for the rectangular polyregular functions, by taking the programming language for the polyregular function, and eliminating the  split function, thus obtaining a programming language where all atomic functions have linear output size.
 
 
-
-\begin{myexample}[Duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us begin with a program in a Haskell-like language that implements the duplication function from Example~\ref{ex:duplication} (we use blue superscripts to indicate the types of  variables and  auxiliary functions):
+\begin{example}[Duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us begin with a program in a Haskell-like language that implements the duplication function from Example~\ref{ex:duplication} (we use blue superscripts to indicate the types of  variables and  auxiliary functions):
     \begin{align*}
     \lambda \church x {\blue{A^*}}.\ \church \concatterm {\blue{A^{**} \to A^*}} [x,x].
     \end{align*}
@@ -500,12 +502,11 @@ Here, the function $\concatterm$ concatenates a list of lists into a single list
     \end{align*}
 The subprogram $\mapterm \ (\lambda y : A.\ x)\ x$ applies the function $\lambda y.x$ to each list element of $x$, which means that each letter in the list $x$ will be replaced by the list $x$ itself. For example, if the input to this subprogram is $[1,2,3]$, then its output will be the nested list $[[1,2,3],[1,2,3],[1,2,3]]$. The nesting is then removed by the $\concatterm$ function. 
 Using a similar program, we can implement a variant of the rectangle function from Example~\ref{ex:strength}, in which the input is two strings
-\begin{align*}
-    \lambda x^{\blue{A^*}}.\  \lambda y^{\blue{A^*}}. \  \concatterm^{\blue{A^{**} \to A^*}} ( \mapterm^{\blue{(A \to A^*) \to A^* \to A^{**}}} \ ( \lambda z^{\blue{A}} . \ \concatterm^{\blue{A^{**} \to A^*}} [[z],y] ) \ x )
-  \end{align*}
-\end{myexample}
-
-
+\begin{equation*}
+    \lambda x^{\blue{A^*}}.\  \lambda y^{\blue{A^*}}. \  \concatterm^{\blue{A^{**} \to A^*}} ( \mapterm^{\blue{(A \to A^*) \to A^* \to A^{**}}} \ ( \lambda z^{\blue{A}} . \ \concatterm^{\blue{A^{**} \to A^*}} [[z],y] ) \ x )  
+  \end{equation*}
+  \qed
+\end{example}
 % For a type constructed without using the list constructor, the domain will be finite, and therefore such types will be called \emph{finite types}.
 We now  give a formal definition of the  programming language in detail. It is called the \emph{polyregular $\lambda$-calculus}, and its purpose is to define exactly the polyregular functions. 
 
@@ -518,7 +519,6 @@ We now  give a formal definition of the  programming language in detail. It is c
     \myunderbrace{A^*}{lists} \qquad 
     \myunderbrace{A \to B}{functions}
 \end{align*}
-
 Here is the inductive definition of the syntax  of the programs.
 
 \newcommand{\lambdarule}[3]{\frac{#1}{#2}\text{\ (#3)}}

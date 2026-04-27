@@ -2,7 +2,7 @@
 %  this is a set of common macros that I use for my projects
 
 % basic math symbols, like \subseteq
-\usepackage{amssymb}
+\usepackage{amssymb,amsthm}
 
 % basic environments like align*
 \usepackage{amsmath}
@@ -14,7 +14,7 @@
 
 
 % the proof macro
-\usepackage{proof}
+%\usepackage{proof}
 
 % commuting diagrams
 \usepackage{tikz-cd}
@@ -33,7 +33,7 @@
 \usepackage{mathrsfs}
 
 % allows \begin{enumerate}[(a)]
-\usepackage[shortlabels]{enumitem}
+%\usepackage[shortlabels]{enumitem}
 
 % used for code listings, configuration below
  \usepackage{listings}
@@ -42,8 +42,6 @@
 \usepackage{libertine}
 \usepackage{inconsolata}
 
-% infrastructure for theorem names, actual names configured below
-\usepackage{amsthm} 
 
 % todonotes
 \usepackage{todonotes}
@@ -70,8 +68,8 @@
 
 %  ******** configuration for amsthm **********
 % amsthm provides infrastructure for theorem-like environments, but it does not define the environments themselves. This is done below.
-\newcommand\@thmheadfont{\bfseries}
-\theoremstyle{plain}
+%\newcommand\@thmheadfont{\bfseries}
+%\theoremstyle{plain}
 %\newtheorem{theorem}{Theorem}[section]
 
 % Use aliascnt to help cleveref distinguish shared counters
@@ -240,17 +238,17 @@
 
 
 
-
-% ********* myexample **********
-%  A custom example environment. I think that the main feature is that it finishes with a box, so that it is clear where the example ends.
-\newcounter{ourexamplecounter}
-\newenvironment{myexample}{
-\medskip
-\refstepcounter{ourexamplecounter}
-\smallskip\noindent{\textbf{{Example \arabic{ourexamplecounter}. }}}}{
-$\Box$ \smallskip 
-}
-
+%
+%% ********* myexample **********
+%%  A custom example environment. I think that the main feature is that it finishes with a box, so that it is clear where the example ends.
+%\newcounter{ourexamplecounter}
+%\newenvironment{myexample}{
+%\medskip
+%\refstepcounter{ourexamplecounter}
+%\smallskip\noindent{\textbf{{Example \arabic{ourexamplecounter}. }}}}{
+%$\Box$ \smallskip 
+%}
+%
 
 
 % *********** colours ***********
