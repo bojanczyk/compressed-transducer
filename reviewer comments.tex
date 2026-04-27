@@ -35,6 +35,8 @@ I think it would be worth motivating this choice somewhere, e.g. by explaining t
 recursion mechanism in the polyregular λ-calculus formalism and because of the intended proof strategy based on bounding the height 
 of syntax trees (if needed, one could even point to the reduction rule for map on page 19).
 
+ML: TODO (I am not sure whether I understand this comment)
+
 * A general question/curiosity: 
 Is there any chance that the equivalence problem for rectangular polyregular functions turns out to be simpler than for unrestricted 
 polyregular functions?
@@ -44,16 +46,20 @@ ML: I guess, this could be the case.
 * Figure at page 5
 I would consider annotating the outputs along the initial and final arrows as /b rather than just b.
 
-ML: TODO
+ML: TODO (I can offer to draw the repictures with tikz, which I personally prefer).
 
 * page 5 paragraph just before Theorem 2.1: "there is *exactly one* output string"
 Functional transducers / rational functions / etc. are usually defined as outputting *at most one* string per input. 
 Perhaps it is worth clarifying and motivating the tacit assumption that transducers here always produce an output.
 
+ML: Is there a good reason for not allowing functions to be undefined for certain inputs?
+If we would allow rational functions to be only partially defined then the larger classes would
+also contain partially defined functions.
+
 * colors: 
 Can you make the "blue" color darker? When printed, text in this color does not appear as clearly as the rest.
 
-ML: TODO
+ML: done (I changed blue to cyan)
 
 * page 8 Definition 2.6
 This definition is somehow extracted from earlier results, e.g. from [7]. It would be nice to have a clear reference 
@@ -61,21 +67,34 @@ here, to help the reader understand the origin of the current definition. The cl
 exactly the same as Definition 2.6, seems to be Theorem 3.2 from [7]. Perhaps this could be cited, or one could 
 explain in more details how Definition 2.6 arises from earlier work.
 
+ML: TODO
+
 * page 10 end of Example 6
 "we append a copy..." -> "we insert a copy..."
+
+ML: done
 
 * page 10 paragraph before Theorem 2.10
 I would move the phrase "Since the marked squaring function..."”" to just after Theorem 2.10, 
 as a preliminary remark for the separation results stated later in Theorem 2.11.
 
+ML: done
+
 * page 12 "The subprogram map ..."
 The type annotation ":A" could be removed here.
+
+ML: done
+
 Also, a few lines below, when generalizing the technique to a variant of the rectangle function, you could 
 explain that  map(λz concat [[z,y]) x  transforms each element z of x into the list obtained by prepending
 z to y. An example with x = [a,b] and y = [1,2,3] may also help here.
 
+ML: TODO
+
 * page 13, third line from the top
 "blue subscripts" -> "blue superscripts"
+
+ML: done
 
 * pages 16-19, resource bounds and reductions
 Since the resource bound includes a bound on the height of programs, and β-reduction is implemented by substitution, 
@@ -86,13 +105,19 @@ programs should remain within some larger resource bound depending only on the i
 carry out the argument uniformly within a bounded-resource setting. 
 I think it would be helpful to add a remark clarifying this point, or to explain it in another way.
 
+ML: TODO
+
 * page 17, reduction rules for either M1 M2 Left/Right N
 Somewhere you may want to recall that the destructor  either  is designed to works naturally 
 with the constructors  Left  and  Right  for the co-products.
 
+ML: TODO
+
 * page 19, (1) mark the redexes using a rational function
 I would clarify, even though it is already fairly clear, that the marked redexes need to be 
 non-overlapping, and that, for instance, one may mark w.l.o.g. the innermost redexes.
+
+ML: TODO
 
 * page 21, analogue of Conjecture 10.1 from [29]
 When inspecting [29] to understand the kind of restriction on interpretations that might capture 
@@ -103,6 +128,7 @@ positions together with copies of the input relations on each coordinate, and th
 one-dimensional FO interpretation to obtain the desired output structure (at least this is how 
 I understood it).
 
+ML: TODO
 
 ----------------
 
@@ -114,8 +140,11 @@ ML: done
 
 * pg4: why is it a hopeless task?
 
+ML: done (I weakened the statement)
 
 * pg4: I am not sure I agree with why alternative models like macro tree transducers are not considered. Your argument rather implies that the full power of these models is not necessary, but not that it makes no sense to consider them.
+
+ML: done (I reformulated the statement)
 
 * pg4, sec2: introduce ... introduction is a bit too much alliteration
 
@@ -124,10 +153,11 @@ ML: done
 * pg7, footnote 1: least -> smallest; also, the last sentence in the footnote feels off... are you trying to support the earlier claim that [11, Thm 18] implies Thm 2.4 or did you want to give intuition about the converse?
 
 ML: done, see comment in the paper.
+
 * example 6: I think the first words should be 1234 since the suffix of the image has 4abcd
 * pg10, second paragraph: this argument was a bit too quick for me, what does the last sentence of the prove actually achieve? are there no steps missing to conclude the argument?
 
-ML: Done (I removed the suffix 4abcd).
+ML: done (I removed the suffix 4abcd).
 
 ----------------
 
