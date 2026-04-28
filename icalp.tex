@@ -378,7 +378,6 @@ If the input is not of the form $A^*B^*$, then the output is the empty string. O
     Let us show that the rectangle function is compatible with compression. Suppose that we are given a compression of some string over alphabet $A+B$. We can first check in polynomial time if this string is in $A^*B^*$; this can be done  because membership in a regular language can be checked in polynomial time for compressed inputs \cite{PlandowskiR99}. Next, we extract in polynomial time compressions for the two parts of the input string, one in $A^*$ and one in $B^*$; this can be done by removing the nonterminals from the unused part of the alphabet.  Finally, in the compression for the first  string from $A^*$, we insert a copy of the compression for the second string from $B^*$ after each terminal symbol. 
     \qed
 \end{example}
-
 As we have mentioned after Theorem~\ref{thm:regular-compatible}, adding any function compatible with compression to the basic functions in the theorem will lead to a class that is compatible with compression. We believe -- with some justification presented in Section~\ref{sec:functional-lang} --  that the particular choice of the rectangle function is worthwhile, hence the following definition. 
 \begin{definition}[Rectangular polyregular functions]\label{def:rectangular-polyregular}
     Define the class of \emph{rectangular polyregular functions} in the same way as the polyregular functions from Definition~\ref{def:polyregular-def}, except that marked squaring is replaced by the rectangle function from Example~\ref{ex:strength}.
@@ -392,7 +391,7 @@ By design, this subclass is compatible with compression, as stated in the follow
 Since the marked squaring function is polyregular, it follows that the rectangular polyregular functions are a subclass of the polyregular functions. 
 One corollary of Theorem~\ref{thm:polyregular-compatible} is that the rectangular polyregular functions are a proper subclass of the polyregular functions, since the latter are not necessarily compatible with compression, as shown by Lemma~\ref{lem:nonblind-squaring}. This is stated in the following theorem, which also relates the classes to another known subclass of the polyregular functions, namely the comparison-free polyregular functions from~\cite{NguyenNP21} (this model  will be explained in the proof of the theorem). The comparison-free polyregular functions are the model most closely related with the rectangular ones, and can be seen as an inspiration for their definition.
 
-\begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular $\subsetneq$ rectangular polyregular $\subsetneq$ polyregular.
+\begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular \; $\subsetneq$\; rectangular polyregular \; $\subsetneq$ \; polyregular.
 \end{theorem}
 \begin{proof}
     We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem 6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem 6.1]{NguyenNP21} does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary 8.5]{NguyenNP21}.
@@ -470,7 +469,7 @@ In the definition of the rectangular polyregular functions from Definition~\ref{
 We think that the rectangular polyregular functions are interesting in their own right, and not just some random subclass of the polyregular functions that  is compatible with compression. In particular, one could ask if the converse implication of Theorem~\ref{thm:polyregular-compatible} also holds: if a polyregular function is compatible with compression, then it is rectangular polyregular. We are not aware of any counterexample to the converse implication, but proving it   seems difficult, and we leave it for future work.  
 
 
-In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the (not rectangular) polyregular functions in~\cite[Section 4.1]{polyregular-survey}. Before giving a formal definition, we present some example programs.
+In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the general polyregular functions in~\cite[Section 4.1]{polyregular-survey}. Before giving a formal definition, we present some example programs.
 
 % We begin by discussing  the programming language for the (not rectangular ) polyregular functions. This is  a  variant of the simply typed $\lambda$-calculus, with type constructors for pairs, disjoint unions and lists, as well as  certain atomic functions which operate on these types, such as a concatenation
 % \begin{align*}
@@ -501,10 +500,11 @@ Here, the function $\concatterm$ concatenates a list of lists into a single list
     \lambda \church x {A^*}.\ \church \concatterm {A^{**} \to A^*} (\church \mapterm {(A \to A^*) \to A^* \to A^{**}} \ (\lambda \church y {A}.\ x)\ x)
     \end{align*}
 The subprogram $\mapterm \ (\lambda y.\ x)\ x$ applies the function $\lambda y. \ x$ to each list element of $x$, which means that each letter in the list $x$ will be replaced by the list $x$ itself. For example, if the input to this subprogram is $[1,2,3]$, then its output will be the nested list $[[1,2,3],[1,2,3],[1,2,3]]$. The nesting is then removed by the $\concatterm$ function. 
-Using a similar program, we can implement a variant of the rectangle function from Example~\ref{ex:strength}, in which the input consists of two strings
+Using the similar program
 \begin{equation*}
-    \lambda \church x {A^*}.\  \lambda \church y {A^*}. \  \church \concatterm {A^{**} \to A^*} ( \church \mapterm {(A \to A^*) \to A^* \to A^{**}} \ ( \lambda \church z {A} . \ \church \concatterm {A^{**} \to A^*} [[z],y] ) \ x )  
+    \lambda \church x {A^*}.\  \lambda \church y {A^*}. \  \church \concatterm {A^{**} \to A^*} ( \church \mapterm {(A \to A^*) \to A^* \to A^{**}} \ ( \lambda \church z {A} . \ \church \concatterm {A^{**} \to A^*} [[z],y] ) \ x ),
   \end{equation*}
+ we can implement a variant of the rectangle function from Example~\ref{ex:strength}, in which the input consists of two strings.
   \qed
 \end{example}
 % For a type constructed without using the list constructor, the domain will be finite, and therefore such types will be called \emph{finite types}.
@@ -572,7 +572,6 @@ Here is the inductive definition of the syntax  of the programs.
         [a, b, 1, c, d, e, 2, 3, f] 
         \quad \mapsto \quad ([a,b], [(1,[c,d,e]),(2,[]),(3,[f])]).
         \end{equation}
-    
 Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained, and also because the semantics are much simpler than those of a full-fledged programming language such as Haskell.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$; which is appropriate to our language since it can only define always-terminating functions.  
 If a program has free variables of types $A_1,\ldots,A_n$, and the program itself has type $A$, then its semantics will be a function 
 \begin{align*}
@@ -594,7 +593,6 @@ We are mainly interested in closed programs that define string-to-string functio
     \end{align*}
     is polyregular if and only if it can be defined in the polyregular $\lambda$-calculus.
     \end{theorem}
-  
 The purpose of this section is to identify the subclass which corresponds to the rectangular polyregular functions. This is done in the following theorem, which identifies the $\splitterm$ function as the only obstruction.
 
 
@@ -631,7 +629,7 @@ write down a program as a string, and to then evaluate it be using string rewrit
     
     % It is  based on the following observations: (1) when evaluating a program that represents a string-to-string function by using normalisation, the intermediate steps of the normalisation are consistent with certain resource bounds, such as the variables and types that are used and the height of the term; (2) once the resource bounds are fixed, then the number of normalisation steps is bounded, if one uses a normalisation strategy which does some reductions in parallel; and (3) each step of the normalisation strategy mentioned in the previous item can be implemented using a rectangular polyregular function.    
 
-    \paragraph*{String representation of programs.} We begin by explaining how programs are represented as strings. This is the usual representation, which we have already used above when writing example programs. In this representation, we assume that the variable names and the atomic programs are single letters. In particular, the alphabet is infinite, since there are infinitely many variables and infinitely many atomic programs.  (There are infinitely many atomic programs  since the type annotation is important. For example, different letters will be used for $\concatterm$ depending on the type $A$ that is involved.) If we pick some convention on writing parentheses, then the string representation can be made unique, so that each program has a unique string representation.
+    \subparagraph*{String representation of programs.} We begin by explaining how programs are represented as strings. This is the usual representation, which we have already used above when writing example programs. In this representation, we assume that the variable names and the atomic programs are single letters. In particular, the alphabet is infinite, since there are infinitely many variables and infinitely many atomic programs.  (There are infinitely many atomic programs  since the type annotation is important. For example, different letters will be used for $\concatterm$ depending on the type $A$ that is involved.) If we pick some convention on writing parentheses, then the string representation can be made unique, so that each program has a unique string representation.
     
     A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. 
     
@@ -643,7 +641,12 @@ write down a program as a string, and to then evaluate it be using string rewrit
 The assumptions discussed above are summarised  in the following definition.
 
     \begin{definition}
-        Define a \emph{resource bound} to be a triple consisting of: (a) a finite set of variables; (b) a finite set of atomic programs; and (c)  a height bound in $\set{1,2,\ldots}$.        
+        Define a \emph{resource bound} to be a triple consisting of
+        \begin{enumerate}[(a)]
+\item  a finite set of variables,
+\item a finite set of atomic programs and 
+\item a height bound in $\set{1,2,\ldots}$. 
+\end{enumerate}       
     \end{definition}
     We say that a program is \emph{consistent} with a resource bound if  its variables are contained in the set from item (a), its atomic programs are contained in the  set from item (b), and its  height is at most  the number from item (c). If we fix a resource bound, then programs consistent with this resource bound can be written as strings over a finite alphabet (for this, the height bound is unimportant). Furthermore, the set of strings that are representations of programs is a regular language over this alphabet (for this, the height bound is important). 
     
@@ -672,12 +675,12 @@ The assumptions discussed above are summarised  in the following definition.
     \end{figure}
 
 
-  \subsection{Reduction} So far, we have explained how a program can be written as a string over a finite alphabet. We now explain how programs can be evaluated under this representation. 
+  \subparagraph{Reduction.} So far, we have explained how a program can be written as a string over a finite alphabet. We now explain how programs can be evaluated under this representation. 
     When defining the semantics of the polyregular $\lambda$-calculus, we used a denotational approach, defined by  induction on the syntax. In this proof, we use an approach based on rewriting, where  a program is executed by applying syntactic reduction rules. Arguably the most important rule is $\beta$-reduction, which  substitutes an argument for a variable (we omit the blue superscripts with types to improve readability): 
     \begin{align}\label{eq:beta-reduction}
-    (\lambda x. M)\ N \quad \leadsto \quad M[x:=N].
+    (\lambda x. M)\ N \; \leadsto \; M[x:=N].
     \end{align}
-The complete list of reduction rules is in Figure~\ref{fig:reduction-rules}.
+The complete list of reduction rules is shown in Figure~\ref{fig:reduction-rules}.
 It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables~\cite[Corollary 1.4.9]{sorensenLecturesCurryHowardIsomorphism2006}. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type $A^*$, normal forms and their string representations are essentially the same thing.
 % Note that if $R$ is an atomic
 % program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
@@ -687,8 +690,8 @@ It is easy to see that applying a reduction rule changes neither the type nor th
     \begin{lemma}\label{lem:substitution}
         Fix a resource bound $\Rr$. There is a rectangular polyregular function which does the following, with programs represented as strings:
         \begin{itemize}
-            \item \textbf{Input.} A program of the form $(\lambda x. M) \ N$, which is consistent with $\Rr$; 
-            \item \textbf{Output.} The program $M[x:=N]$.
+            \item \textbf{Input.} a program of the form $(\lambda x. M) \ N$, which is consistent with $\Rr$; 
+            \item \textbf{Output.} the program $M[x:=N]$.
         \end{itemize}
     \end{lemma}
     \begin{proof}Thanks to the resource bound, there are finitely many possible choices for the variable $x$, and therefore we can think of this variable as being fixed. 
@@ -699,22 +702,21 @@ It is easy to see that applying a reduction rule changes neither the type nor th
     \end{proof}
     The above lemma is the only place where our proof differs from the one in~\cite{polyregular-survey}. Essentially, the content of the above lemma is the  observation that a weaker mechanism than the full polyregular functions, namely the rectangle function, is sufficient to implement term substitution.
 
-   \subsection{A reduction strategy} The rest of this proof follows the same lines as the one in~\cite[Theorem 4.1]{polyregular-survey}. Define a \emph{redex} in a program to be a node in its syntax tree to which a reduction rule can be applied. A redex can also be seen as an infix of the string representation of the program. Here is an example of a program with some (in fact, all) redexes underlined:
+  \subparagraph{A reduction strategy.} The rest of this proof follows the same lines as the one in~\cite[Theorem 4.1]{polyregular-survey}. Define a \emph{redex} in a program to be a node in its syntax tree to which a reduction rule can be applied. A redex can also be seen as an infix of the string representation of the program. Here is an example of a program with some (in fact, all) redexes underlined:
     \begin{align*}
     [ \myunderbrace{(\lambda x.x) []}{a redex for \\ $\lambda$-abstraction}, [], [], \myunderbrace{\mapterm (\lambda x. x) [[],[],[]]}{a redex for \\ $\mapterm$}, \myunderbrace{\fstterm ([],())}{a redex \\ for $\fstterm$}].
     \end{align*}
     Usually in the $\lambda$-calculus, one chooses a reduction strategy which picks some redex, reduces it, and then repeats this process. However, in the current proof, we will need to use a more general notion of reduction strategy, which allows reducing several redexes in parallel. This will allow us to reduce a program to normal form in constant time, once resource bounds are fixed. Define a 
-     \emph{parallel reduction strategy} to be a function which assigns to each term a subset of its redexes, such that the redexes are non-overlapping (i.e.~the corresponding infixes in the string representation do not overlap). The result of applying such a strategy to a program is obtained by reducing all the selected redexes in parallel, which can be done since the redexes are assumed to be non-overlapping. The following lemma shows that, once the resource bounds are fixed, there is a parallel reduction strategy which leads to the normal form in a bounded number of steps.
+     \emph{parallel reduction strategy} to be a function which assigns to each term a subset of its redexes, such that the redexes are pairwise non-overlapping (i.e.~the corresponding infixes in the string representation do not overlap). The result of applying such a strategy to a program is obtained by reducing all the selected redexes in parallel, which can be done since the redexes are assumed to be non-overlapping. The following lemma shows that, once the resource bounds are fixed, there is a parallel reduction strategy which leads to the normal form in a bounded number of steps.
      
 
-    \begin{lemma}[{\cite[Lemma 8.6]{bojanczykPolyregularFunctions2018}}] \label{lem:reduction-strategy} Fix a resource bound $\Rr$. There exist: 
+    \begin{lemma}[{\cite[Lemma 8.6]{bojanczykPolyregularFunctions2018}}] \label{lem:reduction-strategy} Fix a resource bound $\Rr$. There exist
         \begin{enumerate}
-            \item a parallel reduction strategy; and 
-            \item a time bound $k \in \set{1,2,\ldots}$;
+            \item a parallel reduction strategy and 
+            \item a time bound $k \in \set{1,2,\ldots}$
        \end{enumerate}
        such that for every program consistent with the  resource bound, applying the reduction strategy $k$ times  leads to a term in normal form. Furthermore, the reduction strategy can be implemented by a rational function, with the redexes marked in the output using begin/end markers.
     \end{lemma}
-
     The above lemma was proved in \cite{bojanczykPolyregularFunctions2018} for the (not necessarily rectangular ) polyregular $\lambda$-calculus, but it remains valid for any fragment of this language, such as the split-free fragment that we are considering here. 
 
     We now put the above results together to conclude that split-free programs can be evaluated using rectangular polyregular functions, as stated in the following corollary.
@@ -722,12 +724,19 @@ It is easy to see that applying a reduction rule changes neither the type nor th
     \begin{corollary}\label{cor:normalisation}
         Fix a resource bound $\Rr$. There is a rectangular polyregular function which does the following, with programs represented as strings:
         \begin{itemize}
-            \item \textbf{Input.} A split-free program $M$ consistent with  $\Rr$;
-            \item \textbf{Output.} A program in normal form obtained from $M$ by applying reductions.
+            \item \textbf{Input.} a split-free program $M$ consistent with  $\Rr$;
+            \item \textbf{Output.} a program in normal form obtained from $M$ by applying reductions.
         \end{itemize}
     \end{corollary}
     \begin{proof}
-        By Lemma~\ref{lem:reduction-strategy}, there is some $k$, which only depends on the resource bound and not on the input program, such that the program can be reduced to normal form by repeating the following process $k$ times: (1) mark the redexes using a rational function; and (2) reduce the marked redexes. Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
+    Fix the $k$ and the parallel reduction strategy from  Lemma~\ref{lem:reduction-strategy}; they 
+ only depends on the resource bound and not on the input program.
+ Then the given split-free program $M$ can be reduced to normal form by repeating the following process $k$ times: 
+ \begin{enumerate}[(1)]
+\item mark a pairwise non-overlapping set of redexes in $M$ using the rational function from the parallel reduction strategy;
+\item reduce the marked redexes in parallel.
+\end{enumerate}
+Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
         
         We first argue that a single redex can be reduced by a rectangular polyregular function. For redexes corresponding to $\lambda$-abstraction, this was proved in Lemma~\ref{lem:substitution}. Let us now consider the remaining kinds of redexes, which correspond to the reduction rules in Figure~\ref{fig:reduction-rules}, except for $\splitterm$, which has been removed in the rectangular fragment that we are considering. Consider first the reduction rule for  $\mapterm$, which is 
         \begin{align*}
@@ -743,14 +752,14 @@ It is easy to see that applying a reduction rule changes neither the type nor th
     Using the above corollary, we complete the proof of the inclusion
         \begin{align*}
     \text{split-free programs} 
-    \quad \subseteq \quad 
+    \; \subseteq \;
     \text{rectangular polyregular}.
     \end{align*}
 Fix  a split-free program $M$ of type  $A^* \to B^*$. The output string is computed as follows: (a) given an input string in $A^*$, replace it by  a term of the form $M N$, where $N$ is a program that represents the input string; (b) reduce the term $M N$ to normal form; (c) extract the output string from the normal form. Each of these steps can be computed by a rectangular polyregular function, which completes the proof of the inclusion. Indeed, (b) is a rectangular polyregular function by Corollary~\ref{cor:normalisation}, while steps (a) and (c) can even be implemented using rational functions, since  there is very little difference between strings over a finite alphabet $A$ and the string representations of the corresponding programs of type $A^*$ that are in normal form. 
 \end{proof}
 
 
-\subsection{Programs with combinators instead of $\lambda$-abstraction}
+ \subsection{Programs with combinators instead of $\lambda$-abstraction}
 We finish this section with another characterisation of the rectangular polyregular functions. This is a variant of a characterisation of the polyregular functions, see~\cite[Section 4]{bojanczykPolyregularFunctions2018}, which is similar to the polyregular $\lambda$-calculus, but uses a programming language that is based on  combinators instead of  $\lambda$-abstraction. A nice feature of this characterisation is that it highlights the role of the strength function 
 \begin{align} \label{eq:strength}
         \mathtt{strength} : A \times B^* & \to (A \times B)^* \\
