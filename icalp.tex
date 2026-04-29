@@ -166,8 +166,31 @@ We begin with the class of rational functions, which was introduced by Eilenberg
 
 
 Let us begin with the definition of a {rational relation}, and then we will identify the \emph{rational functions} as the special case of rational relations which are functions. A rational relation is described by an \nfa with output. This is the same as an \nfa, except that there is an additional labelling which assigns output strings (possibly empty) to: (a) initial states; (b) transitions; and (c) final states. Here is a picture of an \nfa with output: 
-\mypic{1} 
-
+\begin{center}
+\begin{tikzpicture}
+  \tikzset{initial text={}}
+  \tikzset{every edge/.style={draw,->}}
+  \tikzstyle{small} = [fill,color = lightgray, circle,draw=black,inner sep=0, minimum size = 15]
+   \tikzset{every loop/.style={min distance=10mm,looseness=10}}
+   
+   \node[small, initial left, initial distance = 1cm] (g) {};
+   \node [above left = -2.6mm and .4cm  of g]  (l1) {$\textcolor{red}{/b}$};
+   \node[small, accepting by arrow, accepting distance = 1cm] (u)  [right =2cm  of g]  {};
+  \node [above right = -2.6mm and .4cm  of u]  (l2) {$\textcolor{red}{/b}$};
+ 
+  \path  (g) edge [bend left=60]  node[above=-.5mm] (l3) {$a\textcolor{red}{/\varepsilon}$} (u) 
+            (g) edge [bend left=10]  node[above=-.5mm] {$a\textcolor{red}{/a}$} (u) 
+            (u) edge [bend left=40]  node[below=-.5mm] {$a\textcolor{red}{/\varepsilon}$} (g) ;
+            
+ \node [above = .4cm  of l3]  (t3) {\small transition that inputs $a$ and outputs $\varepsilon$};
+ \node [above left = .2cm and .4cm of l1, align = left]  (t1) {\small if the run begins in this  initial \\ \small state then output output $b$};
+ \node [above right = .2cm and .4cm of l2, align = left]  (t2) {\small if the run begins in this  final \\ \small state then output output $b$};
+ \path[gray]  (t1) edge (l1) ;
+  \path[gray]  (t2) edge (l2) ;
+ \path[gray]  (t3) edge (l3) ;
+\end{tikzpicture}
+\end{center}
+%\mypic{1} 
 Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
 The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. A relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string. 
 \footnote{We restrict our attention to total functions. While one could also consider partial functions computed by transducers, this would not introduce any new aspects with respect to compatibility with compression.}
