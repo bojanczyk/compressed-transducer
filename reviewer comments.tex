@@ -52,9 +52,8 @@ ML: TODO (I can offer to draw the repictures with tikz, which I personally prefe
 Functional transducers / rational functions / etc. are usually defined as outputting *at most one* string per input. 
 Perhaps it is worth clarifying and motivating the tacit assumption that transducers here always produce an output.
 
-ML: Is there a good reason for not allowing functions to be undefined for certain inputs?
-If we would allow rational functions to be only partially defined then the larger classes would
-also contain partially defined functions.
+ML: I think one could also allow partial functions, but  this would not introduce any new aspects with respect to compatibility with compression.
+I added a footnote saying this.
 
 * colors: 
 Can you make the "blue" color darker? When printed, text in this color does not appear as clearly as the rest.
@@ -105,19 +104,19 @@ programs should remain within some larger resource bound depending only on the i
 carry out the argument uniformly within a bounded-resource setting. 
 I think it would be helpful to add a remark clarifying this point, or to explain it in another way.
 
-ML: TODO
+ML: I added a footnote (see the comment in the paper) that hopefully clarifies this point.
 
 * page 17, reduction rules for either M1 M2 Left/Right N
 Somewhere you may want to recall that the destructor  either  is designed to works naturally 
 with the constructors  Left  and  Right  for the co-products.
 
-ML: TODO
+ML: done, I added a sentence after the definition of the destructors
 
 * page 19, (1) mark the redexes using a rational function
 I would clarify, even though it is already fairly clear, that the marked redexes need to be 
 non-overlapping, and that, for instance, one may mark w.l.o.g. the innermost redexes.
 
-ML: done, I tried to make this clearer.
+ML: done, I tried to make this clearer
 
 * page 21, analogue of Conjecture 10.1 from [29]
 When inspecting [29] to understand the kind of restriction on interpretations that might capture 
