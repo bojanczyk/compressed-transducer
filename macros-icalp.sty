@@ -24,6 +24,7 @@
 \usetikzlibrary{decorations.pathmorphing}
 \usepackage{framed}
 \usetikzlibrary{arrows,automata,positioning}
+\usetikzlibrary{trees}
 
 % clickable references
 %\usepackage[hypertexnames=false]{hyperref}
@@ -172,50 +173,50 @@
 %  ******* pictures **********
 
 % picture macros. Here is the setup. I use figma to generate a pdf file, in the directory of main.tex, which typically has some name based on the project, e.g. definable-clique.pdf. (This is because figma automatically uses the name of the project inside figma as the name of the pdf export, and it would be a hassle to always rename it.) The pdf has one page per picture, and the mypic command inputs the page number and shows the picture. 
-\usepackage{graphicx}
-
-% the core command, which contains the name of the file and the desired scaling factor. These are subject to per-project customization
-\newcommand{\mypiccore}[1]{
-	\includegraphics[page=#1,scale=0.2]{compressed}
-}
-
-% show the picture centered
-\newcommand{\mypic}[1]{
-	\begin{center}
-		\mypiccore{#1}
-	\end{center}
-}
-
-% show two pictures centered
-\newcommand{\mypicdouble}[2]{
-	\begin{center}
-		\mypiccore{#1} \quad \mypiccore{#2}
-	\end{center}
-}
+%\usepackage{graphicx}
+%
+%% the core command, which contains the name of the file and the desired scaling factor. These are subject to per-project customization
+%\newcommand{\mypiccore}[1]{
+%	\includegraphics[page=#1,scale=0.2]{compressed}
+%}
+%
+%% show the picture centered
+%\newcommand{\mypic}[1]{
+%	\begin{center}
+%		\mypiccore{#1}
+%	\end{center}
+%}
+%
+%% show two pictures centered
+%\newcommand{\mypicdouble}[2]{
+%	\begin{center}
+%		\mypiccore{#1} \quad \mypiccore{#2}
+%	\end{center}
+%}
 
 % an environment that makes numbered inline pictures, similar to numbered equations
-\newcounter{mypic}
-\newenvironment{numberedpic}[1][]{%
-    \refstepcounter{mypic}%
-     #1\par
-    \vspace{0.5em}
-}{%
-    \vspace{0.5em}
-}
-\newcommand{\numpic}[2]{
-	\begin{numberedpic}
-        \label{#2}
-        \begin{center}
-            \begin{tabular}{cr}
-                \begin{minipage}{0.85\columnwidth}
-					\begin{center}
-						\mypiccore{#1}
-					\end{center}
-                \end{minipage} & (\themypic)
-            \end{tabular}
-        \end{center}
-    \end{numberedpic}
-}
+%\newcounter{mypic}
+%\newenvironment{numberedpic}[1][]{%
+%    \refstepcounter{mypic}%
+%     #1\par
+%    \vspace{0.5em}
+%}{%
+%    \vspace{0.5em}
+%}
+%\newcommand{\numpic}[2]{
+%	\begin{numberedpic}
+%        \label{#2}
+%        \begin{center}
+%            \begin{tabular}{cr}
+%                \begin{minipage}{0.85\columnwidth}
+%					\begin{center}
+%						\mypiccore{#1}
+%					\end{center}
+%                \end{minipage} & (\themypic)
+%            \end{tabular}
+%        \end{center}
+%    \end{numberedpic}
+%}
 
 
 

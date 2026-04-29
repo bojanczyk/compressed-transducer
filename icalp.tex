@@ -5,6 +5,8 @@
 
 \bibliographystyle{plainurl}
 
+\nolinenumbers
+
 \title{Transducers on compressed strings} %TODO Please add
 
 %\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
@@ -271,7 +273,22 @@ The first closure property, which is immediate from the definition, is that func
         \end{claim}
     \begin{proof}
         For a string $w$ that uses at least one separator, define three parts, as in the following picture:
-        \mypic{3}
+    
+    \smallskip
+        
+      %  \mypic{3} 
+        \definecolor{light-gray}{gray}{0.9}
+   \begin{center}    
+        \begin{tikzpicture}
+	\node[rectangle, fill = light-gray]  (a) at (0,0) {$\phantom{|}\! a\,a\,a\,a\,b\,a\,b\,b\,a\,a\,b\,a\,a\,b$};
+	\node[anchor=west, rectangle, fill = light-gray, right = 1.5mm of a.east]  (b) {$|\,a\,b\,a\,b\,a\,b\,b\,|\,a\,b\,a\,b\,a\,b\,b\,a\,a$};
+        \node[anchor=west,right = 0mm of b.east] (c) {$|$};
+        \node[anchor=west, rectangle, fill = light-gray, right = 0mm of c.east] (d) {$\phantom{|}\! a\,a\,b\,a\,a\,b\,a\,a\,a\,b\,b\,a\,a\,b\,a\,b\,b$};
+        \node[anchor=north west, align=left] at (a.south west) {\small \textbf{start} \\ before first separator, \\ not including it};
+        \node[anchor=north west, align=left] at (b.south west) {\small \textbf{middle} \\ between first and last \\ separators, including the \\ first but not the last one.};
+        \node[anchor=north west, align=left] at (d.south west) {\small \textbf{finish} \\ after last separator, \\ not including it};
+   \end{tikzpicture}
+   \end{center}
         Observe that the last separator is not in any of the parts, and the remaining separators are in the middle part.
         For a string with exactly one occurrence of $|$ the middle part is missing, whereas a string with no $|$ at all only
         has a start. 
@@ -670,7 +687,33 @@ write down a program as a string, and to then evaluate it be using string rewrit
     A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. 
     
     Another problem is that programs with deep syntax trees will be difficult to handle in their string representation. The syntax of the polyregular $\lambda$-calculus is defined inductively, and therefore each program has a corresponding syntax tree, in which nodes are labelled by term constructors. Here is a picture of such a syntax tree for a program which applies $\concatterm$ to a doubly nested list of type $1^{**}$:
-    \mypic{2}
+  \begin{center}
+ \begin{tikzpicture}[level distance=1.3cm,
+  level 1/.style={sibling distance=2cm},
+  level 2/.style={sibling distance=1.5cm},
+  level 2/.style={sibling distance=1cm}]
+  \node (r) {@}
+    child {node {concat}
+    }
+    child {node {[\,]}
+      child {node {[\,]}
+        child {node {(\,)}}
+        child {node {(\,)}}
+        child {node {(\,)}}   
+          }
+      child {node {[\,]}}
+      child {node {[\,]}}
+      child {node {[\,]}
+        child {node {(\,)}}
+        child {node {(\,)}}
+        child {node {(\,)}}
+        }
+    };
+ \node [right = 1cm of r]  (t) {\small application};
+ \path  (t) edge[->,gray] (r) ;
+\end{tikzpicture}
+\end{center}
+%    \mypic{2}
     The height of a syntax tree is defined to be the maximal number of edges on a root-to-leaf path (in the above picture, the height is three), and the height of a program is defined to be the height of its syntax tree.
     It turns out that a polyregular function cannot  deal with trees of unbounded height, since it is essentially a finite automaton, and finite automata on strings cannot handle trees of unbounded height. For this reason, we will impose a bound on the height of programs. 
 
