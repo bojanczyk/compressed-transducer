@@ -301,7 +301,6 @@ The first closure property, which is immediate from the definition, is that func
         
         From the new grammar, we easily get a grammar in normal form that generates the same string as the original grammar, by suitably choosing the production for the starting nonterminal.
     \end{proof}
-    
     Once we have normalized the input compression, we can easily prove the lemma. 
     The input string can be seen as a list of strings over the alphabet $A^*$, separated by the symbol $|$. In the compression, each list item will be found as the value of an inner nonterminal $\blue Y$  in rules of the form
     \begin{align*}
@@ -898,7 +897,14 @@ We have studied string-to-string transducers which are compatible with compressi
 \begin{enumerate}
     \item Are the rectangular polyregular functions exactly the polyregular functions that are compatible with compression? 
     \item Can one decide if a given polyregular function is rectangular?
-    \item Can the rectangular polyregular functions be characterised in terms of logic? Such a characterisation exists for the  general polyregular functions; these  are exactly the \mso interpretations~\cite[Theorem 7]{msoInterpretations}. For the rectangular ones a promising idea is to consider the interpretations described in Conjecture 10.1 from~\cite{NguyenNP21}. This conjecture was originally made for the weaker class of comparison-free polyregular functions, but it has been refuted~\cite[Theorem 4.6]{kiefer2023refutations}. However, it might still be appropriate for the rectangular polyregular functions.
+    \item Can the rectangular polyregular functions be characterised in terms of logic? Such a characterisation exists for the  general polyregular functions; these  are exactly the \mso interpretations~\cite[Theorem 7]{msoInterpretations}. For the rectangular ones a promising idea is to consider the interpretations described in \cite[Conjecture 10.1]{NguyenNP21}:
+Starting with a word $w$ represented in the usual way as a structure $\mathcal{A}_w$, one first takes a $k$-fold product 
+$\mathcal{A}_w^k$ and then applies a $1$-dimensional MSO-interpretations that produces the output word.\todo{\cite[Conjecture 10.1]{NguyenNP21}  
+ refers to 1-dim. FO-interpretations and FO-comparision-free polyregular functions and the authors write that you mentioned that the
+naive transposition of their conjecture to MSO fails. Is your idea to take 1-dim. MSO-interpretations applied to $k$-fold powers for 
+ rectangular polyregular functions?} 
+Conjecture 10.1 from~\cite{NguyenNP21}
+ was originally made for the weaker class of comparison-free polyregular functions, but it has been refuted~\cite[Theorem 4.6]{kiefer2023refutations}. However, it might still be appropriate for the rectangular polyregular functions.
     \item  Can the rectangular polyregular functions be characterised in terms of an  imperative programming languages, such as the for-transducers from~\cite[Section 1]{polyregular-survey}?
 \end{enumerate}
 It is a tantalising possibility that the answers to all these questions are positive.
