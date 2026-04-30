@@ -1,7 +1,122 @@
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
 
-\usepackage{macros-icalp,MnSymbol}
-%\usepackage{enumitem}
+\usepackage{MnSymbol}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools} % an extension of amsmath needed for I don't know what 
+
+% for repeating theorems, using restatable
+\usepackage{thmtools}
+\usepackage{thm-restate}
+
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows,automata,positioning}
+\usetikzlibrary{trees}
+
+\usepackage{url}
+
+\usepackage[capitalise]{cleveref} 
+\usepackage{aliascnt} % Helps cleveref distinguish shared counters 
+
+% used for fancy script font mathscr
+\usepackage{mathrsfs}
+
+% allows \begin{enumerate}[(a)]
+%\usepackage[shortlabels]{enumitem}
+
+% used for code listings, configuration below
+ \usepackage{listings}
+
+% font packages 
+\usepackage{libertine}
+\usepackage{inconsolata}
+
+\usepackage{xspace}
+
+\usepackage{todonotes}
+
+\crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{Lemma}{Lemmas}
+\crefname{definition}{Definition}{Definitions}
+\crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
+\crefname{claim}{Claim}{Claims}
+\crefname{example}{Example}{Examples}
+\crefname{remark}{Remark}{Remarks}
+\crefname{section}{Section}{Sections}
+\crefname{equation}{Equation}{Equations}
+\crefname{conjecture}{Conjecture}{Conjectures}
+
+
+%  *********** configurations for listings ***********
+%  default configuration for listings, which uses python style
+\lstset{
+    basicstyle=\ttfamily\footnotesize, % Code font and size
+    % keywordstyle=\color{blue}\bfseries, % Keywords in bold blue
+    commentstyle=\color{gray}, % Comments in gray
+    stringstyle=\color{red}, % Strings in red
+    numbers=left, % Line numbers on the left
+    numberstyle=\tiny\color{gray}, % Line number style
+    stepnumber=1, % Line number step
+    numbersep=5pt, % Space between line numbers and code
+    backgroundcolor=\color{lightgray!20}, % Light gray background
+    % frame=single, % Frame around the code
+    tabsize=4, % Tab size
+    breaklines=true, % Line breaking
+    captionpos=b, % Caption position (bottom)
+    language=Python, % Default language
+    mathescape=true, % Allow math mode in code
+    escapechar=|,
+    aboveskip=10pt, % Space above the listing
+    belowskip=10pt,  % Space below the listing
+    xleftmargin=15pt, % Left margin inside the box
+    xrightmargin=15pt % Right margin inside the box
+}
+
+
+\usepackage{color} 
+
+% these are colors consistent with my styles in figma
+\definecolor{red}{RGB}{235,87,87}
+\definecolor{blue}{RGB}{86,204,242}
+\definecolor{orange}{RGB}{242,153,74}
+
+\newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\blue}[1]{{\color{cyan}#1}}
+\newcommand{\orange}[1]{{\color{orange}#1}}
+
+
+%  ********** miscellaneous *************
+% the rest of this style file is a list of miscellaneous macros. It should only contain macros that are expected to be used in many projects. Macros specific to a single project should not be added here, and should be in the preamble of the main.tex file.
+
+
+% Custom underbrace and overbrace commands. They allow for annotations below and above the braces, possibly multiline
+\newcommand{\myunderbrace}[2]{\underbrace{#1}_{\mathclap{\text{\scriptsize 
+\begin{tabular}{c}
+	#2
+\end{tabular} }}}}
+\newcommand{\myoverbrace}[2]{\overbrace{#1}^{\mathclap{\text{\scriptsize 
+\begin{tabular}{c}
+	#2
+\end{tabular} }}}}
+
+% a set 
+\newcommand{\set}[1]{\{#1\}}
+
+% set builder expression, which can be multiline
+\newcommand{\setbuild}[2]{\set{#1 \ | 
+\begin{tabular}{l}
+	#2
+\end{tabular}}}
+
+
+\newcommand{\mso}{{\textsc{mso}}\xspace}
+\newcommand{\nfa}{{\textsc{nfa}}\xspace}
+\newcommand{\sem}[1]{[\![#1]\!]}
+\newcommand{\Rr}{{\mathcal R}}
+
+
+
 
 \bibliographystyle{plainurl}
 
@@ -27,6 +142,18 @@
 \category{} %optional, e.g. invited paper
 
 \relatedversion{} 
+
+\EventEditors{Sayan Bhattacharya, Danupon Nanongkai, Michael Benedikt, and Gabriele Puppis}
+\EventNoEds{4}
+\EventLongTitle{53rd International Colloquium on Automata, Languages, and Programming (ICALP 2026)}
+\EventShortTitle{ICALP 2026}
+\EventAcronym{ICALP}
+\EventYear{2026}
+\EventDate{July 7--10, 2026}
+\EventLocation{Royal Holloway, University of London, Egham, United Kingdom}
+\EventLogo{}
+\SeriesVolume{374}
+\ArticleNo{192}
 
 %\acknowledgements{I want to thank \dots}%optional
 
