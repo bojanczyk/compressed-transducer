@@ -123,7 +123,7 @@
 
 %\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
 
-\author{Mikołaj Bojańczyk}{University of Warsaw, Poland \and \url{https://www.mimuw.edu.pl/~bojan/}}{bojan@mimuw.edu.pl}{https://orcid.org/0000-0002-7758-1072}{}
+\author{Mikołaj Bojańczyk}{University of Warsaw, Poland \and \url{https://www.mimuw.edu.pl/~bojan/}}{bojan@mimuw.edu.pl}{https://orcid.org/0000-0002-7758-1072}{Mikołaj Bojańczyk was supported by the Polish National Science Centre (NCN) grant ``Polynomial finite state computation'' (2022/46/A/ST6/00072).}
 \author{Markus Lohrey}{University of Siegen, Germany \and \url{https://www.uni-siegen.de/person/markus-lohrey}}{lohrey@eti.uni-siegen.de}{https://orcid.org/0000-0002-4680-7198}{}
 
 
@@ -176,7 +176,7 @@ There are three main applications for algorithms of this kind (see  \cite{Loh12s
 \begin{itemize}
 \item  In many applications one has to combine compression and querying. A typical example 
 is a genome database where DNA sequences are stored in compressed form and searched for specific patterns (e.g. genes).
-This leads to so-called compressed text indices \cite{CNP21,FeMa05}
+This leads to so-called compressed text indices \cite{CNP21,FeMa05}.
 \item A compressed representation of the input data might reveal
 certain regularities, which could be used to speed up an algorithm. This principle is 
 known as {\em acceleration by compression}. An example can be found in \cite{LMWZiv07},
@@ -259,7 +259,7 @@ This function  is compatible with compression. To implement squaring on  straigh
     The  function \eqref{exp-map} maps $a^{2^k}$ to $a^{2^{2^k}}$ which requires a straight-line program of size $2^k$. 
     Such a straight-line program cannot be constructed in polynomial time from a straight-line program of size $k$. \qed
 \end{example}
-Characterizing the class of all string-to-string functions that are compatible with compression might be a very difficult task. In this paper, we are interested in  string-to-string functions that can be computed by finite-state transducer models. As explained in \cref{ex:exp-output}, a transducer computing a function that is compatible with compression +
+Characterizing the class of all string-to-string functions that are compatible with compression might be a very difficult task. In this paper, we are interested in  string-to-string functions that can be computed by finite-state transducer models. As explained in \cref{ex:exp-output}, a transducer computing a function that is compatible with compression 
 cannot produce outputs of exponential size, which excludes many important transducer models (at least in their full generality), such as copyful streaming string transducers \cite[Section 2.1]{filiotCopyfulStreamingString2017} or the even more general model of  macro tree transducers (in the string-to-string case) \cite[Section 3.1]{DBLP:journals/jcss/EngelfrietV85}.  For this reason, we will only consider transducer models that produce outputs of polynomial size. The largest known class of string-to-string transducers with polynomial size outputs are the \emph{polyregular functions} \cite{polyregular-survey}, and thus all transducers in this paper will be special cases of the polyregular functions. We will consider three such classes: 
 \begin{align*}
 \text{rational functions} 
@@ -269,7 +269,7 @@ cannot produce outputs of exponential size, which excludes many important transd
 \text{polyregular functions.}
 \end{align*}
 Rational functions are computed by nondeterministic one-way transducers, whereas regular functions are computed by deterministic 
-two-way transducers. Finally, polyregular functions are computed deterministic two-way transducers with pebbles. The regular and polyregular
+two-way transducers. Finally, polyregular functions are computed by deterministic two-way transducers with pebbles. The regular and polyregular
 functions have many equivalent characterizations \cite{polyregular-survey}; in this paper we will use characterizations based on closure properties of string-to-string functions.
 
 Let us now outline the main contributions of this paper.
@@ -310,8 +310,8 @@ Let us begin with the definition of a {rational relation}, and then we will iden
             (u) edge [bend left=40]  node[below=-.5mm] {$a\textcolor{red}{/\varepsilon}$} (g) ;
             
  \node [above = .4cm  of l3]  (t3) {\small transition that inputs $a$ and outputs $\varepsilon$};
- \node [above left = .2cm and .4cm of l1, align = left]  (t1) {\small if the run begins in this  initial \\ \small state then output output $b$};
- \node [above right = .2cm and .4cm of l2, align = left]  (t2) {\small if the run begins in this  final \\ \small state then output output $b$};
+ \node [above left = .2cm and .4cm of l1, align = left]  (t1) {\small if the run begins in this  initial \\ \small state then  output $b$};
+ \node [above right = .2cm and .4cm of l2, align = left]  (t2) {\small if the run ends in this  final \\ \small state then  output $b$};
  \path[gray]  (t1) edge (l1) ;
   \path[gray]  (t2) edge (l2) ;
  \path[gray]  (t3) edge (l3) ;
@@ -394,7 +394,7 @@ The first closure property, which is immediate from the definition, is that func
 
     \begin{claim}
         Every compression over the alphabet $A \cup \set{
-        |}$ can be converted in polynomial time into an equivalent compression which has normal form.
+        |}$ can be converted in polynomial time into an equivalent compression which is in normal form.
         \end{claim}
     \begin{proof}
         For a string $w$ that uses at least one separator, define three parts, as in the following picture:
@@ -439,7 +439,6 @@ The first closure property, which is immediate from the definition, is that func
 Having proved that the rational string-to-string functions are compatible with compression, we now move to the next class of functions, namely the regular string-to-string functions. The latter class of  functions can be defined  using several different models, such as two-way automata with output~\cite{shepherdson1959reduction}, \mso transductions~\cite{engelfrietMSODefinableString2001}, or streaming string transducers~\cite{alurExpressivenessStreamingString2010}. Instead of presenting any of these machine models, we use a characterization of the regular functions that uses concepts that have already been introduced in this paper. For the reader who is unfamiliar with regular functions, the following theorem, see~\cite[Theorem 18]{bojanczykstefanski2020},  can be taken as the definition of regular functions\footnote{Let us explain in more detail the relation of \cref{thm:regular-def} and \cite[Theorem 18]{bojanczykstefanski2020}. The latter result is in fact stronger, because it allows certain kinds of infinite alphabets, and has fewer closure properties than those mentioned in items~\ref{item:reg-char-rational}-\ref{item:reg-char-map} of \cref{thm:regular-def}. The difficult implication in 
 \cref{thm:regular-def} is that the regular functions are contained in the  smallest class with the listed closure properties \ref{item:reg-char-rational}--\ref{item:reg-char-map}.
 Therefore,  \cite[Theorem 18]{bojanczykstefanski2020} implies Theorem~\ref{thm:regular-def}.}.
-\todo{ML: I changed the last sentence in the footnote slightly, see review 116D.}
 
 \begin{theorem}\label{thm:regular-def}
     The class of \emph{regular functions} is the smallest class of string-to-string functions which: 
@@ -478,8 +477,7 @@ Similarly to the rational and regular functions discussed in the previous sectio
 Formally speaking, the output alphabet consists of two copies of the input alphabet, one with and one without underlining. \qed
 \end{example}
 The polyregular functions are then obtained from the regular ones by adding marked squaring to the basic functions, as in the following definition; see \cite[Definition~1.2 and Theorem~1.6]{bojanczykPolyregularFunctions2018} \footnote{In \cite[Definition~1.2 and Theorem~1.6]{bojanczykPolyregularFunctions2018} the class of polyregular functions is defined in an equivalent way as the smallest class of functions that is closed under composition and that contains all rational functions, marked squaring and map reverse (i.e., map applied
-to reverse). Equivalence of this definition with \cref{def:polyregular-def} can be shown in the same way as \cref{lem:map-normal-form} below.}.\todo{ML: Please check whether the
-new footnote is correct.}
+to reverse). Equivalence of this definition with \cref{def:polyregular-def} can be shown in the same way as \cref{lem:map-normal-form} below.}.
 \begin{definition}\label{def:polyregular-def}
     The class of \emph{polyregular functions} is the smallest class of string-to-string functions which: 
     \begin{enumerate}
@@ -503,7 +501,7 @@ According to the above definition, the polyregular functions extend the regular 
     v_n = a^{2^n}b.
     \end{align*}
     This string has a compression of size $\mathcal{O}(n)$. Let $w_n$ be the marked squaring of $v_n$. We will show that 
-    any compression of $w_n$ must have size $2^n$. The reason is that $w_n$ contains an infix of the form  $ba^i\underline a$ for every $i \in \set{1,\ldots,{2^n}}$. On the other hand, the number of such infixes is limited by the size of any compression, as shown in the following claim
+    any compression of $w_n$ must have size at least $2^n$. The reason is that $w_n$ contains an infix of the form  $ba^i\underline a$ for every $i \in \set{1,\ldots,{2^n}}$. On the other hand, the number of such infixes is limited by the size of any compression, as shown in the following claim
     (which is similar to the so-called $mk$-lemma from \cite[Lemma~3]{CLLLPPSS05}).
     \begin{claim} \label{claim-infix}
         Let $a,b,c$ be distinct letters. If a string $w$ has a compression of size $m$, then 
@@ -554,7 +552,7 @@ By design, this subclass is compatible with compression, as stated in the follow
     \label{thm:polyregular-compatible}
     Rectangular polyregular functions are compatible with compression.
 \end{theorem}
-Since the marked squaring function is polyregular, it follows that the rectangular polyregular functions are a subclass of the polyregular functions. 
+Since the rectangle function is polyregular, it follows that the rectangular polyregular functions are a subclass of the polyregular functions. 
 One corollary of \cref{thm:polyregular-compatible} is that the rectangular polyregular functions are a proper subclass of the polyregular functions, since the latter are not necessarily compatible with compression, as shown by \cref{lem:nonblind-squaring}. This is stated in the following theorem, which also relates the classes to another known subclass of the polyregular functions, namely the comparison-free polyregular functions from~\cite{NguyenNP21} (this model  will be explained in the proof of the theorem). The comparison-free polyregular functions are the model most closely related with the rectangular ones, and can be seen as an inspiration for their definition.
 
 \begin{theorem}\label{thm:inclusions-on-classes} Comparison-free polyregular \; $\subsetneq$\; rectangular polyregular \; $\subsetneq$ \; polyregular.
@@ -562,8 +560,8 @@ One corollary of \cref{thm:polyregular-compatible} is that the rectangular polyr
 \begin{proof}
     We have already argued for the second inclusion and its strictness. Let us now define the class of comparison-free polyregular functions, and argue for the first inclusion. One of the definitions of this class, see~\cite[Theorem~6.1]{NguyenNP21}, is the same as in Definition~\ref{def:rectangular-polyregular}, except that  the map combinator is not included\footnote{Strictly speaking, \cite[Theorem~6.1]{NguyenNP21} does not use the rectangle function, but a similar one called \emph{comparison-free squaring}. It is not hard to see that each of these two functions can be defined using the other. }. This proves the first inclusion. This inclusion is also strict, since  the comparison-free polyregular functions are not closed under map, see~\cite[Corollary~8.5]{NguyenNP21}.
 \end{proof}
-By \cite[Theorem 6.1]{NguyenNP21}, the class of comparison-free polyregular functions contains the class of regular function. Hence, we also have the inclusion
-regular $\subsetneq$ rectangular polyregular. \todo{I added this comment; see Review 116E}
+By \cite[Theorem 6.1]{NguyenNP21}, the class of comparison-free polyregular functions contains the class of regular functions. Hence, we also have the inclusion
+regular $\subsetneq$ rectangular polyregular. 
 
 The second  separation in the above theorem, i.e.~the separation between rectangular and general polyregular functions, was proved using compression arguments. We believe that this is an interesting and clean technique, and much simpler than the intricate pumping arguments used for other separations, such as the first one in the above theorem. We believe that this lends further credence to the usefulness of compression techniques in the study of string-to-string functions.
 
@@ -583,7 +581,7 @@ In the definition of the rectangular polyregular functions from \cref{def:rectan
         12w 
         \quad \stackrel{\text{rectangle}}\mapsto \quad 
 1w2w 
-        \qquad \stackrel{\text{rational}}\mapsto \quad  \mapsto ww.
+        \qquad \stackrel{\text{rational}}\mapsto \quad   ww.
         \end{align*}
         It remains to show that the class is closed under applying map. Map commutes with composition ($\mathop{map}(f \circ g) =
         \mathop{map}(f) \circ \mathop{map}(g)$), and therefore it is enough to show that map can be applied to the atomic functions (a), (b) and (c) from the lemma. In other words, it is easy to see that map can be pushed inside composition, but it remains to be argued that it does not need to be applied twice.  The class of rational functions is closed under applying map, and therefore we only need to show that applying map twice to reverse or rectangle  yields  a function as in the statement of the lemma. We only do this for the case of the rectangle, and we leave the case of reverse to the reader.  
@@ -594,7 +592,7 @@ In the definition of the rectangular polyregular functions from \cref{def:rectan
         a01,bc234|de56|fg78,hij9  \quad \mapsto \quad 
         a01,b234c234|d56e56|f78g78,h9i9j9.
         \end{align*}
-        This is implemented by using a map rectangle where  both kinds of separators are treated in the same way. Formally speaking, we need to introduce a third separator (say $\#$), which is appended to both kinds of a separator using a rational function, as in the following example:
+        This is implemented by using a map rectangle where  both kinds of separators are treated in the same way. Formally speaking, we need to introduce a third separator (say $\#$), which is appended to both kinds of separators using a rational function, as in the following example:
                 \begin{align*}
                     a01,bc234|de56|fg78,hij9  \quad \mapsto \quad
                     a01,\#bc234|\#de56|\#fg78,\#hij9 .
@@ -603,8 +601,8 @@ In the definition of the rectangular polyregular functions from \cref{def:rectan
         \begin{align*}
                     a01,\# b234|c234|\#d56|e56|\#f78,g78,\#h9i9j9 .
         \end{align*}
-        From this we obtain the correct output by removing every comma or $|$ that that does not directly follow a $\#$ 
-        and finally remove every $\#$.  This is a regular function.
+        From this we obtain the correct output by removing every comma or $|$ that  does not directly follow a $\#$ 
+        and finally removing every $\#$.  This is a regular function.
 %        This gives us essentially the correct output, except that the squares have an extra iteration, and there are many copies of the new separator.
 %        The result can then be cleaned up using a regular function, in order to obtain the correct output.
     \end{proof}
@@ -674,7 +672,7 @@ Using the similar program
  which means that every list item $z$ in $x$ is replaced by $\concatterm [[z],y]$. For instance, for $x = [a,b]$ and $y = [1,2,3]$ 
  we obtain 
  \[ [  \concatterm [[a],[1,2,3]], \concatterm [[b],[1,2,3]] ] = [[a,1,2,3], [b,1,2,3]]. \] 
- The othermost application of $\concatterm$ in \eqref{prog for rectangle} flattens  this nested list into $[a,1,2,3,b,1,2,3]$.
+ The outermost application of $\concatterm$ in \eqref{prog for rectangle} flattens  this nested list into $[a,1,2,3,b,1,2,3]$.
   \qed
 \end{example}
 % For a type constructed without using the list constructor, the domain will be finite, and therefore such types will be called \emph{finite types}.
@@ -735,7 +733,7 @@ constructors $ \leftterm$ and $ \rightterm$.
         &        \church \blockterm {(A+B)^* \to A^* \times (B \times A^*)^*} \qquad 
     \end{align*}
    
-    \subsubsection{Rational functions} For every finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic program\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from Sections~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items from Sections~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
+    \subsubsection{Rational functions} For all finite types $A$ and $B$ and every rational function $A^* \to B^*$, we have a corresponding atomic program\footnote{In fact, for expressive completeness, it is enough to have only very special rational functions that evaluate the group operation in a finite group, see~\cite[Figure 1]{polyregular-survey}. This is because all other rational functions can be derived using the group operation and the part of the programming language from Sections~\ref{item:language-variables}--\ref{item:language-list-processing}. However, for simplicity of exposition, we use the more powerful construction that allows all rational functions, which does not affect the expressive power of the programming language. It is worth pointing out that if we do not explicitly add the rational functions, and keep only items from Sections~\ref{item:language-variables}--\ref{item:language-list-processing}, then we still get a reasonable class of functions, called the \emph{first-order polyregular functions}~\cite[Theorem 4.4]{bojanczykPolyregularFunctions2018}.}.
 
 \subsection{Semantics} The only part of the polyregular $\lambda$-calculus that is not completely standard is the two functions $\splitterm$ and $\blockterm$, so we begin by explaining those.  The function 
    $\splitterm$ is used to split a list into all possible (prefix, suffix) pairs, sorted by increasing prefixes,  as  explained in this example 
@@ -749,7 +747,7 @@ constructors $ \leftterm$ and $ \rightterm$.
         [a, b, 1, c, d, e, 2, 3, f] 
         \quad \mapsto \quad ([a,b], [(1,[c,d,e]),(2,[]),(3,[f])]).
         \end{equation}
-Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained, and also because the semantics are much simpler than those of a full-fledged programming language such as Haskell.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$; which is appropriate to our language since it can only define always-terminating functions.  
+Having defined these two functions, the rest of the semantics is defined in the standard way. In fact, the programming language can be seen as a fragment of Haskell. Nevertheless, we give a brief  explanation of  the semantics to make this paper relatively self-contained, and also because the semantics are much simpler than those of a full-fledged programming language such as Haskell.  Each type $A$ comes with a \emph{semantic domain}, written by $\sem A$, which is meant to describe the values of programs that have this type. The semantic domain is defined naively by induction on the type structure, with the type constructors having the expected meaning. In particular, $\sem{A \to B}$ is defined to be all (total) functions from $\sem A$ to $\sem B$, which is appropriate to our language since it can only define always-terminating functions.  
 If a program has free variables of types $A_1,\ldots,A_n$, and the program itself has type $A$, then its semantics will be a function 
 \begin{align*}
 \myunderbrace{\sem {A_1} \times \cdots \times \sem{A_n}}{values of the\\ free variables} 
@@ -800,7 +798,7 @@ The purpose of this section is to identify the subclass which corresponds to the
     \text{rectangular polyregular}.
     \end{align*}
     This proof is much longer, and it  follows the same lines as the proof of the corresponding inclusion for the  (not necessarily rectangular) polyregular functions in~\cite[Theorem 4.1]{polyregular-survey}. The general idea is to 
-write down a program as a string, and to then evaluate it be using string rewriting. If done carefully, the evaluation can be done by a rectangular polyregular function.
+write down a program as a string, and to then evaluate it by using string rewriting. If done carefully, the evaluation can be done by a rectangular polyregular function.
 
 
     
@@ -934,16 +932,15 @@ It is easy to see that applying a reduction rule changes neither the type nor th
         \end{itemize}
     \end{corollary}
     \begin{proof}
-    Fix the $k$ and the parallel reduction strategy from  \cref{lem:reduction-strategy}; they 
- only depends on the resource bound and not on the input program.
+    Fix the $k$ and the parallel reduction strategy from  \cref{lem:reduction-strategy}; these 
+ only depend on the resource bound and not on the input program.
  Then the given split-free program $M$ can be reduced to normal form by repeating the following process $k$ times: 
  \begin{enumerate}[(1)]
 \item mark a pairwise non-overlapping set of redexes in $M$ using the rational function from the parallel reduction strategy;
 \item reduce the marked redexes in parallel \footnote{Note that during this process the height of the syntax trees may increase (for instance, due to $\lambda$-abstraction),
 and, hence, the resource bound may not be preserved.
 This is not a problem. It is only important that the initial input program $M$ is consistent with the resource bound $\Rr$. Then \cref{lem:reduction-strategy} guarantees that
-$k$ repetitions of the parallel reduction strategy yield a normal even, even if thereby the height of the syntax tree increases.}. \todo{ML: I added this footnote. I hope that I understood
-this point correctly.}
+$k$ repetitions of the parallel reduction strategy yield a normal form, even if thereby the height of the syntax tree increases.}. 
 \end{enumerate}
 Since the rectangular polyregular functions are closed under composition and contain the rational ones, it remains to prove that part (2) of the process can be implemented using a rectangular polyregular function.
         
@@ -988,7 +985,7 @@ The idea behind the programming language  is to start with a set of atomic funct
 Depending on the choice of the initial set of atomic functions, one can obtain various classes of string-to-string functions. In~\cite[Section 6]{bojanczykRegularFirstOrderList2018}, one can find a choice that leads to the so-called regular functions, which are a well known transducer class. If one adds the function $\splitterm$ (formally speaking, the variant of this  function for all possible arrow-free types $A$), then one  gets exactly the polyregular functions. As we show below, replacing $\splitterm$ by strength leads to the rectangular polyregular functions.
 
 \begin{theorem}
-    Let $A$ and $B$ finite alphabets. A string-to-string function
+    Let $A$ and $B$ be finite alphabets. A string-to-string function
     \begin{align*}
     f : A^* \to B^*
     \end{align*}
@@ -996,7 +993,7 @@ Depending on the choice of the initial set of atomic functions, one can obtain v
     \begin{enumerate}
         \item \label{item:closure-combinators} is closed under the combinators for co-product, product, composition and map;
         \item \label{item:atomic-regular} contains the atomic functions for the regular functions, as  in~\cite[Section 6]{bojanczykRegularFirstOrderList2018};
-        \item \label{item:atomic-strength} contains, for each arrow-free types $A$ and $B$, the strength function explained in~\eqref{eq:strength}.
+        \item \label{item:atomic-strength} contains, for all arrow-free types $A$ and $B$, the strength function explained in~\eqref{eq:strength}.
         
     \end{enumerate}
 \end{theorem}
@@ -1022,15 +1019,12 @@ We have studied string-to-string transducers which are compatible with compressi
 \begin{enumerate}
     \item Are the rectangular polyregular functions exactly the polyregular functions that are compatible with compression? 
     \item Can one decide if a given polyregular function is rectangular?
-    \item Can the rectangular polyregular functions be characterised in terms of logic? Such a characterisation exists for the  general polyregular functions; these  are exactly the \mso interpretations~\cite[Theorem 7]{msoInterpretations}. For the rectangular ones a promising idea is to consider the interpretations described in \cite[Conjecture 10.1]{NguyenNP21}:
-Starting with a word $w$ represented in the usual way as a structure $\mathcal{A}_w$, one first takes a $k$-fold product 
-$\mathcal{A}_w^k$ and then applies a $1$-dimensional MSO-interpretations that produces the output word.\todo{\cite[Conjecture 10.1]{NguyenNP21}  
- refers to 1-dim. FO-interpretations and FO-comparision-free polyregular functions and the authors write that you mentioned that the
-naive transposition of their conjecture to MSO fails. Is your idea to take 1-dim. MSO-interpretations applied to $k$-fold powers for 
- rectangular polyregular functions?} 
+    \item Can the rectangular polyregular functions be characterised in terms of logic? Such a characterisation exists for the  general polyregular functions; these  are exactly the \mso interpretations~\cite[Theorem 7]{msoInterpretations}. For the rectangular ones a promising idea is to consider the interpretations based on \cite[Conjecture 10.1]{NguyenNP21}:
+Starting with a word $w$ represented in the usual way as a structure, one first takes a $k$-fold product 
+of this structure with itself, and then applies a $1$-dimensional MSO-interpretation that produces the output word.
 Conjecture 10.1 from~\cite{NguyenNP21}
  was originally made for the weaker class of comparison-free polyregular functions, but it has been refuted~\cite[Theorem 4.6]{kiefer2023refutations}. However, it might still be appropriate for the rectangular polyregular functions.
-    \item  Can the rectangular polyregular functions be characterised in terms of an  imperative programming languages, such as the for-transducers from~\cite[Section 1]{polyregular-survey}?
+    \item  Can the rectangular polyregular functions be characterised in terms of an  imperative programming language, such as the for-transducers from~\cite[Section 1]{polyregular-survey}?
 \end{enumerate}
 It is a tantalising possibility that the answers to all these questions are positive.
 
