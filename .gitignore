@@ -12,6 +12,9 @@
 *.cb2
 .*.lb
 
+
+lipics*
+
 ## Intermediate documents:
 *.dvi
 *.xdv
@@ -282,3 +285,12 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+cc-by.pdf
+CHANGELOG.md
+.gitignore
+icalp.pdf
+icalp.vtc
+.gitignore
+.gitignore
+.gitignore
+orcid.pdf
