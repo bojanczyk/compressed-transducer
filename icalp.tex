@@ -1,8 +1,8 @@
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
 
-\usepackage{MnSymbol}
-\usepackage{mathtools} % an extension of amsmath needed for I don't know what 
-\usepackage{thm-restate}
+%\usepackage{MnSymbol}
+\usepackage{mathtools} 
+%\usepackage{thm-restate}
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usetikzlibrary{arrows,automata,positioning}
@@ -10,8 +10,8 @@
 \usepackage{url}
 \usepackage{aliascnt} 
 \usepackage{mathrsfs}
-\usepackage{libertine}
-\usepackage{inconsolata}
+%\usepackage{libertine}
+%\usepackage{inconsolata}
 \usepackage{xspace}
 
 \crefname{theorem}{Theorem}{Theorems}
@@ -102,7 +102,7 @@
 
 \keywords{polyregular functions, grammar compression} %TODO mandatory; please add comma-separated list of keywords
 
-\category{} %optional, e.g. invited paper
+\category{Track B: Automata, Logic, Semantics, and Theory of Programming} %optional, e.g. invited paper
 
 \relatedversion{} 
 
@@ -867,7 +867,7 @@ Fix  a split-free program $M$ of type  $A^* \to B^*$. The output string is compu
 \end{proof}
 
 
- \subsection{Programs with combinators instead of $\lambda$-abstraction}
+ \subsection{Programs with combinators instead of \texorpdfstring{$\lambda$}{lambda}-abstraction}
 We finish this section with another characterisation of the rectangular polyregular functions. This is a variant of a characterisation of the polyregular functions, see~\cite[Section 4]{bojanczykPolyregularFunctions2018}, which is similar to the polyregular $\lambda$-calculus, but uses a programming language that is based on  combinators instead of  $\lambda$-abstraction. A nice feature of this characterisation is that it highlights the role of the strength function 
 \begin{align} \label{eq:strength}
         \mathtt{strength} : A \times B^* & \to (A \times B)^* \\
