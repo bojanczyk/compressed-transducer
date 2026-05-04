@@ -1,36 +1,18 @@
 \documentclass[a4paper,UKenglish,cleveref, autoref, thm-restate]{lipics-v2021}
 
 \usepackage{MnSymbol}
-%\usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools} % an extension of amsmath needed for I don't know what 
-
-% for repeating theorems, using restatable
-%\usepackage{thmtools}
 \usepackage{thm-restate}
-
 \usepackage{tikz}
 \usetikzlibrary{calc}
 \usetikzlibrary{arrows,automata,positioning}
 \usetikzlibrary{trees}
-
 \usepackage{url}
-
-%\usepackage[capitalise]{cleveref} 
-\usepackage{aliascnt} % Helps cleveref distinguish shared counters 
-
-% used for fancy script font mathscr
+\usepackage{aliascnt} 
 \usepackage{mathrsfs}
-
-% used for code listings, configuration below
-% \usepackage{listings}
-
-% font packages 
 \usepackage{libertine}
 \usepackage{inconsolata}
-
 \usepackage{xspace}
-
-\usepackage{todonotes}
 
 \crefname{theorem}{Theorem}{Theorems}
 \crefname{lemma}{Lemma}{Lemmas}
@@ -72,15 +54,11 @@
 
 
 \usepackage{color} 
-
-% these are colors consistent with my styles in figma
 \definecolor{red}{RGB}{235,87,87}
 \definecolor{blue}{RGB}{86,204,242}
-%\definecolor{orange}{RGB}{242,153,74}
 
 \newcommand{\red}[1]{{\color{red}#1}}
 \newcommand{\blue}[1]{{\color{cyan}#1}}
-%\newcommand{\orange}[1]{{\color{orange}#1}}
 
 \newcommand{\myunderbrace}[2]{\underbrace{#1}_{\mathclap{\text{\scriptsize 
 \begin{tabular}{c}
@@ -92,8 +70,6 @@
 \end{tabular} }}}}
 
 \newcommand{\set}[1]{\{#1\}}
-
-% set builder expression, which can be multiline
 \newcommand{\setbuild}[2]{\set{#1 \ | 
 \begin{tabular}{l}
 	#2
@@ -112,9 +88,7 @@
 
 \nolinenumbers
 
-\title{Transducers on compressed strings} %TODO Please add
-
-%\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
+\title{Transducers on compressed strings} 
 
 \author{Mikołaj Bojańczyk}{University of Warsaw, Poland \and \url{https://www.mimuw.edu.pl/~bojan/}}{bojan@mimuw.edu.pl}{https://orcid.org/0000-0002-7758-1072}{Mikołaj Bojańczyk was supported by the Polish National Science Centre (NCN) grant ``Polynomial finite state computation'' (2022/46/A/ST6/00072).}
 \author{Markus Lohrey}{University of Siegen, Germany \and \url{https://www.uni-siegen.de/person/markus-lohrey}}{lohrey@eti.uni-siegen.de}{https://orcid.org/0000-0002-4680-7198}{}
@@ -124,7 +98,6 @@
 
 \Copyright{Mikołaj Bojańczyk and Markus Lohrey} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
-%\ccsdesc[100]{\textcolor{red}{Replace ccsdesc macro with valid one}} %TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
 \ccsdesc[500]{Theory of computation~Automata extensions}
 
 \keywords{polyregular functions, grammar compression} %TODO mandatory; please add comma-separated list of keywords
@@ -160,9 +133,6 @@ We study string-to-string functions which are compatible with compression in the
 
 \section{Introduction}
 
-% Mikolaj: I would prefer to avoid the term "big data", especially in a first sentence, otherwise my colleagues will complain that this is just buzzwording :) I guess people know that compression is important.
-% Data compression is a core technology in computer science that has gained additional importance in the era of big data.
-% For an introduction into classical compression techniques see  \cite{Say00}. 
 The starting point for this work stems from the paradigm of {\em algorithmics on compressed data}. 
 Its principal idea is to process data that is given in compressed form without first decompressing it and then operating on the uncompressed data.
 There are three main applications for algorithms of this kind (see  \cite{Loh12survey} for a survey).
@@ -310,12 +280,9 @@ Let us begin with the definition of a {rational relation}, and then we will iden
  \path[gray]  (t3) edge (l3) ;
 \end{tikzpicture}
 \end{center}
-%\mypic{1} 
 Thanks to the labellings with output strings, each accepting run can be seen as producing an output string, which is defined by concatenating the output strings assigned to the initial state, the transitions taken, and the final state. 
 The semantics of the automaton is a binary relation between input and output strings, which assigns to each input string all possible outputs produced by accepting runs. A relation that is obtained this way is called a \emph{rational relation}. A \emph{rational function} is the special case of a rational relation which is a function, i.e.~for every input string there is exactly one output string. 
 \footnote{We restrict our attention to total functions. While one could also consider partial functions computed by transducers, this would not introduce any new aspects with respect to compatibility with compression.}
- %which is more natural for the alternative characterizations based on closure properties and functional programming 
-%languages that we consider for more powerful transducer models in the following sections.}
 The following result extends \cite[Theorem~1]{BeChRa08}, which only covers the 
 class of sequential functions (a subclass of the rational functions):
 
@@ -331,25 +298,6 @@ class of sequential functions (a subclass of the rational functions):
 \end{align*}
 is also context-free. The proof is a simple product construction, in particular the size of the output grammar is polynomial in the sizes of the input grammar and the automaton defining the rational relation. If the input grammar generates exactly one string, and the rational relation is in fact a function, then the output grammar will also generate exactly one string. 
 \end{proof}
-
-%     We prove that  for every (possibly ambiguous) \textsc{nfa} with output, and every context-free grammar $G$, one can compute in polynomial time a new context-free grammar that generates the image 
-%     \begin{align*}
-%     \setbuild{ w }{$w$ is a possible output of the \textsc{nfa} over some input from $G$}.
-%     \end{align*}
-%     If the grammar is generates exactly one string, and the automaton is unambiguous, the the new grammar will generate exactly one string.
-    
-%     To define the output grammar
-%     For each non-terminal $X$ in the input grammar and each pair of states $p,q \in Q$ of the automaton, we create a new non-terminal $X_{p,q}$ which represents the possible outputs of the transducer on runs which input a string derived from $X$, start in state $q$ and end in state $p$. Assuming that the input grammar is in Chomsky normal form, this is done as follows. For every rule $X \to a$ in the input grammar that generates a single letter and states $p,q$, we create new rules in the output grammar that generate all possible outputs of transitions that go from $p$ to $q$ when reading $a$. For every rule $X \to YZ$ in the input grammar and every states $p,q,r$ in the transducer, we create in the output grammar a rule of the form
-%     \begin{align*}
-%     X_{p,r} \to Y_{p,q} Z_{q,r}.
-%     \end{align*}
-%     Under this construction, the desired  output language is the union  
-%     \begin{align*}
-%    \bigcup_{p,q} \text{(initial output string for $p$)}X_{p,q}\text{(final output string for $q$)},
-%     \end{align*}
-%     where $X$ is the starting non-terminal of the input grammar, $p$ ranges over initial states, and $q$ ranges over final states. This is implemented by creating a new starting non-terminal with appropriate rules.
-% \end{proof}
-
 
 \subsection{The map combinator}
 \label{sec:map}
@@ -375,14 +323,10 @@ The first closure property, which is immediate from the definition, is that func
  inner (\blue{blue}) nonterminals  and symbols from $A$:
     \begin{align*}
     S \to \blue Y \red Z \qquad
-    %\red X \to \red Y \red Z \qquad
     \red X \to \red v \qquad
     \red X \to | \blue Y \qquad 
-     %\blue X \to \blue Y \blue Z \qquad 
-    % \blue X \to a,
      \blue X \to \blue u,
     \end{align*}
-   % where $S$ is the starting nonterminal red nonterminals are outer, blue nonterminals are inner,  and $a \in A$.  
    Observe that the partition, if it exists, is unique: the inner nonterminals are those which cannot derive a string containing the separator symbol (they correspond to parts of list items), and the outer ones are those which do (they correspond to sequences of list items).
 
     \begin{claim}
@@ -394,7 +338,6 @@ The first closure property, which is immediate from the definition, is that func
     
     \smallskip
         
-      %  \mypic{3} 
         \definecolor{light-gray}{gray}{0.9}
    \begin{center}    
         \begin{tikzpicture}
@@ -566,7 +509,6 @@ In the definition of the rectangular polyregular functions from \cref{def:rectan
     \end{lemma}
     \begin{proof}
         It is enough to show that the class of functions in the statement of the lemma has the  closure properties from \cref{def:rectangular-polyregular}. This class contains all rational functions, and it is closed under composition. It also contains reverse and rectangle, since these are subsumed by map reverse and map rectangle in the case where the separator symbol is not used. 
-      %As we have remarked after \cref{def:rectangular-polyregular}
       Moreover, we can also recover duplication, which can be obtained as follows: 
         \begin{align*}
         w 
@@ -596,8 +538,6 @@ In the definition of the rectangular polyregular functions from \cref{def:rectan
         \end{align*}
         From this we obtain the correct output by removing every comma or $|$ that  does not directly follow a $\#$ 
         and finally removing every $\#$.  This is a regular function.
-%        This gives us essentially the correct output, except that the squares have an extra iteration, and there are many copies of the new separator.
-%        The result can then be cleaned up using a regular function, in order to obtain the correct output.
     \end{proof}
 
 
@@ -627,25 +567,6 @@ We think that the rectangular polyregular functions are interesting in their own
 
 In this section, we give other evidence for the importance of rectangular polyregular functions, by presenting a  functional programming language which is equivalent to them. This functional programming language is based on a similar one that was given for the general polyregular functions in~\cite[Section 4.1]{polyregular-survey}. Before giving a formal definition, we present some example programs.
 
-% We begin by discussing  the programming language for the (not rectangular ) polyregular functions. This is  a  variant of the simply typed $\lambda$-calculus, with type constructors for pairs, disjoint unions and lists, as well as  certain atomic functions which operate on these types, such as a concatenation
-% \begin{align*}
-% \fstterm : A \times B \to A \quad 
-% \concatterm : A^{**} \to A^* \quad 
-% \mapterm : (A \to B) \to A^* \to B^*,
-% \end{align*}
-% Among the atomic functions, only one  has non-linear output size, namely the  function 
-% \begin{align}
-%     \label{eq:split}
-% \splitterm : A^* \to (A^* \times A^*)^*,
-% \end{align}
-
-% The programming language that we propose for the rectangular polyregular functions is based on the following observation:  even if we omit the split function, and keep only atomic functions of linear growth,  the mechanics of the $\lambda$-calculus  can be used to define functions of non-linear growth. For example, the squaring function from \cref{ex:squaring} can be defined as follows:
-% \begin{align*}
-%     \lambda x: A^*. \concatterm (\mapterm (\lambda y: A^*.x) x)
-% \end{align*}
-% Based on this observation, we define below the programming language for the rectangular polyregular functions, by taking the programming language for the polyregular function, and eliminating the  split function, thus obtaining a programming language where all atomic functions have linear output size.
-
-
 \begin{example}[duplication, squaring and rectangle] \label{ex:squaring-rectangle-duplication} Let us begin with a program in a Haskell-like language that implements the duplication function from \cref{ex:duplication} (we use blue superscripts to indicate the types of  variables and  auxiliary functions; occasionally we will also omit these types):
     \begin{align*}
     \lambda \church x {A^*}.\ \church \concatterm {A^{**} \to A^*} [x,x].
@@ -668,7 +589,6 @@ Using the similar program
  The outermost application of $\concatterm$ in \eqref{prog for rectangle} flattens  this nested list into $[a,1,2,3,b,1,2,3]$.
   \qed
 \end{example}
-% For a type constructed without using the list constructor, the domain will be finite, and therefore such types will be called \emph{finite types}.
 We now  give a formal definition of the  programming language in detail. It is called the \emph{polyregular $\lambda$-calculus}, and its purpose is to define exactly the polyregular functions. 
 
 \subsection{Syntax} The polyregular $\lambda$-calculus is a variant of the simply typed $\lambda$-calculus, and therefore its programs are a certain kind of $\lambda$-terms. We will use the word \emph{programs} for these terms, or \emph{programs of the polyregular $\lambda$-calculus} in case there is some ambiguity about the kind of programs in consideration.   The programs use variables, which are taken from an infinite set of variables. Both programs and variables have associated types, which are unique, i.e.~the same variable or  program cannot be associated with two different types (as in Church typing). We indicate the types using blue superscripts. The types  are built using the following type constructors: 
@@ -794,9 +714,6 @@ The purpose of this section is to identify the subclass which corresponds to the
 write down a program as a string, and to then evaluate it by using string rewriting. If done carefully, the evaluation can be done by a rectangular polyregular function.
 
 
-    
-    % It is  based on the following observations: (1) when evaluating a program that represents a string-to-string function by using normalisation, the intermediate steps of the normalisation are consistent with certain resource bounds, such as the variables and types that are used and the height of the term; (2) once the resource bounds are fixed, then the number of normalisation steps is bounded, if one uses a normalisation strategy which does some reductions in parallel; and (3) each step of the normalisation strategy mentioned in the previous item can be implemented using a rectangular polyregular function.    
-
     \subparagraph*{String representation of programs.} We begin by explaining how programs are represented as strings. This is the usual representation, which we have already used above when writing example programs. In this representation, we assume that the variable names and the atomic programs are single letters. In particular, the alphabet is infinite, since there are infinitely many variables and infinitely many atomic programs.  (There are infinitely many atomic programs  since the type annotation is important. For example, different letters will be used for $\concatterm$ depending on the type $A$ that is involved.) If we pick some convention on writing parentheses, then the string representation can be made unique, so that each program has a unique string representation.
     
     A problem with the string representation that was described above is that the alphabet is infinite. This will be a problem if we want to manipulate string representations using rectangular polyregular functions, which work on finite alphabets. For this reason, we will assume that there is a fixed finite set of variables and atomic programs that can be used, and we will only work with programs that are subject to this restriction. 
@@ -828,7 +745,6 @@ write down a program as a string, and to then evaluate it by using string rewrit
  \path  (t) edge[->,gray] (r) ;
 \end{tikzpicture}
 \end{center}
-%    \mypic{2}
     The height of a syntax tree is defined to be the maximal number of edges on a root-to-leaf path (in the above picture, the height is three), and the height of a program is defined to be the height of its syntax tree.
     It turns out that a polyregular function cannot  deal with trees of unbounded height, since it is essentially a finite automaton, and finite automata on strings cannot handle trees of unbounded height. For this reason, we will impose a bound on the height of programs. 
 
@@ -863,10 +779,6 @@ The assumptions discussed above are summarised  in the following definition.
         \blockterm\ [M_1,\ldots, M_n] & \ \leadsto \ \text{result as in \eqref{def-block}} \\
         f[M_1,\ldots,M_n] & \ \leadsto \ \text{output of the rational function $f$}    \end{align*}
     \caption{\label{fig:reduction-rules} Reduction rules. The last rule is for an atomic program $f$ that is a rational function. In the last rule, we assume that the list elements $M_1,\ldots,M_n$, which have some finite type, are already been evaluated, i.e.~they are built only using the data constructors for the finite types, which are $()$, pairing and co-pairing.
-%     In the last rule, the outcome is 
-%     \(
-%     (N_0, [(M_{i_1}, N_1),\ldots,(M_{i_k}, N_k)])
-% \), where $M_{i_1},\ldots,M_{i_k}$ are the terms of type $A$ in the input list, and $N_j$ is the list of all terms of type $B$ between $M_{i_j}$ and $M_{i_{j+1}}$, with the convention that $i_0$ represents the beginning of the input, and $i_{k+1}$ represents its end.
 }
     \end{figure}
 
@@ -878,9 +790,6 @@ The assumptions discussed above are summarised  in the following definition.
     \end{align}
 The complete list of reduction rules is shown in \cref{fig:reduction-rules}.
 It is easy to see that applying a reduction rule changes neither the type nor the semantics of a program.  A program is in \emph{normal form} if no reduction rules can be applied to it. The normal form is unique, up to renaming of bound variables~\cite[Corollary 1.4.9]{sorensenLecturesCurryHowardIsomorphism2006}. If a closed program represents a string, i.e.~its type is $A^*$ for some finite type, then its normal form is necessarily a list of elements of $A$. Therefore, for closed programs that have such a type $A^*$, normal forms and their string representations are essentially the same thing.
-% Note that if $R$ is an atomic
-% program for a rational function of type $A^* \to B^*$ and $M$ is of type $A^*$ and in normal form then $R \, M$ is in normal form. \todo{I added this sentence; is it correct?} 
-
 
     The key lemma in the proof is the following, which shows that a rectangular polyregular function can perform term  substitution, as used in the $\beta$-reduction rule from~\eqref{eq:beta-reduction}. In the proof of the lemma, we use the rectangle function from \cref{ex:strength}. 
     \begin{lemma}\label{lem:substitution}
@@ -1021,7 +930,7 @@ Conjecture 10.1 from~\cite{NguyenNP21}
 \end{enumerate}
 It is a tantalising possibility that the answers to all these questions are positive.
 
-\bibliography{bib}
+\bibliography{icalp}
 
 
 
